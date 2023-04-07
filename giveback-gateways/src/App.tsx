@@ -1,33 +1,61 @@
-import { Grid, GridItem, Show, Text } from "@chakra-ui/react";
+import {
+  Card,
+  Center,
+  Flex,
+  Grid,
+  GridItem,
+  Image,
+  Text,
+} from "@chakra-ui/react";
+import cristianoImage from "./assets/Cristiano_Ronaldo_2018.jpg";
+import dva from "./assets/dva-featured.jpg";
+import LoginSection from "./components/LoginSection";
 
 function App() {
   return (
-    <>
-      <Grid
-        templateAreas={{ base: "'header' 'main' 'footer'", md: "'header header' 'main footer'" }}
+    <Grid templateAreas={{ base: "'header' 'main'" }} height="100vh">
+      <GridItem
+        area={"header"}
+        textAlign={"center"}
         bg={"blue.200"}
+        height="20vh"
       >
-        <GridItem area={"header"} textAlign={"center"}>
+        <Center height="100%">
           <Text
-            marginTop="1rem"
-            fontSize="2rem"
+            fontSize="3rem"
             fontFamily="Verdana, sans-serif"
             fontWeight={"bold"}
             color="white"
           >
             GiveBack Gateways
           </Text>
-        </GridItem>
-        <GridItem area={"main"}>
-          <Text>GiveBack Gateways middle</Text>
-        </GridItem>
-        <Show above="md">
-          <GridItem area={"footer"}>
-            <Text>GiveBack Gateways bottom</Text>
-          </GridItem>
-        </Show>
-      </Grid>
-    </>
+        </Center>
+      </GridItem>
+
+      <GridItem area={"main"} bg={"gray.100"} minHeight="80vh" mt={3}>
+        <Flex
+          bg={"gray.50"}
+          height="100%"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Card marginX={{ base: 5, sm: 10, md: 20, lg: 40 }} boxShadow={"md"}>
+            <Text
+              padding={1}
+              fontSize="1rem"
+              fontFamily="Verdana, sans-serif"
+              textAlign="center"
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id nisi
+              nam distinctio mollitia magnam tenetur, odit maxime excepturi illo
+              repellendus quaerat, exercitationem quia esse facilis ipsa!
+              Tempora fugiat suscipit voluptatem!
+            </Text>
+          </Card>
+          <LoginSection />
+        </Flex>
+      </GridItem>
+    </Grid>
   );
 }
 
