@@ -32,14 +32,14 @@ function App() {
         </Center>
       </GridItem>
 
-      <GridItem area={"main"} bg={"gray.100"} minHeight="80vh" mt={3}>
+      <GridItem area={"main"} bg={"gray.100"} minHeight="80vh" pt={5}>
         <Flex
-          bg={"gray.50"}
+          bg={"gray.100"}
           height="100%"
           flexDirection="column"
           alignItems="center"
         >
-          <Card marginX={{ base: 5, sm: 10, md: 20, lg: 40 }} boxShadow={"md"}>
+          <Card marginX={{ base: 5, sm: 10, md: 20, lg: 60 }} boxShadow={"md"}>
             <Text
               padding={1}
               fontSize="1rem"
@@ -52,7 +52,7 @@ function App() {
               Tempora fugiat suscipit voluptatem!
             </Text>
           </Card>
-          <LoginSection />
+          <LoginSection onSubmit={() => console.log("AYIEWDBHABDHIAWBJHDBAW")}/>
         </Flex>
       </GridItem>
     </Grid>
