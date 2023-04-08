@@ -55,17 +55,17 @@ const VolunteerBoardPage = () => {
   const isOpportunitySignedUp = (id: number) => signedUpOpportunities.includes(id);
 
   return (
-    <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
+    <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
       <Navbar />
       <VStack
-        flexBasis="81vh"
+        flexBasis="85vh"
         justifyContent="flex-start"
         alignItems="center"
         spacing={8}
         pt={4}
         pb={20}
       >
-        <Heading as="h1" size="2xl" textAlign="center" my={6}>
+        <Heading as="h1" size="2xl" textAlign="center" mt={"1.5rem"}>
           Volunteer Board
         </Heading>
         <SimpleGrid

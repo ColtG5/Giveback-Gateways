@@ -16,13 +16,20 @@ const ProfilePage = () => {
   let { username } = useParams();
 
   return (
-    <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
+    <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
       <Navbar />
-      <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={8} pt={4}>
-        <Heading as="h1" size="2xl" textAlign="center" mb={6}>
+      <VStack
+        flexBasis="85vh"
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={8}
+        pt={4}
+        pb={20}
+      >
+        <Heading as="h1" size="2xl" textAlign="center" mt={"1.5rem"}>
           {username}'s Profile
         </Heading>
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{base: "100%", md: "80%"}}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
             <Heading as="h2" size="md" mb={4}>
               Personal Information
@@ -45,7 +52,13 @@ const ProfilePage = () => {
             </UnorderedList>
           </Box>
         </SimpleGrid>
-        <Box bg="white" borderRadius="lg" p={6} boxShadow="md" w={{lg:"50%", md: "70%", base: "100%"}} >
+        <Box
+          bg="white"
+          borderRadius="lg"
+          p={6}
+          boxShadow="md"
+          w={{ lg: "50%", md: "70%", base: "100%" }}
+        >
           <Heading as="h2" size="md" mb={4}>
             Volunteer Work
           </Heading>
