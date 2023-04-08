@@ -22,7 +22,7 @@ const ProfilePage = () => {
         <Heading as="h1" size="lg" textAlign="center" mb={6}>
           {username}'s Profile
         </Heading>
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w="100%">
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{base: "100%", md: "80%"}}>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
             <Heading as="h2" size="md" mb={4}>
               Personal Information

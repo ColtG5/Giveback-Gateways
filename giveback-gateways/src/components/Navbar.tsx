@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Flex, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 
-const widthToCenter = 150;
+const widthToCenter = "170rem";
 
 const Navbar = () => {
   return (
@@ -11,7 +11,7 @@ const Navbar = () => {
         as={RouterLink}
         to="/"
         fontWeight="bold"
-        fontSize="lg"
+        fontSize="xl"
         padding={1}
         width={widthToCenter}
         textAlign={"center"}
@@ -22,7 +22,7 @@ const Navbar = () => {
         as={RouterLink}
         to="/volunteer-board"
         fontWeight="bold"
-        fontSize="lg"
+        fontSize="xl"
         padding={1}
         width={widthToCenter}
         textAlign={"center"}
@@ -33,7 +33,7 @@ const Navbar = () => {
         as={RouterLink}
         to="/message-board"
         fontWeight="bold"
-        fontSize="lg"
+        fontSize="xl"
         padding={1}
         width={widthToCenter}
         textAlign={"center"}
