@@ -27,7 +27,7 @@ const LoginSection = ({ onSubmit }: Props) => {
 
   return (
     <Box p={6} boxShadow="md" mt={10} bg={"gray.50"} borderRadius={6} w={300}>
-      <Text fontWeight="bold" fontSize="2xl" mt={4}>
+      <Text fontWeight="bold" fontSize="2xl" marginY={2}>
         Log in
       </Text>
       <form
@@ -38,13 +38,13 @@ const LoginSection = ({ onSubmit }: Props) => {
       >
         <Stack spacing={4}>
           <FormControl id="username">
-            <FormLabel>Username</FormLabel>
-            <Input type="username" {...register("username")} id="username" />
+            <FormLabel></FormLabel>
+            <Input type="username" {...register("username")} variant={'flushed'} placeholder="Username" id="username" />
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
           <FormControl id="password">
-            <FormLabel>Password</FormLabel>
-            <Input type="password" {...register("password")} id="password" />
+            <FormLabel></FormLabel>
+            <Input type="password" {...register("password")} variant={'flushed'} placeholder="Password" id="password" />
             {errors.password && <p className="text-danger">{errors.password.message}</p>}
           </FormControl>
           <Button colorScheme="blue" type="submit">

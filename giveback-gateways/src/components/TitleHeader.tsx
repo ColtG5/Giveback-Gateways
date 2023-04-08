@@ -5,7 +5,7 @@ const TitleHeader = () => {
   return (
     <>
       <Center height="100%">
-        <Text fontSize="3rem" fontFamily="Verdana, sans-serif" fontWeight={"bold"} color="white">
+        <Text fontSize="3rem" fontFamily="Verdana, sans-serif" fontWeight={"bold"} color="white" lineHeight={1}>
           GiveBack Gateways
         </Text>
       </Center>
