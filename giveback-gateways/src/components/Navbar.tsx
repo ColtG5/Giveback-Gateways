@@ -20,6 +20,17 @@ const Navbar = () => {
       </Link>
       <Link
         as={RouterLink}
+        to={`/profile/${localStorage.getItem("username")}`}
+        fontWeight="bold"
+        fontSize="xl"
+        padding={1}
+        width={widthToCenter}
+        textAlign={"center"}
+      >
+        Profile
+      </Link>
+      <Link
+        as={RouterLink}
         to="/volunteer-board"
         fontWeight="bold"
         fontSize="xl"

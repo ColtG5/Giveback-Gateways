@@ -19,7 +19,7 @@ const ProfilePage = () => {
     <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
       <Navbar />
       <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={8} pt={4}>
-        <Heading as="h1" size="lg" textAlign="center" mb={6}>
+        <Heading as="h1" size="2xl" textAlign="center" mb={6}>
           {username}'s Profile
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{base: "100%", md: "80%"}}>

@@ -7,6 +7,12 @@ import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   let navigate = useNavigate()
 
+  const handleSubmit = (e: any) => {
+    console.log(e.username, e.password)
+    localStorage.setItem("username", e.username)
+    navigate(`/profile/${e.username}`)
+  }
+
   return (
     <>
       <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
@@ -21,7 +27,7 @@ const LoginPage = () => {
           <TitleHeader />
         </Box>
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
-          <LoginSection onSubmit={(e) => {console.log(e.username, e.password), navigate(`/profile/${e.username}`)} } />
+          <LoginSection onSubmit={(e) => {handleSubmit(e)} } />
         </VStack>
       </Flex>
     </>
