@@ -1,33 +1,21 @@
-import { Grid, GridItem, Show, Text } from "@chakra-ui/react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import ErrorPage from "./pages/ErrorPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-    <>
-      <Grid
-        templateAreas={{ base: "'header' 'main' 'footer'", md: "'header header' 'main footer'" }}
-        bg={"blue.200"}
-      >
-        <GridItem area={"header"} textAlign={"center"}>
-          <Text
-            marginTop="1rem"
-            fontSize="2rem"
-            fontFamily="Verdana, sans-serif"
-            fontWeight={"bold"}
-            color="white"
-          >
-            GiveBack Gateways
-          </Text>
-        </GridItem>
-        <GridItem area={"main"}>
-          <Text>GiveBack Gateways middle</Text>
-        </GridItem>
-        <Show above="md">
-          <GridItem area={"footer"}>
-            <Text>GiveBack Gateways bottom</Text>
-          </GridItem>
-        </Show>
-      </Grid>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile/:username" element={<ProfilePage />} />
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </Router>
   );
 }
 
