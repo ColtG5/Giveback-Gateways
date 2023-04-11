@@ -18,7 +18,7 @@ interface Props {
   onSubmit: (data: SignupData) => void;
 }
 
-const SignupSection = ({ onSubmit }: Props) => {
+const CompanySignupSection = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
@@ -53,7 +53,7 @@ const SignupSection = ({ onSubmit }: Props) => {
               type="username"
               {...register("username")}
               variant={"flushed"}
-              placeholder="Username"
+              placeholder="Company Username"
               id="username"
             />
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
@@ -64,7 +64,7 @@ const SignupSection = ({ onSubmit }: Props) => {
               type="name"
               {...register("name")}
               variant={"flushed"}
-              placeholder="Name"
+              placeholder="Company Name"
               id="name"
             />
             {errors.name && <p className="text-danger">{errors.name.message}</p>}
@@ -75,7 +75,7 @@ const SignupSection = ({ onSubmit }: Props) => {
               type="email"
               {...register("email")}
               variant={"flushed"}
-              placeholder="Email"
+              placeholder="Company Email"
               id="email"
             />
             {errors.email && <p className="text-danger">{errors.email.message}</p>}
@@ -86,7 +86,7 @@ const SignupSection = ({ onSubmit }: Props) => {
               type="tel"
               {...register("phoneNumber")}
               variant={"flushed"}
-              placeholder="Phone Number"
+              placeholder="Company Phone Number"
               id="phoneNumber"
             />
             {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber.message}</p>}
@@ -97,7 +97,7 @@ const SignupSection = ({ onSubmit }: Props) => {
               type="text"
               {...register("location")}
               variant={"flushed"}
-              placeholder="Location"
+              placeholder="Company Location"
               id="location"
             />
             {errors.location && <p className="text-danger">{errors.location.message}</p>}
@@ -111,4 +111,4 @@ const SignupSection = ({ onSubmit }: Props) => {
   );
 };
 
-export default SignupSection;
+export default CompanySignupSection;

@@ -1,6 +1,6 @@
 import { Flex, Box, VStack, Text, Link } from "@chakra-ui/react";
 import React from "react";
-import SignupSection from "../components/VolunteerSignupSection";
+import VolunteerSignupSection from "../components/VolunteerSignupSection";
 import TitleHeader from "../components/TitleHeader";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const VolunteerSignUpPage = () => {
       <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
         <TitleHeader />
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
-          <SignupSection
+          <VolunteerSignupSection
             onSubmit={(e) => {
               handleSubmit(e);
             }}
