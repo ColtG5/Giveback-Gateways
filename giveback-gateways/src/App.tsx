@@ -8,6 +8,7 @@ import { ChakraProvider, createLocalStorageManager } from "@chakra-ui/react";
 import theme from "./theme";
 import VolunteerBoardPage from "./pages/VolunteerBoardPage";
 import MessageBoardPage from "./pages/MessageBoardPage";
+import SignUpPage from "./pages/SignupPage";
 
 const manager = createLocalStorageManager("chakra-ui-color-mode");
 manager.set("light");
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/volunteer-board" element={<VolunteerBoardPage />} />
