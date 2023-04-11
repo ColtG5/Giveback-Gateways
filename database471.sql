@@ -25,7 +25,7 @@ INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography
 ('xlishx', 'databasesrock', 'Alisha', 'Nasir', 'alisha.nasir456@gmail.com', '9876543210', 'I LOVE DATABASES', 'Calgary', '2023-04-10');
 
 CREATE TABLE Volunteer_profile (
-    vID INT AUTO_INCREMENT NOT NULL,
+    cID INT AUTO_INCREMENT NOT NULL,
     vUser varchar(25) NOT NULL,
     Hours INT DEFAULT NULL,
     PRIMARY KEY (vID),
