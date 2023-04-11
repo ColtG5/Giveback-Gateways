@@ -43,8 +43,18 @@ const HomePage = () => {
             as={Link}
             to="/login"
             _hover={{ textDecoration: "none" }}
+            marginRight={4} // Add margin to separate the buttons
           >
             Login
+          </Button>
+          <Button
+            size={{ base: "sm", md: "md", lg: "lg" }}
+            colorScheme="teal" // Change the color scheme to differentiate the buttons
+            as={Link}
+            to="/signup"
+            _hover={{ textDecoration: "none" }}
+          >
+            Sign Up
           </Button>
         </Box>
       </VStack>
