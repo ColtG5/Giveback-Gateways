@@ -5,17 +5,8 @@ import TitleHeader from "../components/TitleHeader";
 
 const HomePage = () => {
   return (
-    <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
-      <Box
-        flexBasis="15vh"
-        textAlign="center"
-        bg="blue.200"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <TitleHeader />
-      </Box>
+    <Flex flexDirection="column" height={"100vh"} justifyContent="space-between" bg="gray.100">
+      <TitleHeader />
       <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={8} pt={4}>
         <Card
           marginX={{ base: 5, sm: 10, md: 20, lg: 60 }}

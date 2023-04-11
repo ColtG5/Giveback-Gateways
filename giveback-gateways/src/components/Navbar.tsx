@@ -9,17 +9,6 @@ const Navbar = () => {
     <Flex justifyContent="space-around" alignItems="center" bg="blue.200" h="15vh">
       <Link
         as={RouterLink}
-        to="/"
-        fontWeight="bold"
-        fontSize="xl"
-        padding={1}
-        width={widthToCenter}
-        textAlign={"center"}
-      >
-        Home
-      </Link>
-      <Link
-        as={RouterLink}
         to={`/profile/${localStorage.getItem("username")}`}
         fontWeight="bold"
         fontSize="xl"

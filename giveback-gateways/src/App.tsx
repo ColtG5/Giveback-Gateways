@@ -9,6 +9,7 @@ import theme from "./theme";
 import VolunteerBoardPage from "./pages/VolunteerBoardPage";
 import MessageBoardPage from "./pages/MessageBoardPage";
 import SignUpPage from "./pages/SignupPage";
+import Footer from "./components/Footer";
 
 const manager = createLocalStorageManager("chakra-ui-color-mode");
 manager.set("light");
@@ -27,6 +28,7 @@ function App() {
           <Route path="/message-board" element={<MessageBoardPage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
+        <Footer />
       </ChakraProvider>
     </Router>
   );

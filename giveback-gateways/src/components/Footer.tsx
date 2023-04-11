@@ -1,0 +1,50 @@
+import { Box, Center, Link, Text } from "@chakra-ui/layout";
+import { Link as RouterLink } from "react-router-dom";
+import React from "react";
+
+const widthToCenter = "15rem";
+
+const Footer = () => {
+  return (
+    <>
+      <Box
+        bottom={1000}
+        width={"100%"}
+        height={"10vh"}
+        flexBasis="10vh"
+        textAlign="center"
+        bg="blue.200"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Center height="50%">
+          <Link
+            as={RouterLink}
+            to="/"
+            //fontWeight="bold"
+            fontSize="xl"
+            padding={1}
+            width={widthToCenter}
+            textAlign={"center"}
+          >
+            Home
+          </Link>
+          <Link
+            as={RouterLink}
+            to="/"
+            //fontWeight="bold"
+            fontSize="xl"
+            padding={1}
+            width={widthToCenter}
+            textAlign={"center"}
+          >
+            About
+          </Link>
+        </Center>
+      </Box>
+    </>
+  );
+};
+
+export default Footer;

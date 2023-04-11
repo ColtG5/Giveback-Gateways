@@ -1,8 +1,8 @@
-import { Flex, Box, VStack, Text } from "@chakra-ui/react";
+import { Flex, Box, VStack, Text, Link } from "@chakra-ui/react";
 import React from "react";
 import SignupSection from "../components/SignupSection";
 import TitleHeader from "../components/TitleHeader";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   let navigate = useNavigate();
@@ -19,29 +19,22 @@ const SignUpPage = () => {
   return (
     <>
       <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
-        <Box
-          flexBasis="15vh"
-          textAlign="center"
-          bg="blue.200"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <TitleHeader />
-        </Box>
+        <TitleHeader />
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
           <SignupSection
             onSubmit={(e) => {
               handleSubmit(e);
             }}
           />
-          <Text
-            textAlign="center"
-            style={{ textDecoration: "underline", color: "deepskyblue", cursor: "pointer" }}
-            onClick={() => navigate("/login")}
+          <Link
+            as={RouterLink}
+            to="/login"
+            fontSize="md"
+            style={{ textDecoration: "underline", color: "deepskyblue"}}
+            textAlign={"center"}
           >
-            New User?
-          </Text>
+            Already have an account?
+          </Link>
         </VStack>
       </Flex>
     </>

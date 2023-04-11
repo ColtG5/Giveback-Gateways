@@ -1,8 +1,8 @@
-import { Flex, Box, VStack, Text } from "@chakra-ui/react";
+import { Flex, Box, VStack, Text, Link } from "@chakra-ui/react";
 import React, { useState } from "react";
 import LoginSection from "../components/LoginSection";
 import TitleHeader from "../components/TitleHeader";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import useUsers from "../hooks/use-users";
 import userService, { User } from "../services/user-serivce";
 
@@ -75,16 +75,7 @@ const LoginPage = () => {
   return (
     <>
       <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
-        <Box
-          flexBasis="15vh"
-          textAlign="center"
-          bg="blue.200"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <TitleHeader />
-        </Box>
+        <TitleHeader />
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
           <LoginSection
             onSubmit={(e) => {
@@ -96,13 +87,15 @@ const LoginPage = () => {
               Invalid username or password. Please try again.
             </Box>
           )}
-          <Text
-            textAlign="center"
-            style={{ textDecoration: "underline", color: "deepskyblue", cursor: "pointer" }}
-            onClick={() => navigate("/signup")}
+          <Link
+            as={RouterLink}
+            to="/signup"
+            fontSize="md"
+            style={{ textDecoration: "underline", color: "deepskyblue"}}
+            textAlign={"center"}
           >
-            Already have an account?
-          </Text>
+            New user?
+          </Link>
         </VStack>
       </Flex>
     </>
