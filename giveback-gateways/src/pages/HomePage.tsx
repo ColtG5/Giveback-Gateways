@@ -27,25 +27,33 @@ const HomePage = () => {
             facilis ipsa! Tempora fugiat suscipit voluptatem!
           </Text>
         </Card>
-        <Box>
+        <Box pt={5}>
           <Button
             size={{ base: "sm", md: "md", lg: "lg" }}
             colorScheme="blue"
             as={Link}
             to="/login"
-            _hover={{ textDecoration: "none" }}
-            marginRight={4} // Add margin to separate the buttons
           >
             Login
           </Button>
-          <Button
+        </Box>
+        <Box >
+          <Button 
             size={{ base: "sm", md: "md", lg: "lg" }}
-            colorScheme="teal" // Change the color scheme to differentiate the buttons
+            colorScheme="teal"
             as={Link}
-            to="/signup"
-            _hover={{ textDecoration: "none" }}
+            to="/signup-volunteer"
+            marginRight={4}
           >
-            Sign Up
+            Sign up as volunteer
+          </Button>
+          <Button 
+            size={{ base: "sm", md: "md", lg: "lg" }}
+            colorScheme="teal"
+            as={Link}
+            to="/signup-company"
+          >
+            Sign up as company
           </Button>
         </Box>
       </VStack>

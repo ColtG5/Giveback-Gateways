@@ -1,10 +1,10 @@
 import { Flex, Box, VStack, Text, Link } from "@chakra-ui/react";
 import React from "react";
-import SignupSection from "../components/SignupSection";
+import SignupSection from "../components/VolunteerSignupSection";
 import TitleHeader from "../components/TitleHeader";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-const SignUpPage = () => {
+const VolunteerSignUpPage = () => {
   let navigate = useNavigate();
 
   const handleSubmit = (e: any) => {
@@ -30,7 +30,7 @@ const SignUpPage = () => {
             as={RouterLink}
             to="/login"
             fontSize="md"
-            style={{ textDecoration: "underline", color: "deepskyblue"}}
+            style={{ textDecoration: "underline", color: "deepskyblue" }}
             textAlign={"center"}
           >
             Already have an account?
@@ -41,4 +41,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default VolunteerSignUpPage;
