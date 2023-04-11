@@ -18,7 +18,7 @@ interface Props {
   onSubmit: (data: SignupData) => void;
 }
 
-const SignupSection = ({ onSubmit }: Props) => {
+const VolunteerSignupSection = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
@@ -111,4 +111,4 @@ const SignupSection = ({ onSubmit }: Props) => {
   );
 };
 
-export default SignupSection;
+export default VolunteerSignupSection;

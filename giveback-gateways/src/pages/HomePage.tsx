@@ -5,17 +5,8 @@ import TitleHeader from "../components/TitleHeader";
 
 const HomePage = () => {
   return (
-    <Flex flexDirection="column" minHeight="100vh" justifyContent="space-between" bg="gray.100">
-      <Box
-        flexBasis="15vh"
-        textAlign="center"
-        bg="blue.200"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <TitleHeader />
-      </Box>
+    <Flex flexDirection="column" height={"100vh"} justifyContent="space-between" bg="gray.100">
+      <TitleHeader />
       <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={8} pt={4}>
         <Card
           marginX={{ base: 5, sm: 10, md: 20, lg: 60 }}
@@ -36,25 +27,33 @@ const HomePage = () => {
             facilis ipsa! Tempora fugiat suscipit voluptatem!
           </Text>
         </Card>
-        <Box>
+        <Box pt={5}>
           <Button
             size={{ base: "sm", md: "md", lg: "lg" }}
             colorScheme="blue"
             as={Link}
             to="/login"
-            _hover={{ textDecoration: "none" }}
-            marginRight={4} // Add margin to separate the buttons
           >
             Login
           </Button>
-          <Button
+        </Box>
+        <Box >
+          <Button 
             size={{ base: "sm", md: "md", lg: "lg" }}
-            colorScheme="teal" // Change the color scheme to differentiate the buttons
+            colorScheme="teal"
             as={Link}
-            to="/signup"
-            _hover={{ textDecoration: "none" }}
+            to="/signup-volunteer"
+            marginRight={4}
           >
-            Sign Up
+            Sign up as volunteer
+          </Button>
+          <Button 
+            size={{ base: "sm", md: "md", lg: "lg" }}
+            colorScheme="teal"
+            as={Link}
+            to="/signup-company"
+          >
+            Sign up as company
           </Button>
         </Box>
       </VStack>
