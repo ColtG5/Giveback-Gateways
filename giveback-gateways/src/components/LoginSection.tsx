@@ -25,54 +25,49 @@ const LoginSection = ({ onSubmit }: Props) => {
     resolver: zodResolver(schema),
   });
 
-  return (
-    <Box
-      p={6}
-      boxShadow="md"
-      mt={10}
-      bg={"gray.50"}
-      borderRadius={6}
-      w={{ base: "300px", md: "400px" }}
-    >
-      <Text fontWeight="bold" fontSize="2xl" marginY={2}>
-        Log in
-      </Text>
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          await onSubmit(data);
-          reset();
-        })}
-      >
-        <Stack spacing={4}>
-          <FormControl id="username">
-            <FormLabel></FormLabel>
-            <Input
-              type="username"
-              {...register("username")}
-              variant={"flushed"}
-              placeholder="Username"
-              id="username"
-            />
-            {errors.username && <p className="text-danger">{errors.username.message}</p>}
-          </FormControl>
-          <FormControl id="password">
-            <FormLabel></FormLabel>
-            <Input
-              type="password"
-              {...register("password")}
-              variant={"flushed"}
-              placeholder="Password"
-              id="password"
-            />
-            {errors.password && <p className="text-danger">{errors.password.message}</p>}
-          </FormControl>
-          <Button colorScheme="blue" type="submit">
-            Log in
-          </Button>
-        </Stack>
-      </form>
-    </Box>
-  );
+  const handleFormSubmit = (data: LoginData) => {
+    onSubmit(data);
+    reset(); // Reset the form after submission
+  };
+
+return (
+  <Box p={6} boxShadow="md" mt={10} borderRadius={6} bg="white">
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <Stack spacing={4}>
+        <FormControl isInvalid={!!errors.username}>
+          <FormLabel htmlFor="username">Username</FormLabel>
+          <Input
+            id="username"
+            placeholder="Username"
+            {...register("username", { required: true })}
+          />
+          {errors.username && (
+            <Text color="red.500" fontSize="sm">
+              {errors.username.message}
+            </Text>
+          )}
+        </FormControl>
+        <FormControl isInvalid={!!errors.password}>
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Password"
+            {...register("password", { required: true })}
+          />
+          {errors.password && (
+            <Text color="red.500" fontSize="sm">
+              {errors.password.message}
+            </Text>
+          )}
+        </FormControl>
+        <Button type="submit" colorScheme="blue">
+          Login
+        </Button>
+      </Stack>
+    </form>
+  </Box>
+);
 };
 
 export default LoginSection;

@@ -1,14 +1,18 @@
-import { Flex, Box, VStack, Text } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Box, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
 import LoginSection from "../components/LoginSection";
 import TitleHeader from "../components/TitleHeader";
 import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/use-users";
 import userService, { User } from "../services/user-serivce";
 
+
+
 const LoginPage = () => {
-  let navigate = useNavigate();
+  let navigate = useNavigate()
   const { users, error, isLoading, setUsers, setError } = useUsers();
+  const [loginStatus, setLoginStatus] = useState("");
+
 
   //----------------------------------------------
   //new things added for updating database maybe
@@ -19,9 +23,8 @@ const LoginPage = () => {
     const originalUsers = [...users];
     const newUser = { id: 0, name: "Colton" };
     setUsers([newUser, ...users]);
-
-    userService
-      .create(newUser)
+  
+    userService.create(newUser)    
       .then(({ data: savedUser }) => {
         // setUsers(users.map((user) => (user.id === newUser.id ? updatedUser : user)));
         setUsers([savedUser, ...users]);
@@ -31,6 +34,7 @@ const LoginPage = () => {
         setUsers(originalUsers);
       });
   };
+
 
   const updateUser = (user: User) => {
     const originalUsers = [...users];
@@ -43,13 +47,39 @@ const LoginPage = () => {
     });
   };
 
-  //----------------------------------------------
 
-  const handleSubmit = (e: any) => {
-    console.log(e.username, e.password);
-    localStorage.setItem("username", e.username);
-    navigate(`/profile/${e.username}`);
+
+
+  // //----------------------------------------------
+  const handleSubmit = async (e: any) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({username: e.username, password:e.password})
+      });
+      if(response.ok){
+        const result = await response.json()
+        if(result.success){
+          setLoginStatus("success");
+          localStorage.setItem("username", e.username)
+          navigate(`/profile/${e.username}`)
+        }
+        else{
+          setLoginStatus("error");
+        }
+      }
+      else {
+        setLoginStatus("error");
+      }
+    } catch (error) {
+      console.error(error);
+      setLoginStatus("error");
+    }
   };
+  
 
   return (
     <>
@@ -65,18 +95,12 @@ const LoginPage = () => {
           <TitleHeader />
         </Box>
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
-          <LoginSection
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-          />
-          <Text
-            textAlign="center"
-            style={{ textDecoration: "underline", color: "deepskyblue" }}
-            onClick={() => navigate("/signup")}
-          >
-            New User?
-          </Text>
+          <LoginSection onSubmit={(e) => {handleSubmit(e)} } />
+          {loginStatus === "error" && (
+            <Box p={4} bg="red.100" color="red.500" mt={4} borderRadius={6}>
+              Invalid username or password. Please try again.
+            </Box>
+          )}
         </VStack>
       </Flex>
     </>
