@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Flex,
@@ -39,6 +39,15 @@ const MessageBoardPage = () => {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // Replace with data fetched from the SQL database
   const companies = [
@@ -49,6 +58,9 @@ const MessageBoardPage = () => {
 
   const sendMessage = () => {
     // Save the message to the SQL database and retrieve the date/time
+
+    if (messageInput === "") return;
+
     const newMessage: Message = {
       messageID: messages.length + 1,
       volunteerUsername: "John Doe",
@@ -60,7 +72,7 @@ const MessageBoardPage = () => {
 
     setMessages([...messages, newMessage]);
     setMessageInput("");
-    onClose();
+    //onClose();
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
@@ -106,7 +118,7 @@ const MessageBoardPage = () => {
         <ModalContent padding={0}>
           <ModalHeader>{selectedCompany} Forum</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody overflow={"auto"} maxHeight={"60vh"}>
             {messages
               .filter(
                 (message) =>
@@ -137,6 +149,7 @@ const MessageBoardPage = () => {
                   </GridItem>
                 </Grid>
               ))}
+            <div ref={messagesEndRef} />
           </ModalBody>
           <ModalFooter>
             <FormControl>
