@@ -117,7 +117,7 @@ INSERT INTO 'Message_board' ('cUser') VALUES
 
 CREATE TABLE 'Message' (
     'messageID' INT AUTO_INCREMENT NOT NULL,
-    'cUser' varchar(25) NOT NULL,
+    'vUser' varchar(25) NOT NULL,
     'bID' INT NOT NULL,
     'Title' varchar(25) NOT NULL,
     'Content' varchar(255) NOT NULL,
