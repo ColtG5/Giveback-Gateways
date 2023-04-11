@@ -8,7 +8,7 @@ const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
+  phoneNumber: z.string().regex(/^\d{10}$/, "Invalid phone number"),
   location: z.string().min(1, "Location is required"),
 });
 
@@ -29,7 +29,14 @@ const SignupSection = ({ onSubmit }: Props) => {
   });
 
   return (
-    <Box p={6} boxShadow="md" mt={10} bg={"gray.50"} borderRadius={6} w={300}>
+    <Box
+      p={6}
+      boxShadow="md"
+      mt={10}
+      bg={"gray.50"}
+      borderRadius={6}
+      w={{ base: "300px", md: "400px" }}
+    >
       <Text fontWeight="bold" fontSize="2xl" marginY={2}>
         Sign up
       </Text>

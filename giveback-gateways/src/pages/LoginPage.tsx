@@ -70,8 +70,12 @@ const LoginPage = () => {
               handleSubmit(e);
             }}
           />
-          <Text textAlign="center" style={{ textDecoration: "underline", color: "deepskyblue" }}>
-            <a href="/signup">New user?</a>
+          <Text
+            textAlign="center"
+            style={{ textDecoration: "underline", color: "deepskyblue" }}
+            onClick={() => navigate("/signup")}
+          >
+            New User?
           </Text>
         </VStack>
       </Flex>

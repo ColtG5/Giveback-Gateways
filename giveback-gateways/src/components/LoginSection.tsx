@@ -26,7 +26,14 @@ const LoginSection = ({ onSubmit }: Props) => {
   });
 
   return (
-    <Box p={6} boxShadow="md" mt={10} bg={"gray.50"} borderRadius={6} w={300}>
+    <Box
+      p={6}
+      boxShadow="md"
+      mt={10}
+      bg={"gray.50"}
+      borderRadius={6}
+      w={{ base: "300px", md: "400px" }}
+    >
       <Text fontWeight="bold" fontSize="2xl" marginY={2}>
         Log in
       </Text>
