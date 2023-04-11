@@ -7,7 +7,6 @@ const AboutPage = () => {
     <>
       <TitleHeader />
       <div>AboutPage</div>
-      <Footer />
     </>
   );
 };

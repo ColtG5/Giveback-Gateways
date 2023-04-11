@@ -8,7 +8,6 @@ const Footer = () => {
   return (
     <>
       <Box
-        bottom={1000}
         width={"100%"}
         height={"10vh"}
         flexBasis="10vh"
@@ -22,7 +21,6 @@ const Footer = () => {
           <Link
             as={RouterLink}
             to="/"
-            //fontWeight="bold"
             fontSize="xl"
             padding={1}
             width={widthToCenter}
@@ -32,8 +30,7 @@ const Footer = () => {
           </Link>
           <Link
             as={RouterLink}
-            to="/"
-            //fontWeight="bold"
+            to="/about"
             fontSize="xl"
             padding={1}
             width={widthToCenter}
