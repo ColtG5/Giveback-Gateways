@@ -30,6 +30,3 @@ CREATE TABLE 'Profile' (
     'CreationDate' date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-
-
-
