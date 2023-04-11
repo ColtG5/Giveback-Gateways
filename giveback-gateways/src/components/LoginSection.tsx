@@ -39,12 +39,24 @@ const LoginSection = ({ onSubmit }: Props) => {
         <Stack spacing={4}>
           <FormControl id="username">
             <FormLabel></FormLabel>
-            <Input type="username" {...register("username")} variant={'flushed'} placeholder="Username" id="username" />
+            <Input
+              type="username"
+              {...register("username")}
+              variant={"flushed"}
+              placeholder="Username"
+              id="username"
+            />
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
           <FormControl id="password">
             <FormLabel></FormLabel>
-            <Input type="password" {...register("password")} variant={'flushed'} placeholder="Password" id="password" />
+            <Input
+              type="password"
+              {...register("password")}
+              variant={"flushed"}
+              placeholder="Password"
+              id="password"
+            />
             {errors.password && <p className="text-danger">{errors.password.message}</p>}
           </FormControl>
           <Button colorScheme="blue" type="submit">

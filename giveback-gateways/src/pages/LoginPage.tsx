@@ -1,4 +1,4 @@
-import { Flex, Box, VStack } from "@chakra-ui/react";
+import { Flex, Box, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import LoginSection from "../components/LoginSection";
 import TitleHeader from "../components/TitleHeader";
@@ -6,15 +6,9 @@ import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/use-users";
 import userService, { User } from "../services/user-serivce";
 
-
-
-
-
-
 const LoginPage = () => {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const { users, error, isLoading, setUsers, setError } = useUsers();
-
 
   //----------------------------------------------
   //new things added for updating database maybe
@@ -25,8 +19,9 @@ const LoginPage = () => {
     const originalUsers = [...users];
     const newUser = { id: 0, name: "Colton" };
     setUsers([newUser, ...users]);
-  
-    userService.create(newUser)    
+
+    userService
+      .create(newUser)
       .then(({ data: savedUser }) => {
         // setUsers(users.map((user) => (user.id === newUser.id ? updatedUser : user)));
         setUsers([savedUser, ...users]);
@@ -36,7 +31,6 @@ const LoginPage = () => {
         setUsers(originalUsers);
       });
   };
-
 
   const updateUser = (user: User) => {
     const originalUsers = [...users];
@@ -49,16 +43,13 @@ const LoginPage = () => {
     });
   };
 
-
-
-
   //----------------------------------------------
 
   const handleSubmit = (e: any) => {
-    console.log(e.username, e.password)
-    localStorage.setItem("username", e.username)
-    navigate(`/profile/${e.username}`)
-  }
+    console.log(e.username, e.password);
+    localStorage.setItem("username", e.username);
+    navigate(`/profile/${e.username}`);
+  };
 
   return (
     <>
@@ -74,7 +65,14 @@ const LoginPage = () => {
           <TitleHeader />
         </Box>
         <VStack flexBasis="81vh" justifyContent="flex-start" alignItems="center" spacing={6}>
-          <LoginSection onSubmit={(e) => {handleSubmit(e)} } />
+          <LoginSection
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          />
+          <Text textAlign="center" style={{ textDecoration: "underline", color: "deepskyblue" }}>
+            <a href="/signup">New user?</a>
+          </Text>
         </VStack>
       </Flex>
     </>
