@@ -30,3 +30,46 @@ CREATE TABLE 'Profile' (
     'CreationDate' date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE 'Volunteer_profile' (
+    'vUser' varchar(25) NOT NULL,
+    'vID' char(10) NOT NULL,
+    'Hours' INT DEFAULT NULL 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'Company_profile' (
+    'cUser' varchar(25) NOT NULL,
+    'cID' char(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'User_goals' (
+    'vUser' varchar(25) NOT NULL,
+    'Goal' varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'User_interests' (
+    'vUser' varchar(25) NOT NULL,
+    'Interest' varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'Profile_follows' (
+    'vUser' varchar(25) NOT NULL,
+    'cUser' varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'Volunteering_opportunity' (
+    'ID' char(10) NOT NULL,
+    'Title' varchar(25) NOT NULL,
+    'Date' date NOT NULL,
+    'Time' time NOT NULL,
+    'Duration' INT NOT NULL,
+    'Description' varchar(255) NOT NULL,
+    'VolunteersNeeded' INT NOT NULL,
+    'cUser' varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+CREATE TABLE 'SignedUp_Opportunities' (
+    'vUser' varchar(25) NOT NULL,
+    'OppID' char(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+COMMIT;
