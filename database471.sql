@@ -40,8 +40,7 @@ CREATE TABLE 'Volunteer_profile' (
     'vUser' varchar(25) NOT NULL,
     'vID' INT NOT NULL,
     'Hours' INT DEFAULT NULL,
-    PRIMARY KEY ('vUser'),
-    PRIMARY KEY ('vID'),
+    PRIMARY KEY ('vUser', 'vID'),
     FOREIGN KEY ('vUser') REFERENCES 'Profile' ('Username') ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY ('vID') REFERENCES 'Volunteer_user' ('vID') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -49,8 +48,7 @@ CREATE TABLE 'Volunteer_profile' (
 CREATE TABLE 'Company_profile' (
     'cUser' varchar(25) NOT NULL,
     'cID' INT NOT NULL,
-    PRIMARY KEY ('cUser'),
-    PRIMARY KEY ('cID'),
+    PRIMARY KEY ('cUser', 'cID'),
     FOREIGN KEY ('cUser') REFERENCES 'Profile' ('Username') ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY ('cID') REFERENCES 'Volunteer_user' ('cID') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -58,24 +56,21 @@ CREATE TABLE 'Company_profile' (
 CREATE TABLE 'User_goals' (
     'vUser' varchar(25) NOT NULL,
     'Goal' varchar(25) NOT NULL,
-    PRIMARY KEY ('vUser'),
-    PRIMARY KEY ('Goal'),
+    PRIMARY KEY ('vUser', 'Goal'),
     FOREIGN KEY ('vUser') REFERENCES 'Volunteer_profile' ('vUser') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE 'User_interests' (
     'vUser' varchar(25) NOT NULL,
     'Interest' varchar(25) NOT NULL,
-    PRIMARY KEY ('vUser'),
-    PRIMARY KEY ('Interest'),
+    PRIMARY KEY ('vUser', 'Interest'),
     FOREIGN KEY ('vUser') REFERENCES 'Volunteer_profile' ('vUser') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE 'Profile_follows' (
     'vUser' varchar(25) NOT NULL,
     'cUser' varchar(25) NOT NULL,
-    PRIMARY KEY ('vUser'),
-    PRIMARY KEY ('cUser'),
+    PRIMARY KEY ('vUser', 'cUser'),
     FOREIGN KEY ('vUser') REFERENCES 'Volunteer_profile' ('vUser') ON DELETE CASCADE ON UPDATE CASCADE, 
     FOREIGN KEY ('cUser') REFERENCES 'Company_profile' ('cUser') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -100,8 +95,7 @@ CREATE TABLE 'SignedUp_Opportunities' (
     'Rejected' tinyint(1) DEFAULT 0,
     'Pending' tinyint(1) DEFAULT 1,
     'Attended' tinyint(1) DEFAULT 0,
-    PRIMARY KEY ('vUser'),
-    PRIMARY KEY ('OppID'),
+    PRIMARY KEY ('vUser', 'OppID'),
     FOREIGN KEY ('vUser') REFERENCES 'Volunteer_profile' ('vUser') ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY ('OppID') REFERENCES 'Volunteering_opportunity' ('cUser') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -129,8 +123,7 @@ CREATE TABLE 'Message' (
 CREATE TABLE 'Board_follows' (
     'cUser' varchar(25) NOT NULL,
     'boardID' INT NOT NULL,
-    PRIMARY KEY ('cUser'),
-    PRIMARY KEY ('boardID'),
+    PRIMARY KEY ('cUser', 'boardID'),
     FOREIGN KEY ('cUser') REFERENCES 'Company_profile' ('cUser') ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY ('boardID') REFERENCES 'Message_board' ('boardID') ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
