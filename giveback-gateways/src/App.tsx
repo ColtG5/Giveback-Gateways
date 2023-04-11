@@ -8,7 +8,7 @@ import { ChakraProvider, createLocalStorageManager } from "@chakra-ui/react";
 import theme from "./theme";
 import VolunteerBoardPage from "./pages/VolunteerBoardPage";
 import MessageBoardPage from "./pages/MessageBoardPage";
-import SignUpPage from "./pages/SignupPage";
+import SignUpPage from "./pages/SignupVolunteerPage";
 import Footer from "./components/Footer";
 
 const manager = createLocalStorageManager("chakra-ui-color-mode");
