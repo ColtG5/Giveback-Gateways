@@ -14,12 +14,13 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  ListItem,
-  UnorderedList,
   FormControl,
   FormLabel,
   Textarea,
   useDisclosure,
+  Grid,
+  GridItem,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import { format } from "date-fns";
@@ -46,29 +47,23 @@ const MessageBoardPage = () => {
     { id: 3, name: "Company C" },
   ];
 
-  console.log("Messages:", messages);
-  console.log("Selected company:", selectedCompany);
-  console.log("Message input:", messageInput);
-
   const sendMessage = () => {
     // Save the message to the SQL database and retrieve the date/time
     const newMessage: Message = {
-      messageID: messages.length + 1, // Use the length of the messages array to assign a new ID
-      volunteerUsername: "John Doe", // Replace with the user's name
+      messageID: messages.length + 1,
+      volunteerUsername: "John Doe",
       messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
       Title: "New Message",
       content: messageInput,
       timestamp: new Date(),
     };
 
-    console.log("New message:", newMessage);
-
     setMessages([...messages, newMessage]);
     setMessageInput("");
     onClose();
   };
 
-  console.log("Companies:", companies);
+  const fontSize = useBreakpointValue({ base: "13", md: "md" });
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -106,39 +101,56 @@ const MessageBoardPage = () => {
         </SimpleGrid>
       </VStack>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent padding={0}>
           <ModalHeader>{selectedCompany} Forum</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <UnorderedList>
-              {messages
-                .filter(
-                  // the messages that belong to the selected company are displayed
-                  (message) =>
-                    message.messageBoardID ===
-                    companies.find((company) => company.name === selectedCompany)?.id
-                )
-                .map((message) => (
-                  <ListItem key={message.messageID}>
-                    {message.volunteerUsername} - {message.Title} - {message.content} -{" "}
-                    {format(message.timestamp, "PPpp")}
-                  </ListItem>
-                ))}
-            </UnorderedList>
+            {messages
+              .filter(
+                (message) =>
+                  message.messageBoardID ===
+                  companies.find((company) => company.name === selectedCompany)?.id
+              )
+              .map((message, index) => (
+                <Grid
+                  key={message.messageID}
+                  templateColumns="1fr 1fr"
+                  gap={4}
+                  bg={index % 2 === 0 ? "blue.50" : "white"}
+                  p={4}
+                  borderRadius="md"
+                  borderColor="gray.200"
+                  borderWidth={1}
+                >
+                  <GridItem colSpan={2}>
+                    <Text fontSize={fontSize}>
+                      <strong>{message.volunteerUsername}</strong> -{" "}
+                      {format(message.timestamp, "MMM dd, yyyy hh:mm a")}
+                    </Text>
+                  </GridItem>
+                  <GridItem colSpan={2}>
+                    <Text fontSize={fontSize} wordBreak="break-word">
+                      {message.content}
+                    </Text>
+                  </GridItem>
+                </Grid>
+              ))}
           </ModalBody>
           <ModalFooter>
             <FormControl>
-              <FormLabel htmlFor="message">New message:</FormLabel>
+              <FormLabel htmlFor="message" fontSize={fontSize}>
+                Message
+              </FormLabel>
               <Textarea
+                id="message"
+                fontSize={fontSize}
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
-                placeholder="Type your message here"
-                id="message"
               />
             </FormControl>
-            <Button colorScheme="blue" onClick={sendMessage} ml={3} mt={4}>
+            <Button colorScheme="blue" ml={2} onClick={sendMessage} fontSize={fontSize} mt={4}>
               Send Message
             </Button>
           </ModalFooter>
