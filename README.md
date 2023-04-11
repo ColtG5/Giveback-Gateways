@@ -7,6 +7,8 @@ First download, the following vite and chakra using the respective commands:<br>
 
 'npm i vite' 
 'npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion'
+'npm i express' 
+'npm install mysql'
 
 <br>
 To run: Navigate to base folder of the project, and run <br>
