@@ -33,7 +33,7 @@ const SignupSection = ({ onSubmit }: Props) => {
       p={6}
       boxShadow="md"
       mt={10}
-      bg={"gray.50"}
+      bg="white"
       borderRadius={6}
       w={{ base: "300px", md: "400px" }}
     >

@@ -28,7 +28,7 @@ CREATE TABLE Volunteer_profile (
     cID INT AUTO_INCREMENT NOT NULL,
     vUser varchar(25) NOT NULL,
     Hours INT DEFAULT NULL,
-    PRIMARY KEY (vID),
+    PRIMARY KEY (cID),
     FOREIGN KEY (vUser) REFERENCES Profile (Username) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 

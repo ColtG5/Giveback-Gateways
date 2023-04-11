@@ -30,44 +30,57 @@ const LoginSection = ({ onSubmit }: Props) => {
     reset(); // Reset the form after submission
   };
 
-return (
-  <Box p={6} boxShadow="md" mt={10} borderRadius={6} bg="white">
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <Stack spacing={4}>
-        <FormControl isInvalid={!!errors.username}>
-          <FormLabel htmlFor="username">Username</FormLabel>
-          <Input
-            id="username"
-            placeholder="Username"
-            {...register("username", { required: true })}
-          />
-          {errors.username && (
-            <Text color="red.500" fontSize="sm">
-              {errors.username.message}
-            </Text>
-          )}
-        </FormControl>
-        <FormControl isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Password"
-            {...register("password", { required: true })}
-          />
-          {errors.password && (
-            <Text color="red.500" fontSize="sm">
-              {errors.password.message}
-            </Text>
-          )}
-        </FormControl>
-        <Button type="submit" colorScheme="blue">
-          Login
-        </Button>
-      </Stack>
-    </form>
-  </Box>
-);
+  return (
+    <Box
+      p={6}
+      boxShadow="md"
+      mt={10}
+      borderRadius={6}
+      bg="white"
+      w={{ base: "300px", md: "400px" }}
+    >
+      <Text fontWeight="bold" fontSize="2xl" marginY={2}>
+        Log in
+      </Text>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <Stack spacing={4}>
+          <FormControl isInvalid={!!errors.username}>
+            <FormLabel></FormLabel>
+            <Input
+              type="username"
+              {...register("username")}
+              variant={"flushed"}
+              placeholder="Username"
+              id="username"
+            />
+            {errors.username && (
+              <Text color="red.500" fontSize="sm">
+                {errors.username.message}
+              </Text>
+            )}
+          </FormControl>
+          <FormControl isInvalid={!!errors.password}>
+            <FormLabel></FormLabel>
+            <Input
+              type="password"
+              {...register("password")}
+              variant={"flushed"}
+              placeholder="Password"
+              id="password"
+            />
+            {errors.password && (
+              <Text color="red.500" fontSize="sm">
+                {errors.password.message}
+              </Text>
+            )}
+          </FormControl>
+          <Button type="submit" colorScheme="blue">
+            Log in
+          </Button>
+        </Stack>
+      </form>
+    </Box>
+  );
 };
 
 export default LoginSection;

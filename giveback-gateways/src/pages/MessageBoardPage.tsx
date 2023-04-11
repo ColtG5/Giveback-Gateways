@@ -72,7 +72,6 @@ const MessageBoardPage = () => {
 
     setMessages([...messages, newMessage]);
     setMessageInput("");
-    //onClose();
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });

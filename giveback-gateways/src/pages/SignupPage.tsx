@@ -37,7 +37,7 @@ const SignUpPage = () => {
           />
           <Text
             textAlign="center"
-            style={{ textDecoration: "underline", color: "deepskyblue" }}
+            style={{ textDecoration: "underline", color: "deepskyblue", cursor: "pointer" }}
             onClick={() => navigate("/login")}
           >
             New User?
