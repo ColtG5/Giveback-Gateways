@@ -34,7 +34,7 @@ interface Message {
   timestamp: Date;
 }
 
-const MessageBoardPage = () => {
+const MessageBoardPage =  () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCompany, setSelectedCompany] = useState("");
   const [messageInput, setMessageInput] = useState("");
@@ -56,7 +56,7 @@ const MessageBoardPage = () => {
     { id: 3, name: "Company C" },
   ];
 
-  const sendMessage = () => {
+  const sendMessage = async (e:any) => {
     // Save the message to the SQL database and retrieve the date/time
 
     if (messageInput === "") return;
@@ -70,8 +70,37 @@ const MessageBoardPage = () => {
       timestamp: new Date(),
     };
 
+      // Make a fetch request to your server's API endpoint
+  try {
+    const response = await fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cUser: 'John', 
+        bID: newMessage.messageBoardID,
+        Title: newMessage.Title,
+        content: newMessage.content,
+        Date: newMessage.timestamp,
+      }),
+    });
+    if (response.ok) {
+      setMessages([...messages, newMessage]);
+      setMessageInput("");
+      console.log(newMessage);
+    } else {
+      // Handle error response from server
+      console.error('Failed to send message:', response.status, response.statusText);
+    }
+  } catch (error) {
+    // Handle fetch error
+    console.error('Failed to send message:', error);
+  }
+
     setMessages([...messages, newMessage]);
     setMessageInput("");
+    console.log(newMessage)
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });

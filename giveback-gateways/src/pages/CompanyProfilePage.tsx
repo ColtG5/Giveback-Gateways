@@ -18,6 +18,7 @@ import PendingApplication from "../components/PendingApplication";
 const CompanyProfilePage = () => {
   let { username } = useParams();
 
+
   // Replace the array below with data fetched from the database
   const volunteeringOpportunities = [
     {
@@ -91,7 +92,7 @@ const CompanyProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               Volunteering Opportunities
             </Heading>
-            <NewVolunteeringOpportunitySection />
+            <NewVolunteeringOpportunitySection username={username} />
             {volunteeringOpportunities.map((opportunity, index) => (
               <VolunteeringOpportunity key={index} {...opportunity} />
             ))}

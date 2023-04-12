@@ -1,7 +1,8 @@
 const express = require('express')
 const cors = require('cors');
 const app = express()
-const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases } = require('./database.js'); // Import the function from database.js
+const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -63,10 +64,10 @@ app.post("/api/checkUsername", async (req, res) => {
 });
 
 app.post("/api/volunteering-opportunities", async (req, res) => {
-  const { ID, Title, Date, Time, Duration, Description, VolunteersNeeded } = req.body;
+  const { Title, Date, Time, Duration, Description, VolunteersNeeded, cUser } = req.body;
   console.log("Title:", Title);
   try {
-    const result = await insertVolunteeringOpportunity(ID, Title, Date, Time, Duration, Description, VolunteersNeeded );
+    const result = await insertVolunteeringOpportunity( Title, Date, Time, Duration, Description, VolunteersNeeded, cUser );
     // Send success response back to client
     res.json({ success: true, message: "Volunteer opportunity successfully registered" });
     console.log(result);
@@ -117,5 +118,24 @@ app.post("/api/search-username", async (req, res) => {
     res.status(500).json({ error: "Failed to check user and password" });
   }
 });
+
+app.post("/api/messages", async (req, res) => {
+  const { cUser, bID, Title, Content, Date, Time } = req.body;
+  console.log("Username:", cUser, bID, Title, Content, Date, Time);
+  try {
+    const result = await storeMessages(cUser, bID, Title, Content, Date, Time);
+    if (result) {
+      console.log("Server: User and pass match records")
+      res.json({ success: true, message: "User found" });
+    } else {
+      console.log("Server: User and pass do not match records")
+      res.json({ success: false, message: "User and password did not match" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to check user and password" });
+  }
+});
+
+
 
 app.listen(5000, () => { console.log("Server started on port 5000")})

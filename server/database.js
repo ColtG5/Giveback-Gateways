@@ -83,9 +83,9 @@ const checkUsernameExists = (username) => {
   });
 };
 
-const insertVolunteeringOpportunity = (ID, Title, Date, Time, Duration, Description, VolunteersNeeded ) => {
+const insertVolunteeringOpportunity = ( Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ) => {
   return new Promise((resolve, reject) => {
-    console.log("Values:",ID, Title, Date, Time, Duration, Description, VolunteersNeeded )
+    console.log("Values:", Title, Date, Time, Duration, Description, VolunteersNeeded, cUser )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
@@ -94,8 +94,8 @@ const insertVolunteeringOpportunity = (ID, Title, Date, Time, Duration, Descript
       } else {
         // Call the pool.query method to insert the user information into the Profile table
         pool.query(
-          "INSERT INTO Volunteering_opportunity (ID, Title, Date, Time, Duration, Description, VolunteersNeeded ) VALUES (?, ?, ?, ?, ?, ?, ?)",
-          [ID, Title, Date, Time, Duration, Description, VolunteersNeeded ],
+          "INSERT INTO Volunteering_opportunity ( Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ) VALUES ( ?, ?, ?, ?, ?, ?, ?)",
+          [ Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ],
           (err, res) => {
             if (err) {
               console.error(err);
@@ -207,7 +207,35 @@ const checkUserInDatabases = (username) => {
   });
 };
 
+const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", cUser, bID, Title, Content, Date, Time )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)",
+          [ cUser, bID, Title, Content, Date, Time ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('User registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases };
+  checkUserInDatabases, storeMessages };

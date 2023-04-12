@@ -16,7 +16,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const NewVolunteeringOpportunitySection = () => {
+
+const NewVolunteeringOpportunitySection = ({ username }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [title, setTitle] = useState("");
@@ -26,16 +27,8 @@ const NewVolunteeringOpportunitySection = () => {
   const [description, setDescription] = useState("");
   const [numOfVolunteers, setNumOfVolunteers] = useState("");
 
-  function generateRandomId() {
-    const min = 1; // Minimum ID value
-    const max = 1000; // Maximum ID value
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  
-
   const handleSubmit = async () => {
     try {
-      const id = generateRandomId(); // Generate random ID
       // Check if the username already exists in the database
       const checkResponse = await fetch(`http://localhost:5000/api/volunteering-opportunities`, {
         method: 'post',
@@ -43,13 +36,13 @@ const NewVolunteeringOpportunitySection = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ID: id,
           Title : title,
           Date: date,
           Time: time,
           Duration: duration,
           Description: description,
-          VolunteersNeeded: numOfVolunteers
+          VolunteersNeeded: numOfVolunteers,
+          cUser: username,
         }),
       });
         if (checkResponse.ok) {

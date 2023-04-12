@@ -70,10 +70,10 @@ const LoginPage = () => {
           const searchResult = await waitResponse.json();
           if (searchResult.success) {
             // If user is found in Volunteer_profile, navigate to volunteer profile page
-            navigate(`/profile/2`);
+            navigate(`/profile/${e.username}`);
           } else {
             // If user is found in Company_profile, navigate to company profile page
-            navigate(`/profile/1`);
+            navigate(`/profile/${e.username}`);
           }
         } else {
           setLoginStatus("error");
