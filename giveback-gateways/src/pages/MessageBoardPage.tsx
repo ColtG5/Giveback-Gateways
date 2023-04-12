@@ -63,7 +63,7 @@ const MessageBoardPage = () => {
       try {
         const response = await fetch("http://localhost:5000/api/companies"); // Update the URL with your actual API endpoint
         const data = await response.json();
-        console.log("Companies are: ", data[0].cUser);
+        console.log("Companies are: ", data[0]);
         setCompanies(data); // Update the companies state with the fetched data
       } catch (error) {
         console.error("Failed to fetch companies:", error);
@@ -80,7 +80,7 @@ const MessageBoardPage = () => {
     const newMessage: Message = {
       messageID: messages.length + 1,
       volunteerUsername: "John Doe", // Replace with the actual username from the user's profile
-      messageBoardID: selectedCompany.id,
+      messageBoardID: selectedCompany.cID,
       Title: "New Message",
       content: messageInput,
       timestamp: new Date(),
@@ -138,16 +138,19 @@ const MessageBoardPage = () => {
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
           {companies.map((company) => (
             <Box
-              key={company.id}
+              key={company.cID}
               bg="white"
               borderRadius="lg"
               boxShadow="md"
               p={4}
               cursor="pointer"
-              onClick={() => setSelectedCompany(company)}
-              border={selectedCompany?.id === company.id ? "2px solid" : "none"}
+              onClick={() => {
+                setSelectedCompany(company);
+                onOpen();
+              }}
+              border={selectedCompany?.cID === company.cID ? "2px solid" : "none"}
             >
-              <Text fontSize={fontSize}>{company.name}</Text>
+              <Text fontSize={fontSize}>{company.cUser}</Text>
             </Box>
           ))}
         </SimpleGrid>
@@ -156,11 +159,11 @@ const MessageBoardPage = () => {
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent padding={0}>
-          <ModalHeader>{selectedCompany?.name} Forum</ModalHeader>
+          <ModalHeader>{selectedCompany?.cUser} Forum</ModalHeader>
           <ModalCloseButton />
           <ModalBody overflow={"auto"} maxHeight={"60vh"}>
             {messages
-              .filter((message) => message.messageBoardID === selectedCompany?.id)
+              .filter((message) => message.messageBoardID === selectedCompany?.cID)
               .map((message, index) => (
                 <Grid
                   key={message.messageID}
