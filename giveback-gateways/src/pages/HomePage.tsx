@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button, Card, Flex, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import TitleHeader from "../components/TitleHeader";
+import Volunteers from "../../../Volunteer1.jpeg";
 
 const HomePage = () => {
   return (
@@ -54,6 +55,7 @@ const HomePage = () => {
             Sign up as company
           </Button>
         </Box>
+        <img src={Volunteers} alt="Volunteering" style={{ width: "20%", height: "auto"}}/>  
       </VStack>
     </Flex>
   );
