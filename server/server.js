@@ -2,9 +2,6 @@ const express = require('express')
 const cors = require('cors');
 const app = express()
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists } = require('./database.js'); // Import the function from database.js
-const Profile = require('./Profile.js'); 
-
-
 
 // Allow requests from specific origins
 app.use(cors({

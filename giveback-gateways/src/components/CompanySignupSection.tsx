@@ -13,6 +13,7 @@ const schema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"), // Add password field
 });
 
+// export type SignupData = z.infer<typeof schema>;
 export type SignupData = z.infer<typeof schema> & {
   password: string;
   creationDate: string; // Add creationDate field
@@ -45,7 +46,7 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
         Sign up
       </Text>
       <form
-        onSubmit={handleSubmit(async (data) => {
+       onSubmit={handleSubmit(async (data) => {
         // Generate creation date here
         const currentDate = new Date();
         const creationDate = currentDate.toISOString().split('T')[0]; // Format date as "YYYY-MM-DD"
@@ -66,6 +67,13 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
             />
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
+          <Input
+    type="password"
+    {...register("password")}
+    variant={"flushed"}
+    placeholder="Password"
+    id="password"
+  />
           <FormControl id="name">
             <FormLabel></FormLabel>
             <Input
