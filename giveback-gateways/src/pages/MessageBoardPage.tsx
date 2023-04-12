@@ -72,8 +72,8 @@ const MessageBoardPage =  () => {
 
       // Make a fetch request to your server's API endpoint
   try {
-    const response = await fetch('/api/messages', {
-      method: 'POST',
+    const response = await fetch(`http://localhost:5000/api/messages`, {
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -85,6 +85,7 @@ const MessageBoardPage =  () => {
         Date: newMessage.timestamp,
       }),
     });
+    console.log("Content is:",newMessage.content)
     if (response.ok) {
       setMessages([...messages, newMessage]);
       setMessageInput("");
