@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Text, Stack, Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-
 const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   name: z.string().min(1, "Name is required"),
@@ -20,7 +19,6 @@ export type SignupData = z.infer<typeof schema> & {
   password: string;
   creationDate: string; // Add creationDate field
 };
-
 
 interface Props {
   onSubmit: (data: SignupData) => void;
@@ -49,15 +47,15 @@ const VolunteerSignupSection = ({ onSubmit }: Props) => {
         Sign up
       </Text>
       <form
-       onSubmit={handleSubmit(async (data) => {
-        // Generate creation date here
-        const currentDate = new Date();
-        const creationDate = currentDate.toISOString().split('T')[0]; // Format date as "YYYY-MM-DD"
-        const newData = {...data, creationDate}; // Include creationDate in the data object
-        await onSubmit(newData); // Pass newData to onSubmit callback
-        reset();
-      })}
-    >
+        onSubmit={handleSubmit(async (data) => {
+          // Generate creation date here
+          const currentDate = new Date();
+          const creationDate = currentDate.toISOString().split("T")[0]; // Format date as "YYYY-MM-DD"
+          const newData = { ...data, creationDate }; // Include creationDate in the data object
+          await onSubmit(newData); // Pass newData to onSubmit callback
+          reset();
+        })}
+      >
         <Stack spacing={4}>
           <FormControl id="username">
             <FormLabel></FormLabel>
@@ -71,16 +69,16 @@ const VolunteerSignupSection = ({ onSubmit }: Props) => {
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
           <FormControl id="password">
-  <FormLabel></FormLabel>
-  <Input
-    type="password"
-    {...register("password")}
-    variant={"flushed"}
-    placeholder="Password"
-    id="password"
-  />
-  {errors.password && <p className="text-danger">{errors.password.message}</p>}
-</FormControl>
+            <FormLabel></FormLabel>
+            <Input
+              type="password"
+              {...register("password")}
+              variant={"flushed"}
+              placeholder="Password"
+              id="password"
+            />
+            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+          </FormControl>
           <FormControl id="name">
             <FormLabel></FormLabel>
             <Input

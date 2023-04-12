@@ -1,16 +1,14 @@
-import React from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
   Flex,
-  Text,
   VStack,
   Heading,
   SimpleGrid,
   ListItem,
   UnorderedList,
   Button,
-  HStack,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOpportunitySection";
@@ -24,6 +22,7 @@ const CompanyProfilePage = () => {
   const volunteeringOpportunities = [
     {
       title: "Beach Cleanup",
+      company: "Big Companawdn",
       date: "2023-05-01",
       time: "09:00",
       duration: "3 hours",
@@ -44,6 +43,22 @@ const CompanyProfilePage = () => {
     },
     // Add more applications...
   ];
+
+  const [pendingApps, setPendingApps] = useState(pendingApplications);
+
+  // Function to handle application acceptance or rejection
+  const handleApplication = (index: number, action: string) => {
+    // Remove the application from the pendingApps array
+    const updatedPendingApps = [...pendingApps];
+    updatedPendingApps.splice(index, 1);
+
+    // Update the pendingApps state
+    setPendingApps(updatedPendingApps);
+
+    // Handle the action (accept or reject) and update the database here
+    console.log(index, action);
+    // ...
+  };
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -77,13 +92,6 @@ const CompanyProfilePage = () => {
               Volunteering Opportunities
             </Heading>
             <NewVolunteeringOpportunitySection />
-
-            {/* <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
-              <NewVolunteeringOpportunitySection />
-              {volunteeringOpportunities.map((opportunity, index) => (
-                <VolunteeringOpportunity key={index} {...opportunity} />
-              ))}
-            </Box> */}
             {volunteeringOpportunities.map((opportunity, index) => (
               <VolunteeringOpportunity key={index} {...opportunity} />
             ))}
@@ -93,26 +101,33 @@ const CompanyProfilePage = () => {
           <Heading as="h2" size="md" mb={4}>
             Pending Volunteering Applications
           </Heading>
-          {pendingApplications.map((application, index) => (
+          {pendingApps.map((application, index) => (
             <PendingApplication key={index} {...application}>
-              <Button
-                colorScheme="green"
-                onClick={() => {
-                  // Accept application
-                  // Update the database here
-                }}
+              <Flex
+                flexDirection={{ base: "column", md: "row" }}
+                alignItems={{ base: "flex-start", md: "center" }}
+                flexWrap="wrap"
+                mt={{ base: 2, md: 0 }}
               >
-                Accept
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  // Reject application
-                  // Update the database here
-                }}
-              >
-                Reject
-              </Button>
+                <Button
+                  mb={{ base: 2, md: 0 }}
+                  mr={{ md: 5 }}
+                  colorScheme="green"
+                  onClick={() => {
+                    handleApplication(index, "accept");
+                  }}
+                >
+                  Accept
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    handleApplication(index, "reject");
+                  }}
+                >
+                  Reject
+                </Button>
+              </Flex>
             </PendingApplication>
           ))}
         </Box>
