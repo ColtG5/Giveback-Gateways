@@ -35,7 +35,7 @@ const styles = {
   container: {
     maxWidth: "700px",
     margin: "0 auto",
-    padding: "50px 20px",
+    padding: "20px 20px",
   },
   heading: {
     marginTop: '20px',

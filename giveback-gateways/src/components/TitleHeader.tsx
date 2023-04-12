@@ -11,7 +11,7 @@ const TitleHeader = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="85px"
+        height="90px"
       >
         <Center height="100%">
           <Text
