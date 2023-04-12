@@ -20,7 +20,7 @@ const VolunteerSignUpPage = () => {
         }),
       });
       const checkResult = await checkResponse.json();
-      console.log("We get to this point")
+      console.log("We get to this point");
       if (checkResult.success) {
         // Username already exists, notify the user
         console.log("Username already exists");

@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const app = express()
-const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists } = require('./database.js'); // Import the function from database.js
+const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -60,6 +60,21 @@ app.post("/api/checkUsername", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: "Failed to check username" });
+  }
+});
+
+app.post("/api/message", async (req, res) => {
+  const { cUser, bID, Title, Content, Date, Time} = req.body;
+  console.log(cUser, bID, Title, Content, Date, Time)
+
+  try {
+    const result = await insertMessageTable(cUser, bID, Title, Content, Date, Time);
+    // Send success response back to the client
+    res.json({ success: true, message: "Message posted succesfully" });
+    console.log(result)
+  } catch (err) {
+    // Handle error
+    res.status(500).json({ error: "Failed to post message" });
   }
 });
 

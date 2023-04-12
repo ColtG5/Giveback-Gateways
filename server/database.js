@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "colton.gowans.471",
+  password: "habiba471",
   connecLimit: 10 
 })
 
@@ -60,6 +60,33 @@ const insertUserIntoProfileTable = (username, name, email, phone, location, pass
   });
 };
 
+const insertMessageTable = (cUser, bID, Title, Content, Date, Time) => {
+  return new Promise((resolve, reject) => {
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          'INSERT INTO Message (cUser, bID, Title, Content, Date, Time) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [cUser, bID, Title, Content, Date, Time],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Message posted successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
 // Function to check if username exists in the database
 const checkUsernameExists = (username) => {
   return new Promise((resolve, reject) => {
@@ -84,4 +111,4 @@ const checkUsernameExists = (username) => {
   });
 };
 
-module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists };
+module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable };

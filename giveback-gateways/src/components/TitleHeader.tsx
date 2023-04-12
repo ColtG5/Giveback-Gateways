@@ -7,10 +7,11 @@ const TitleHeader = () => {
       <Box
         flexBasis="15vh"
         textAlign="center"
-        bg="blue.200"
+        bg="blue.300"
         display="flex"
         justifyContent="center"
         alignItems="center"
+        height="85px"
       >
         <Center height="100%">
           <Text

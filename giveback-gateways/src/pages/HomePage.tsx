@@ -22,9 +22,7 @@ const HomePage = () => {
             textAlign="center"
             lineHeight="1.5"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id nisi nam distinctio mollitia
-            magnam tenetur, odit maxime excepturi illo repellendus quaerat, exercitationem quia esse
-            facilis ipsa! Tempora fugiat suscipit voluptatem!
+            Welcome to GiveBack Gateways' official website! If you are a student looking for volunteer opportunities or if you are a non-profit organization seeking volunteers, then you have come to the right place.
           </Text>
         </Card>
         <Box pt={5}>

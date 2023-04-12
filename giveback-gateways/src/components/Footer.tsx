@@ -12,7 +12,7 @@ const Footer = () => {
         height={"10vh"}
         flexBasis="10vh"
         textAlign="center"
-        bg="blue.200"
+        bg="blue.100"
         display="flex"
         justifyContent="center"
         alignItems="center"
