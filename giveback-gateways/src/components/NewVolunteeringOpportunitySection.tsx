@@ -26,11 +26,61 @@ const NewVolunteeringOpportunitySection = () => {
   const [description, setDescription] = useState("");
   const [numOfVolunteers, setNumOfVolunteers] = useState("");
 
-  const handleSubmit = () => {
-    // Add your logic to handle the submission of a new volunteering opportunity
-    // Update the database here
+  function generateRandomId() {
+    const min = 1; // Minimum ID value
+    const max = 1000; // Maximum ID value
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
 
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      const id = generateRandomId(); // Generate random ID
+      // Check if the username already exists in the database
+      const checkResponse = await fetch(`http://localhost:5000/api/volunteering-opportunities`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ID: id,
+          Title : title,
+          Date: date,
+          Time: time,
+          Duration: duration,
+          Description: description,
+          VolunteersNeeded: numOfVolunteers
+        }),
+      });
+        if (checkResponse.ok) {
+          // User successfully registered
+          // Do something with the response
+          console.log("Response ok")
+        } else {
+          // Handle error
+          console.log("Failed to register user");
+        }
+      } catch (err) {
+      // Handle error
+      console.log(err)
+    }
+
+  //   try {
+  //     console.log("We attempt")
+  //     await fetch(`http://localhost:5000/api/test`, {
+  //       method: 'post', // Update to use POST method
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       // Add any request body data if required
+  //       // body: JSON.stringify({ key: value }),
+  //     });
+  //     onClose();
+  //   } catch (err) {
+  //     // Handle error
+  //     console.log(err);
+  //   }
+  // };
   };
 
   return (
