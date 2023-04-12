@@ -3,10 +3,9 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "colton.gowans.471",
+  password: "habiba471",
   connecLimit: 10 
 })
-
 
 // Function to check user and password in the database
 const checkUserAndPassword = (username, password) => {
@@ -171,6 +170,21 @@ const retrieveProfileInfo = (username, callback) => {
   });
 };
 
+const retrieveSignedUpOpportunities = (username, callback) => {
+  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve signed up opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
 const insertVolunteerProfile = ( vUser,Hours ) => {
   return new Promise((resolve, reject) => {
     console.log("Values:", vUser,Hours )
@@ -190,6 +204,34 @@ const insertVolunteerProfile = ( vUser,Hours ) => {
               reject(err);
             } else {
               console.log('Volunteer registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+const insertSignedUpOpportunity = ( vUser, OppID, Accepted, Rejected, Pending, Attended ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", vUser, OppID, Accepted, Rejected, Pending, Attended )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO SignedUp_Opportunities (vUser, OppID, Accepted, Rejected, Pending, Attended ) VALUES (?, ?, ?, ?, ?, ?)",
+          [vUser, OppID, Accepted, Rejected, Pending, Attended ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Signed up for opportunity successfully');
               resolve(res);
             }
           }
@@ -329,4 +371,4 @@ const retrieveOpportunities = (callback) => {
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities };

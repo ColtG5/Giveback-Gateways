@@ -3,7 +3,9 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
+  retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
+retrieveSignedUpOpportunities } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -77,6 +79,19 @@ app.post("/api/volunteering-opportunities", async (req, res) => {
   }
 });
 
+app.post("/api/sign-up-opportunity", async (req,res) => {
+  const { vUser, OppID, Accepted, Rejected, Pending, Attended } = req.body;
+  
+  try {
+    const result = await insertSignedUpOpportunity( vUser, OppID, Accepted, Rejected, Pending, Attended );
+    // Send success response back to client
+    res.json({ success: true, message: "Signed up for opportunity successfully" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to sign up for opportunity" });
+  }
+});
+
 app.post("/api/volunteer-profile", async (req,res) => {
   const { vUser,Hours } = req.body;
   console.log("vUser:", vUser);
@@ -87,6 +102,31 @@ app.post("/api/volunteer-profile", async (req,res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to register volunteer in database" });
+  }
+});
+
+app.post("/api/get-signed-opportunities", async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveSignedUpOpportunities(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No opportunities signed up")
+      res.json({ success: false, message: "No signed up for opportunities found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve signed up for opportunities" });
   }
 });
 
