@@ -43,9 +43,17 @@ const CompanySignUpPage = () => {
           }),
         });
         if (response.ok) {
-          // User successfully registered
           // Do something with the response
           console.log("Response ok");
+          const waitResponse = await fetch("http://localhost:5000/api/company-profile", {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cUser: e.username,
+            }),
+          });
           navigate(`/login`);
         } else {
           // Handle error

@@ -3,9 +3,12 @@ import React from "react";
 import VolunteerSignupSection from "../components/VolunteerSignupSection";
 import TitleHeader from "../components/TitleHeader";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useState } from "react"; // Import useState from React
+
 
 const VolunteerSignUpPage = () => {
   let navigate = useNavigate();
+
 
   const handleSubmit = async (e:any) => {
     try {
@@ -20,13 +23,14 @@ const VolunteerSignUpPage = () => {
         }),
       });
       const checkResult = await checkResponse.json();
-      console.log("We get to this point")
+      console.log("We get to this point");
       if (checkResult.success) {
         // Username already exists, notify the user
         console.log("Username already exists");
       } else {
         // Username doesn't exist, proceed with user registration
         console.log("The username does not exist")
+        // Generate a 10-digit PID starting with the number 2
         const response = await fetch("http://localhost:5000/api/signup", {
           method: 'post',
           headers: {
@@ -39,13 +43,24 @@ const VolunteerSignUpPage = () => {
             phone: e.phoneNumber,
             location: e.location,
             password: e.password,
-            creationDate: e.creationDate
+            creationDate: e.creationDate,
           }),
         });
         if (response.ok) {
           // User successfully registered
           // Do something with the response
           console.log("Response ok")
+          // Now we insert values into a volunteer profile 
+          const waitResponse = await fetch("http://localhost:5000/api/volunteer-profile", {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              vUser: e.username,
+              Hours: 0,
+            }),
+          });
           navigate(`/login`)
         } else {
           // Handle error

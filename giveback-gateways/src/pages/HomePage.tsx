@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Button, Card, Flex, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import TitleHeader from "../components/TitleHeader";
+import Volunteers from "../../../Volunteer1.jpeg";
 
 const HomePage = () => {
   return (
@@ -22,9 +23,7 @@ const HomePage = () => {
             textAlign="center"
             lineHeight="1.5"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id nisi nam distinctio mollitia
-            magnam tenetur, odit maxime excepturi illo repellendus quaerat, exercitationem quia esse
-            facilis ipsa! Tempora fugiat suscipit voluptatem!
+            Welcome to GiveBack Gateways' official website! If you are a student looking for volunteer opportunities or if you are a non-profit organization seeking volunteers, then you have come to the right place.
           </Text>
         </Card>
         <Box pt={5}>
@@ -56,6 +55,7 @@ const HomePage = () => {
             Sign up as company
           </Button>
         </Box>
+        <img src={Volunteers} alt="Volunteering" style={{ width: "20%", height: "auto"}}/>  
       </VStack>
     </Flex>
   );
