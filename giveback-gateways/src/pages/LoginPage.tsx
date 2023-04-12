@@ -94,7 +94,16 @@ const LoginPage = () => {
             style={{ textDecoration: "underline", color: "deepskyblue"}}
             textAlign={"center"}
           >
-            New user?
+            New volunteer?
+          </Link>
+          <Link
+            as={RouterLink}
+            to="/signup-company"
+            fontSize="md"
+            style={{ textDecoration: "underline", color: "deepskyblue"}}
+            textAlign={"center"}
+          >
+            New company?
           </Link>
         </VStack>
       </Flex>
