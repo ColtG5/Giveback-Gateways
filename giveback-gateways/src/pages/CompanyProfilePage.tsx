@@ -9,11 +9,41 @@ import {
   SimpleGrid,
   ListItem,
   UnorderedList,
+  Button,
+  HStack,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
+import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOpportunitySection";
+import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
+import PendingApplication from "../components/PendingApplication";
 
 const CompanyProfilePage = () => {
   let { username } = useParams();
+
+  // Replace the array below with data fetched from the database
+  const volunteeringOpportunities = [
+    {
+      title: "Beach Cleanup",
+      date: "2023-05-01",
+      time: "09:00",
+      duration: "3 hours",
+      description: "Join us in cleaning the local beach.",
+      numOfVolunteers: 10,
+    },
+    // Add more opportunities...
+  ];
+
+  // Replace the array below with data fetched from the database
+  const pendingApplications = [
+    {
+      volunteerName: "Jane Smith",
+      location: "New York, NY",
+      email: "jane@example.com",
+      phoneNumber: "123-456-7890",
+      opportunityTitle: "Beach Cleanup",
+    },
+    // Add more applications...
+  ];
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -42,31 +72,49 @@ const CompanyProfilePage = () => {
               <ListItem>Contact Info: johndoe@example.com</ListItem>
             </UnorderedList>
           </Box>
-          {/* <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
+          <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
-              Goals & Interests
+              Volunteering Opportunities
             </Heading>
-            <UnorderedList>
-              <ListItem>Goal: Help 100 people this year</ListItem>
-              <ListItem>Interests: Animal welfare, Environment</ListItem>
-            </UnorderedList>
-          </Box> */}
+            <NewVolunteeringOpportunitySection />
+
+            {/* <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
+              <NewVolunteeringOpportunitySection />
+              {volunteeringOpportunities.map((opportunity, index) => (
+                <VolunteeringOpportunity key={index} {...opportunity} />
+              ))}
+            </Box> */}
+            {volunteeringOpportunities.map((opportunity, index) => (
+              <VolunteeringOpportunity key={index} {...opportunity} />
+            ))}
+          </Box>
         </SimpleGrid>
-        <Box
-          bg="white"
-          borderRadius="lg"
-          p={6}
-          boxShadow="md"
-          w={{ lg: "50%", md: "70%", base: "100%" }}
-        >
+        <Box bg="white" borderRadius="lg" p={6} boxShadow="md" w={{ base: "100%", md: "80%" }}>
           <Heading as="h2" size="md" mb={4}>
-            Volunteer Work
+            Pending Volunteering Applications
           </Heading>
-          <UnorderedList>
-            <ListItem>Animal Shelter Volunteer</ListItem>
-            <ListItem>Park Cleanup Organizer</ListItem>
-            <ListItem>Food Bank Supporter</ListItem>
-          </UnorderedList>
+          {pendingApplications.map((application, index) => (
+            <PendingApplication key={index} {...application}>
+              <Button
+                colorScheme="green"
+                onClick={() => {
+                  // Accept application
+                  // Update the database here
+                }}
+              >
+                Accept
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => {
+                  // Reject application
+                  // Update the database here
+                }}
+              >
+                Reject
+              </Button>
+            </PendingApplication>
+          ))}
         </Box>
       </VStack>
     </Flex>
