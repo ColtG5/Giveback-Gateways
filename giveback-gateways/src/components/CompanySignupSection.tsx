@@ -10,9 +10,14 @@ const schema = z.object({
   email: z.string().email("Invalid email address"),
   phoneNumber: z.string().regex(/^\d{10}$/, "Invalid phone number"),
   location: z.string().min(1, "Location is required"),
+  password: z.string().min(6, "Password must be at least 6 characters"), // Add password field
 });
 
-type SignupData = z.infer<typeof schema>;
+// export type SignupData = z.infer<typeof schema>;
+export type SignupData = z.infer<typeof schema> & {
+  password: string;
+  creationDate: string; // Add creationDate field
+};
 
 interface Props {
   onSubmit: (data: SignupData) => void;
@@ -41,11 +46,15 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
         Sign up
       </Text>
       <form
-        onSubmit={handleSubmit(async (data) => {
-          await onSubmit(data);
-          reset();
-        })}
-      >
+       onSubmit={handleSubmit(async (data) => {
+        // Generate creation date here
+        const currentDate = new Date();
+        const creationDate = currentDate.toISOString().split('T')[0]; // Format date as "YYYY-MM-DD"
+        const newData = {...data, creationDate}; // Include creationDate in the data object
+        await onSubmit(newData); // Pass newData to onSubmit callback
+        reset();
+      })}
+    >
         <Stack spacing={4}>
           <FormControl id="username">
             <FormLabel></FormLabel>
@@ -58,6 +67,13 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
             />
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
+          <Input
+    type="password"
+    {...register("password")}
+    variant={"flushed"}
+    placeholder="Password"
+    id="password"
+  />
           <FormControl id="name">
             <FormLabel></FormLabel>
             <Input

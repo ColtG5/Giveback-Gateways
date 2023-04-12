@@ -7,13 +7,55 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 const VolunteerSignUpPage = () => {
   let navigate = useNavigate();
 
-  const handleSubmit = (e: any) => {
-    console.log(e);
-    // Save the user's data to the database, including creation date
-    // ...
-
-    // Redirect to the login page after successful sign-up
-    navigate("/login");
+  const handleSubmit = async (e:any) => {
+    try {
+      // Check if the username already exists in the database
+      const checkResponse = await fetch(`http://localhost:5000/api/checkUsername`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: e.username
+        }),
+      });
+      const checkResult = await checkResponse.json();
+      console.log("We get to this point")
+      if (checkResult.success) {
+        // Username already exists, notify the user
+        console.log("Username already exists");
+      } else {
+        // Username doesn't exist, proceed with user registration
+        console.log("The username does not exist")
+        const response = await fetch("http://localhost:5000/api/signup", {
+          method: 'post',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: e.username,
+            name: e.name,
+            email: e.email,
+            phone: e.phoneNumber,
+            location: e.location,
+            password: e.password,
+            creationDate: e.creationDate
+          }),
+        });
+        if (response.ok) {
+          // User successfully registered
+          // Do something with the response
+          console.log("Response ok")
+          navigate(`/login`)
+        } else {
+          // Handle error
+          console.log("Failed to register user");
+        }
+      }
+    } catch (err) {
+      // Handle error
+      console.log(err)
+    }
   };
 
   return (
