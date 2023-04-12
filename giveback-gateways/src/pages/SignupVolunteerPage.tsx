@@ -3,9 +3,18 @@ import React from "react";
 import VolunteerSignupSection from "../components/VolunteerSignupSection";
 import TitleHeader from "../components/TitleHeader";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useState } from "react"; // Import useState from React
+
 
 const VolunteerSignUpPage = () => {
   let navigate = useNavigate();
+  const [pid, setPid] = useState(2); // Initialize PID with starting value of 2
+
+  const generatePid = () => {
+    // Function to generate unique PID
+    setPid(pid + 1); // Increment PID by 1
+  };
+
 
   const handleSubmit = async (e:any) => {
     try {
@@ -27,6 +36,9 @@ const VolunteerSignUpPage = () => {
       } else {
         // Username doesn't exist, proceed with user registration
         console.log("The username does not exist")
+        // Generate a 10-digit PID starting with the number 2
+        generatePid();
+        console.log(pid);
         const response = await fetch("http://localhost:5000/api/signup", {
           method: 'post',
           headers: {
@@ -39,13 +51,15 @@ const VolunteerSignUpPage = () => {
             phone: e.phoneNumber,
             location: e.location,
             password: e.password,
-            creationDate: e.creationDate
+            creationDate: e.creationDate,
+            pid: pid
           }),
         });
         if (response.ok) {
           // User successfully registered
           // Do something with the response
           console.log("Response ok")
+          // Now we insert values into a volunteer profile 
           navigate(`/login`)
         } else {
           // Handle error

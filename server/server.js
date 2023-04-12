@@ -31,11 +31,11 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/signup", async (req, res) => {
-  const { username, name, email, phone, location, password, creationDate} = req.body;
-  console.log(username,name,email,phone,location, password, creationDate)
+  const { username, name, email, phone, location, password, creationDate, pid} = req.body;
+  console.log(username,name,email,phone,location, password, creationDate, pid)
 
   try {
-    const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate);
+    const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate, pid);
     // Send success response back to the client
     res.json({ success: true, message: "User registered successfully" });
     console.log(result)
