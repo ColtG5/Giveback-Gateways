@@ -1,8 +1,10 @@
 const express = require('express')
 const cors = require('cors');
 const app = express()
+
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, getGoals } = require('./database.js'); // Import the function from database.js
+
 
 // Allow requests from specific origins
 app.use(cors({
@@ -89,6 +91,19 @@ app.post("/api/volunteer-profile", async (req,res) => {
   }
 });
 
+app.get('/api/goals', (req, res) => {
+  getGoals((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve companies:', err);
+      res.status(500).json({ error: 'Failed to retrieve companies' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+    }
+  });
+});
+
 app.post("/api/company-profile", async (req,res) => {
   const { cUser } = req.body;
   console.log("cUser:", cUser);
@@ -135,7 +150,5 @@ app.post("/api/messages", async (req, res) => {
     res.status(500).json({ error: "Failed to check user and password" });
   }
 });
-
-
 
 app.listen(5000, () => { console.log("Server started on port 5000")})
