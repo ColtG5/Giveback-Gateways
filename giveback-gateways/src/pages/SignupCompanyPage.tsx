@@ -7,28 +7,28 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 const CompanySignUpPage = () => {
   let navigate = useNavigate();
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     try {
       // Check if the username already exists in the database
       const checkResponse = await fetch(`http://localhost:5000/api/checkUsername`, {
-        method: 'post',
+        method: "post",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: e.username
+          username: e.username,
         }),
       });
       const checkResult = await checkResponse.json();
-      console.log("We get to this point")
+      console.log("We get to this point");
       if (checkResult.success) {
         // Username already exists, notify the user
         console.log("Username already exists");
       } else {
         // Username doesn't exist, proceed with user registration
-        console.log("The username does not exist")
+        console.log("The username does not exist");
         const response = await fetch("http://localhost:5000/api/signup", {
-          method: 'post',
+          method: "post",
           headers: {
             "Content-Type": "application/json",
           },
@@ -39,14 +39,14 @@ const CompanySignUpPage = () => {
             phone: e.phoneNumber,
             location: e.location,
             password: e.password,
-            creationDate: e.creationDate
+            creationDate: e.creationDate,
           }),
         });
         if (response.ok) {
           // User successfully registered
           // Do something with the response
-          console.log("Response ok")
-          navigate(`/login`)
+          console.log("Response ok");
+          navigate(`/login`);
         } else {
           // Handle error
           console.log("Failed to register user");
@@ -54,7 +54,7 @@ const CompanySignUpPage = () => {
       }
     } catch (err) {
       // Handle error
-      console.log(err)
+      console.log(err);
     }
   };
 

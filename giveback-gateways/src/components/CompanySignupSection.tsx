@@ -46,15 +46,15 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
         Sign up
       </Text>
       <form
-       onSubmit={handleSubmit(async (data) => {
-        // Generate creation date here
-        const currentDate = new Date();
-        const creationDate = currentDate.toISOString().split('T')[0]; // Format date as "YYYY-MM-DD"
-        const newData = {...data, creationDate}; // Include creationDate in the data object
-        await onSubmit(newData); // Pass newData to onSubmit callback
-        reset();
-      })}
-    >
+        onSubmit={handleSubmit(async (data) => {
+          // Generate creation date here
+          const currentDate = new Date();
+          const creationDate = currentDate.toISOString().split("T")[0]; // Format date as "YYYY-MM-DD"
+          const newData = { ...data, creationDate }; // Include creationDate in the data object
+          await onSubmit(newData); // Pass newData to onSubmit callback
+          reset();
+        })}
+      >
         <Stack spacing={4}>
           <FormControl id="username">
             <FormLabel></FormLabel>
@@ -68,12 +68,12 @@ const CompanySignupSection = ({ onSubmit }: Props) => {
             {errors.username && <p className="text-danger">{errors.username.message}</p>}
           </FormControl>
           <Input
-    type="password"
-    {...register("password")}
-    variant={"flushed"}
-    placeholder="Password"
-    id="password"
-  />
+            type="password"
+            {...register("password")}
+            variant={"flushed"}
+            placeholder="Password"
+            id="password"
+          />
           <FormControl id="name">
             <FormLabel></FormLabel>
             <Input
