@@ -34,7 +34,7 @@ interface Message {
   timestamp: Date;
 }
 
-const MessageBoardPage = () => {
+const MessageBoardPage =  () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCompany, setSelectedCompany] = useState("");
   const [messageInput, setMessageInput] = useState("");
@@ -56,44 +56,52 @@ const MessageBoardPage = () => {
     { id: 3, name: "Company C" },
   ];
 
-  const sendMessage = async(e:any) => {
+  const sendMessage = async (e:any) => {
     // Save the message to the SQL database and retrieve the date/time
 
     if (messageInput === "") return;
-    
-      const newMessage: Message = {
-        messageID: messages.length + 1,
-        volunteerUsername: "John Doe",
-        messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
-        Title: "New Message",
-        content: messageInput,
-        timestamp: new Date(),
-      };
 
-      try {
-        const checkResponse = await fetch('https://localhost:5000/api/message', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: e.message
-          }),
-        });
-    
-        const checkResult = await checkResponse.json();
-        console.log("We get to this point");
-        if (checkResult.success) {
-          console.log("Success")
-        } else {
-          console.log('Error saving message:', checkResponse.status);
-        }
-      } catch (error) {
-        console.log('Error saving message:', error);
-      }
-    
+    const newMessage: Message = {
+      messageID: messages.length + 1,
+      volunteerUsername: "John Doe",
+      messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
+      Title: "New Message",
+      content: messageInput,
+      timestamp: new Date(),
+    };
+
+      // Make a fetch request to your server's API endpoint
+  try {
+    const response = await fetch(`http://localhost:5000/api/messages`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cUser: 'John', 
+        bID: newMessage.messageBoardID,
+        Title: newMessage.Title,
+        content: newMessage.content,
+        Date: newMessage.timestamp,
+      }),
+    });
+    console.log("Content is:",newMessage.content)
+    if (response.ok) {
+      setMessages([...messages, newMessage]);
+      setMessageInput("");
+      console.log(newMessage);
+    } else {
+      // Handle error response from server
+      console.error('Failed to send message:', response.status, response.statusText);
+    }
+  } catch (error) {
+    // Handle fetch error
+    console.error('Failed to send message:', error);
+  }
+
     setMessages([...messages, newMessage]);
     setMessageInput("");
+    console.log(newMessage)
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });

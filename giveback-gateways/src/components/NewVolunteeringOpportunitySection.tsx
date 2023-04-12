@@ -16,11 +16,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-type NewVolunteeringOpportunitySectionProps = {
-  username: string;
-}
 
-const NewVolunteeringOpportunitySection = ({ username }: NewVolunteeringOpportunitySectionProps) => {
+const NewVolunteeringOpportunitySection = ({ username }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [title, setTitle] = useState("");
@@ -30,11 +27,36 @@ const NewVolunteeringOpportunitySection = ({ username }: NewVolunteeringOpportun
   const [description, setDescription] = useState("");
   const [numOfVolunteers, setNumOfVolunteers] = useState("");
 
-  const handleSubmit = () => {
-    // Add your logic to handle the submission of a new volunteering opportunity
-    // Update the database here
-
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      // Check if the username already exists in the database
+      const checkResponse = await fetch(`http://localhost:5000/api/volunteering-opportunities`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Title : title,
+          Date: date,
+          Time: time,
+          Duration: duration,
+          Description: description,
+          VolunteersNeeded: numOfVolunteers,
+          cUser: username,
+        }),
+      });
+        if (checkResponse.ok) {
+          // User successfully registered
+          // Do something with the response
+          console.log("Response ok")
+        } else {
+          // Handle error
+          console.log("Failed to register user");
+        }
+      } catch (err) {
+      // Handle error
+      console.log(err)
+    }
   };
 
   return (
