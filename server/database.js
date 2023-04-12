@@ -32,6 +32,38 @@ const checkUserAndPassword = (username, password) => {
   });
 };
 
+const getGoals = (username) => {
+  return new Promise((resolve, reject) => {
+      pool.query('USE gbgw471', (err, res) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          pool.query(
+            `SELECT goal FROM gbgw471.User_goals WHERE vUser = ?`, [username], (err, res) => {
+              if (err) {
+                console.error(err);
+                console.log("Database was not able to retrieve information properly")
+                reject(err);
+              } else {
+                // Process the result and send appropriate response
+                console.log("Successfully retrieved goals");
+                // You can send response back to server or perform further actions here
+                if (res.length > 0) {
+                  console.log("goals exist in the database")
+                  resolve(true);
+                } else {
+                  console.log("no goals for this user")
+                  resolve(false); // Reject the promise with false value
+                }
+              }
+            }
+          );
+        }
+      });
+  });
+};
+
 
 const insertUserIntoProfileTable = (username, name, email, phone, location, password, creationDate) => {
   return new Promise((resolve, reject) => {
@@ -111,4 +143,4 @@ const checkUsernameExists = (username) => {
   });
 };
 
-module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable };
+module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable, getGoals };

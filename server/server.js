@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const app = express()
-const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable } = require('./database.js'); // Import the function from database.js
+const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable, getGoals } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -76,6 +76,19 @@ app.post("/api/message", async (req, res) => {
     // Handle error
     res.status(500).json({ error: "Failed to post message" });
   }
+});
+
+app.get('/api/goals', (req, res) => {
+  getGoals((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve companies:', err);
+      res.status(500).json({ error: 'Failed to retrieve companies' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+    }
+  });
 });
 
 app.listen(5000, () => { console.log("Server started on port 5000")})

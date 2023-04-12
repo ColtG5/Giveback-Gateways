@@ -16,7 +16,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const NewVolunteeringOpportunitySection = () => {
+type NewVolunteeringOpportunitySectionProps = {
+  username: string;
+}
+
+const NewVolunteeringOpportunitySection = ({ username }: NewVolunteeringOpportunitySectionProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [title, setTitle] = useState("");
