@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -11,9 +11,34 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
+import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
 
 const VolunteerProfilePage = () => {
   let { username } = useParams();
+
+  const initialCurrentOpportunities = [
+    {
+      title: "Beach Cleanup",
+      company: "Big Company",
+      date: "2023-05-01",
+      time: "09:00",
+      duration: "3 hours",
+      description: "Join us in cleaning the local beach.",
+      numOfVolunteers: 10,
+    },
+    {
+      title: "yes Cleanup",
+      company: "smol Company",
+      date: "2023-05-01",
+      time: "09:00",
+      duration: "3 hours",
+      description: "Join us in cleaning the local beach.",
+      numOfVolunteers: 10,
+    },
+  ];
+
+  // Initialize the state variable for current opportunities
+  const [currentOpportunities, setCurrentOpportunities] = useState(initialCurrentOpportunities);
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -51,23 +76,25 @@ const VolunteerProfilePage = () => {
               <ListItem>Interests: Animal welfare, Environment</ListItem>
             </UnorderedList>
           </Box>
+          <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
+            <Heading as="h2" size="md" mb={4}>
+              Current Volunteering Opportunities
+            </Heading>
+            {currentOpportunities.map((opportunity, index) => (
+              <VolunteeringOpportunity key={index} {...opportunity} />
+            ))}
+          </Box>
+          <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
+            <Heading as="h2" size="md" mb={4}>
+              All Volunteer Work
+            </Heading>
+            <UnorderedList>
+              <ListItem>Animal Shelter Volunteer</ListItem>
+              <ListItem>Park Cleanup Organizer</ListItem>
+              <ListItem>Food Bank Supporter</ListItem>
+            </UnorderedList>
+          </Box>
         </SimpleGrid>
-        <Box
-          bg="white"
-          borderRadius="lg"
-          p={6}
-          boxShadow="md"
-          w={{ lg: "50%", md: "70%", base: "100%" }}
-        >
-          <Heading as="h2" size="md" mb={4}>
-            Volunteer Work
-          </Heading>
-          <UnorderedList>
-            <ListItem>Animal Shelter Volunteer</ListItem>
-            <ListItem>Park Cleanup Organizer</ListItem>
-            <ListItem>Food Bank Supporter</ListItem>
-          </UnorderedList>
-        </Box>
       </VStack>
     </Flex>
   );

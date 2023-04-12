@@ -36,12 +36,12 @@ const NewVolunteeringOpportunitySection = () => {
   return (
     <Box mb="3">
       <Button colorScheme="blue" onClick={onOpen}>
-        Add a New Volunteering Opportunity
+        Add A Volunteering Opportunity
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add New Volunteering Opportunity</ModalHeader>
+          <ModalHeader>Add A Volunteering Opportunity</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl mt={4}>
