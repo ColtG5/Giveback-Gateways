@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 
-const ProfilePage = () => {
+const CompanyProfilePage = () => {
   let { username } = useParams();
 
   return (
@@ -27,7 +27,7 @@ const ProfilePage = () => {
         pb={20}
       >
         <Heading as="h1" size="2xl" textAlign="center" mt={"1.5rem"}>
-          {username}'s Profile
+          {username}'s Company Profile
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
@@ -42,7 +42,7 @@ const ProfilePage = () => {
               <ListItem>Contact Info: johndoe@example.com</ListItem>
             </UnorderedList>
           </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
+          {/* <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
             <Heading as="h2" size="md" mb={4}>
               Goals & Interests
             </Heading>
@@ -50,7 +50,7 @@ const ProfilePage = () => {
               <ListItem>Goal: Help 100 people this year</ListItem>
               <ListItem>Interests: Animal welfare, Environment</ListItem>
             </UnorderedList>
-          </Box>
+          </Box> */}
         </SimpleGrid>
         <Box
           bg="white"
@@ -73,4 +73,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default CompanyProfilePage;

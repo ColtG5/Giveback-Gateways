@@ -1,8 +1,8 @@
 import create from "./http-service";
 
-export interface User {
+export interface Message {
     id: number;
     name: string;
 }
 
-export default create('/users');
+export default create('/message');
