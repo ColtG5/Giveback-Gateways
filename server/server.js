@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -87,6 +87,31 @@ app.post("/api/volunteer-profile", async (req,res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to register volunteer in database" });
+  }
+});
+
+app.post("/api/profile-info", async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveProfileInfo(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No profile info")
+      res.json({ success: false, message: "No profile information found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve profile information" });
   }
 });
 
