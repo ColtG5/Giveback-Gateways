@@ -64,23 +64,6 @@ const NewVolunteeringOpportunitySection = () => {
       // Handle error
       console.log(err)
     }
-
-  //   try {
-  //     console.log("We attempt")
-  //     await fetch(`http://localhost:5000/api/test`, {
-  //       method: 'post', // Update to use POST method
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       // Add any request body data if required
-  //       // body: JSON.stringify({ key: value }),
-  //     });
-  //     onClose();
-  //   } catch (err) {
-  //     // Handle error
-  //     console.log(err);
-  //   }
-  // };
   };
 
   return (
