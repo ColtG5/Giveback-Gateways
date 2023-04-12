@@ -141,6 +141,21 @@ const retrieveInterests = (username, callback) => {
   });
 };
 
+const retrieveMessages = (bID, callback) => {
+  const query = 'SELECT * FROM gbgw471.Message WHERE bID = ?';
+  pool.query(query, [bID], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve messages:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
 const insertVolunteerProfile = ( vUser,Hours ) => {
   return new Promise((resolve, reject) => {
     console.log("Values:", vUser,Hours )
@@ -302,4 +317,4 @@ const retrieveOpportunities = (callback) => {
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages };

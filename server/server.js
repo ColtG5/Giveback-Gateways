@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -92,7 +92,6 @@ app.post("/api/volunteer-profile", async (req,res) => {
 
 app.post("/api/goals", async (req, res) => {
   const { username } = req.body;
-  console.log("Username:", username);
 
   try {
     const result = await new Promise ((resolve, reject) => {
@@ -118,7 +117,6 @@ app.post("/api/goals", async (req, res) => {
 
 app.post("/api/interests", async (req, res) => {
   const { username } = req.body;
-  console.log("Username:", username);
 
   try {
     const result = await new Promise ((resolve, reject) => {
@@ -139,6 +137,31 @@ app.post("/api/interests", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: "Failed to retrieve interests" });
+  }
+});
+
+app.post("/api/get-messages", async (req, res) => {
+  const { bID } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveMessages(bID, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No messages")
+      res.json({ success: false, message: "No messages found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve messages" });
   }
 });
 
