@@ -3,7 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ErrorPage from "./pages/ErrorPage";
-import ProfilePage from "./pages/ProfilePage";
+import VolunteerProfilePage from "./pages/VolunteerProfilePage";
+import CompanyProfilePage from "./pages/CompanyProfilePage";
 import { ChakraProvider, createLocalStorageManager } from "@chakra-ui/react";
 import theme from "./theme";
 import VolunteerBoardPage from "./pages/VolunteerBoardPage";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup-volunteer" element={<SignupVolunteerPage />} />
           <Route path="/signup-company" element={<SignupCompanyPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile/:username" element={<VolunteerProfilePage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/volunteer-board" element={<VolunteerBoardPage />} />
           <Route path="/message-board" element={<MessageBoardPage />} />
