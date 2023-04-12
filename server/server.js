@@ -262,16 +262,16 @@ app.post("/api/search-username", async (req, res) => {
 });
 
 app.post("/api/messages", async (req, res) => {
-  const { cUser, bID, Title, Content, Date, Time } = req.body;
-  console.log("Username:", cUser, bID, Title, Content, Date, Time);
+  const { username, bID, Title, Content, Date, Time } = req.body;
+  console.log("Username:", username, bID, Title, Content, Date, Time);
   try {
-    const result = await storeMessages(cUser, bID, Title, Content, Date, Time);
+    const result = await storeMessages(username, bID, Title, Content, Date, Time);
     if (result) {
-      console.log("Server: User and pass match records")
-      res.json({ success: true, message: "User found" });
+      console.log("Messages found")
+      res.json({ success: true, message: "Message found" });
     } else {
-      console.log("Server: User and pass do not match records")
-      res.json({ success: false, message: "User and password did not match" });
+      console.log("No messages found")
+      res.json({ success: false, message: "Not found" });
     }
   } catch (err) {
     res.status(500).json({ error: "Failed to check user and password" });

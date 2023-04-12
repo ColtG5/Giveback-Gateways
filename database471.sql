@@ -125,14 +125,14 @@ INSERT INTO Message_board (cUser) VALUES
 
 CREATE TABLE Message (
     messageID INT AUTO_INCREMENT NOT NULL,
-    cUser varchar(25) NOT NULL,
+    username varchar(25) NOT NULL,
     bID INT NOT NULL,
     Title varchar(25) NOT NULL,
     Content varchar(255) NOT NULL,
     Date date NOT NULL,
     Time time NOT NULL,
     PRIMARY KEY (messageID),
-    FOREIGN KEY (cUser) REFERENCES Company_profile (cUser) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (username) REFERENCES Profile (Username) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (bID) REFERENCES Message_board (boardID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
