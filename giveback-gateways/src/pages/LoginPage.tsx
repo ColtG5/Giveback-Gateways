@@ -71,9 +71,11 @@ const LoginPage = () => {
           if (searchResult.success) {
             localStorage.setItem("username", e.username);
             // If user is found in Volunteer_profile, navigate to volunteer profile page
+            localStorage.setItem("profile-type", `2`);
             navigate(`/profile/2`);
           } else {
             // If user is found in Company_profile, navigate to company profile page
+            localStorage.setItem("profile-type", `1`);
             navigate(`/profile/1`);
           }
 

@@ -9,7 +9,7 @@ const Navbar = () => {
     <Flex justifyContent="space-around" alignItems="center" bg="blue.200" h="15vh">
       <Link
         as={RouterLink}
-        to={`/profile/${localStorage.getItem("username")}`}
+        to={`/profile/${localStorage.getItem("profile-type")}`}
         fontWeight="bold"
         fontSize="xl"
         padding={1}
