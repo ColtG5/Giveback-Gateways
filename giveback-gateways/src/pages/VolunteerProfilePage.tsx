@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
+//import { getGoals } from "../../../server/database.js";
 
 const VolunteerProfilePage = () => {
   let { username } = useParams();
@@ -39,6 +40,19 @@ const VolunteerProfilePage = () => {
 
   // Initialize the state variable for current opportunities
   const [currentOpportunities, setCurrentOpportunities] = useState(initialCurrentOpportunities);
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    getGoals(username).then((hasGoals) => {
+      if (hasGoals) {
+        // Make an API call to retrieve the goals and update the state variable
+        fetch(`https://localhost:5000/api/goals/${username}`)
+          .then((response) => response.json())
+          .then((data) => setGoals(data))
+          .catch((error) => console.error(error));
+      }
+    });
+  }, [username]);
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
