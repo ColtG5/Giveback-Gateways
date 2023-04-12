@@ -89,7 +89,7 @@ const LoginPage = () => {
           )}
           <Link
             as={RouterLink}
-            to="/signup"
+            to="/signup-volunteer"
             fontSize="md"
             style={{ textDecoration: "underline", color: "deepskyblue"}}
             textAlign={"center"}
