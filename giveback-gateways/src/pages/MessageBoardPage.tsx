@@ -64,7 +64,7 @@ const MessageBoardPage =  () => {
         const response = await fetch('http://localhost:5000/api/companies'); // Update the URL with your actual API endpoint
         const data = await response.json();
         setCompanies(data); // Update the companies state with the fetched data
-        console.log(data)
+        console.log("Message board data is", data)
       } catch (error) {
         console.error('Failed to fetch companies:', error);
       }

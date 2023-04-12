@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -146,6 +146,22 @@ app.get('/api/companies', (req, res) => {
       // Handle error
       console.error('Failed to retrieve companies:', err);
       res.status(500).json({ error: 'Failed to retrieve companies' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log(results)
+    }
+  });
+});
+
+// Define route to retrieve companies from message_board table
+app.get('/api/get-opportunities', (req, res) => {
+  // Call the retrieveCompanies method to fetch data from the database
+  retrieveOpportunities((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
     } else {
       // Send the retrieved data back to the client
       res.json(results);

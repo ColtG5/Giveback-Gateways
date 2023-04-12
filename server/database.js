@@ -239,7 +239,7 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
 // Method to retrieve values from the message_board table
 const retrieveCompanies = (callback) => {
   // Query the message_board table
-  const query = 'SELECT * FROM gbgw471.Message_board';
+  const query = 'SELECT * FROM gbgw471.Company_profile';
   pool.query(query, (err, results) => {
     if (err) {
       // Handle error
@@ -253,7 +253,23 @@ const retrieveCompanies = (callback) => {
   });
 };
 
+// Method to retrieve values from the message_board table
+const retrieveOpportunities = (callback) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity';
+  pool.query(query, (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities };

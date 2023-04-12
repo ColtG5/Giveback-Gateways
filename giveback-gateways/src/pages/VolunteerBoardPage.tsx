@@ -1,5 +1,5 @@
 // VolunteerBoardPage.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -32,10 +32,26 @@ export interface Opportunity {
 }
 
 const VolunteerBoardPage = () => {
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [signedUpOpportunities, setSignedUpOpportunities] = useState<number[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [signupButton, setSignupButton] = useState({ color: "blue", text: "Sign up for this" });
+
+  useEffect(() => {
+    // Fetch volunteer opportunities from the server
+    const fetchOpportunities = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/get-opportunities");
+        const data = await response.json();
+        setOpportunities(data);
+        console.log("Volunteering opportunities are: ",data)
+      } catch (error) {
+        console.error("Failed to fetch opportunities:", error);
+      }
+    };
+    fetchOpportunities();
+  }, []);
 
   const handleOpportunityClick = (opportunity: Opportunity) => {
     setSelectedOpportunity(opportunity);
