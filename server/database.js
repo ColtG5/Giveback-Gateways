@@ -7,9 +7,6 @@ const pool = createPool ({
   connecLimit: 10 
 })
 
-pool.query(`SELECT * FROM gbgw471.Board_follows;`, (err,res) =>{
-  return console.log(res)
-})
 
 // Function to check user and password in the database
 const checkUserAndPassword = (username, password) => {
@@ -36,4 +33,55 @@ const checkUserAndPassword = (username, password) => {
 };
 
 
-module.exports = { checkUserAndPassword };
+const insertUserIntoProfileTable = (username, name, email, phone, location, password, creationDate) => {
+  return new Promise((resolve, reject) => {
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          'INSERT INTO Profile (Username, Name, Email, Phone, Location, Password, creationDate) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          [username, name, email, phone, location, password, creationDate],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('User registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+// Function to check if username exists in the database
+const checkUsernameExists = (username) => {
+  return new Promise((resolve, reject) => {
+    pool.query(`SELECT * FROM gbgw471.Profile WHERE Username = ?`, [username], (err, res) => {
+      if (err) {
+        console.error(err);
+        console.log("Database was not able to retrieve information properly");
+        reject(err);
+      } else {
+        // Process the result and send appropriate response
+        console.log("Database: Successfully retrieved username");
+        // You can send response back to server or perform further actions here
+        if (res.length > 0) {
+          console.log("Database: The username exists in the database");
+          resolve(true);
+        } else {
+          console.log("Database: The username does not exist in the database");
+          resolve(false); // Reject the promise with false value
+        }
+      }
+    });
+  });
+};
+
+module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists };
