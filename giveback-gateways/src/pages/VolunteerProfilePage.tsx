@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
+//import { getGoals } from "../../../server/database.js";
 
 const VolunteerProfilePage = () => {
   let { username } = useParams();
@@ -39,6 +40,21 @@ const VolunteerProfilePage = () => {
 
   // Initialize the state variable for current opportunities
   const [currentOpportunities, setCurrentOpportunities] = useState(initialCurrentOpportunities);
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/goals'); // Update the URL with your actual API endpoint
+        const data = await response.json();
+        setGoals(data); // Update the companies state with the fetched data
+        console.log("Goals data is", data)
+      } catch (error) {
+        console.error('Failed to fetch goals:', error);
+      }
+    };
+
+  }, []);
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -71,8 +87,8 @@ const VolunteerProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               Goals & Interests
             </Heading>
-            <UnorderedList>
-              <ListItem>Goal: Help 100 people this year</ListItem>
+            <UnorderedList> {goals.map((goal, index) => (
+              <ListItem key={index}>{goal}</ListItem>))}
               <ListItem>Interests: Animal welfare, Environment</ListItem>
             </UnorderedList>
           </Box>

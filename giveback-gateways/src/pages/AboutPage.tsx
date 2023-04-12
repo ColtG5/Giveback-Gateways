@@ -17,7 +17,7 @@ const AboutPage = () => {
         <h1 style={styles.heading}>The Team</h1>
         <img src={AlishaNasir} alt="Alisha Nasir" style={{ width: "25%", height: "auto"}}/>
         <h1 style={styles.imageTitle}>Alisha Nasir</h1>
-        <p style={styles.paragraph}>Alisha is a student in her second year of Computer Science. She enjoys to listen to music in her free time. She aspires to be a successful software engineer in the near future.</p>
+        <p style={styles.paragraph}>Alisha is a student in her second year of Computer Science. She enjoys listening to music in her free time. She aspires to be a successful software engineer in the near future.</p>
         <img src={ColtonGowans} alt="Colton Gowans" style={{ width: "25%", height: "auto", marginTop:"50px" }}/>
         <h1 style={styles.imageTitle}>Colton Gowans</h1>
         <p style={styles.paragraph}>Colton is also in his second year of Computer Science studies. He enjoys playing video games in his downtime. He is passionate about cybersecurity and wishes to be a software engineer.</p>
