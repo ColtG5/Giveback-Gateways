@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -91,7 +91,7 @@ app.post("/api/volunteer-profile", async (req,res) => {
 });
 
 app.get('/api/goals', (req, res) => {
-  getGoals((err, results) => {
+  retrieveGoals((err, results) => {
     if (err) {
       // Handle error
       console.error('Failed to retrieve goals:', err);
