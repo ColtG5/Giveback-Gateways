@@ -95,11 +95,12 @@ app.get('/api/goals', (req, res) => {
   getGoals((err, results) => {
     if (err) {
       // Handle error
-      console.error('Failed to retrieve companies:', err);
-      res.status(500).json({ error: 'Failed to retrieve companies' });
+      console.error('Failed to retrieve goals:', err);
+      res.status(500).json({ error: 'Failed to retrieve goals' });
     } else {
       // Send the retrieved data back to the client
       res.json(results);
+      console.log(results);
     }
   });
 });
