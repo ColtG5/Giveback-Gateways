@@ -141,6 +141,36 @@ const retrieveInterests = (username, callback) => {
   });
 };
 
+const retrieveMessages = (bID, callback) => {
+  const query = 'SELECT * FROM gbgw471.Message WHERE bID = ?';
+  pool.query(query, [bID], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve messages:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+const retrieveProfileInfo = (username, callback) => {
+  const query = 'SELECT * FROM gbgw471.Profile WHERE Username = ?';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve profile information:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
 const insertVolunteerProfile = ( vUser,Hours ) => {
   return new Promise((resolve, reject) => {
     console.log("Values:", vUser,Hours )
@@ -265,8 +295,6 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
   });
 };
 
-
-// Method to retrieve values from the message_board table
 const retrieveCompanies = (callback) => {
   // Query the message_board table
   const query = 'SELECT * FROM gbgw471.Company_profile';
@@ -283,7 +311,6 @@ const retrieveCompanies = (callback) => {
   });
 };
 
-// Method to retrieve values from the message_board table
 const retrieveOpportunities = (callback) => {
   // Query the message_board table
   const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity';
@@ -302,4 +329,4 @@ const retrieveOpportunities = (callback) => {
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo };
