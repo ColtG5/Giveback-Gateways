@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 
 
-const NewVolunteeringOpportunitySection = ({ username }) => {
+const NewVolunteeringOpportunitySection = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [title, setTitle] = useState("");
@@ -29,6 +29,7 @@ const NewVolunteeringOpportunitySection = ({ username }) => {
 
   const handleSubmit = async () => {
     try {
+      const storedUsername = localStorage.getItem("username");
       // Check if the username already exists in the database
       const checkResponse = await fetch(`http://localhost:5000/api/volunteering-opportunities`, {
         method: 'post',
@@ -42,7 +43,7 @@ const NewVolunteeringOpportunitySection = ({ username }) => {
           Duration: duration,
           Description: description,
           VolunteersNeeded: numOfVolunteers,
-          cUser: username,
+          cUser: storedUsername,
         }),
       });
         if (checkResponse.ok) {
@@ -57,6 +58,7 @@ const NewVolunteeringOpportunitySection = ({ username }) => {
       // Handle error
       console.log(err)
     }
+    onClose();
   };
 
   return (

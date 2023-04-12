@@ -236,6 +236,24 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
 };
 
 
+// Method to retrieve values from the message_board table
+const retrieveCompanies = (callback) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Message_board';
+  pool.query(query, (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve companies:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages };
+  checkUserInDatabases, storeMessages, retrieveCompanies };
