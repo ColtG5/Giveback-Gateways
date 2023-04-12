@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "habiba471",
+  password: "alisha.nasir.471",
   connecLimit: 10 
 })
 
@@ -32,7 +32,6 @@ const checkUserAndPassword = (username, password) => {
   });
 };
 
-
 const insertUserIntoProfileTable = (username, name, email, phone, location, password, creationDate) => {
   return new Promise((resolve, reject) => {
     // Call the pool.query method to specify the database to use
@@ -44,40 +43,13 @@ const insertUserIntoProfileTable = (username, name, email, phone, location, pass
         // Call the pool.query method to insert the user information into the Profile table
         pool.query(
           'INSERT INTO Profile (Username, Name, Email, Phone, Location, Password, creationDate) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [username, name, email, phone, location, password, creationDate],
+          [username, name, email, phone, location, password, creationDate ],
           (err, res) => {
             if (err) {
               console.error(err);
               reject(err);
             } else {
               console.log('User registered successfully');
-              resolve(res);
-            }
-          }
-        );
-      }
-    });
-  });
-};
-
-const insertMessageTable = (cUser, bID, Title, Content, Date, Time) => {
-  return new Promise((resolve, reject) => {
-    // Call the pool.query method to specify the database to use
-    pool.query('USE gbgw471', (err, res) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        // Call the pool.query method to insert the user information into the Profile table
-        pool.query(
-          'INSERT INTO Message (cUser, bID, Title, Content, Date, Time) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [cUser, bID, Title, Content, Date, Time],
-          (err, res) => {
-            if (err) {
-              console.error(err);
-              reject(err);
-            } else {
-              console.log('Message posted successfully');
               resolve(res);
             }
           }
@@ -111,4 +83,159 @@ const checkUsernameExists = (username) => {
   });
 };
 
-module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertMessageTable };
+const insertVolunteeringOpportunity = ( Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", Title, Date, Time, Duration, Description, VolunteersNeeded, cUser )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Volunteering_opportunity ( Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ) VALUES ( ?, ?, ?, ?, ?, ?, ?)",
+          [ Title, Date, Time, Duration, Description, VolunteersNeeded, cUser ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('User registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+const insertVolunteerProfile = ( vUser,Hours ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", vUser,Hours )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Volunteer_profile (vUser,Hours ) VALUES (?, ?)",
+          [vUser,Hours ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Volunteer registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+const insertCompanyProfile = ( cUser ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", cUser )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Company_profile (cUser ) VALUES (?)",
+          [ cUser ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Volunteer registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+// Function to check if username exists in the Volunteer_profile or Company_profile tables
+const checkUserInDatabases = (username) => {
+  return new Promise((resolve, reject) => {
+    // Query the Volunteer_profile table
+    const volunteerQuery = `SELECT * FROM gbgw471.Volunteer_profile WHERE vUser = ?`;
+    pool.query(volunteerQuery, [username], (volunteerErr, volunteerRes) => {
+      if (volunteerErr) {
+        console.error(volunteerErr);
+        console.log("Database: Failed to retrieve information from Volunteer_profile table");
+        reject(volunteerErr);
+      } else {
+        // Query the Company_profile table
+        const companyQuery = `SELECT * FROM gbgw471.Company_profile WHERE cUser = ?`;
+        pool.query(companyQuery, [username], (companyErr, companyRes) => {
+          if (companyErr) {
+            console.error(companyErr);
+            console.log("Database: Failed to retrieve information from Company_profile table");
+            reject(companyErr);
+          } else {
+            // Process the results and send appropriate response
+            console.log("Database: Successfully retrieved username");
+            // You can send response back to server or perform further actions here
+            if (volunteerRes.length > 0) {
+              console.log("Database: Username found in Volunteer table");
+              resolve(true);
+            } else if(companyRes.length > 0){
+              console.log("Database: Username found in Company table")
+              resolve(false)
+            } 
+            else {
+              console.log("Database: The username does not exist in either Volunteer_profile or Company_profile table");
+              resolve(false); // Resolve the promise with false value
+            }
+          }
+        });
+      }
+    });
+  });
+};
+
+const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", cUser, bID, Title, Content, Date, Time )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)",
+          [ cUser, bID, Title, Content, Date, Time ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('User registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+
+module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
+  insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
+  checkUserInDatabases, storeMessages };

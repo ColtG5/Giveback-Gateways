@@ -59,7 +59,22 @@ const LoginPage = () => {
         if (result.success) {
           setLoginStatus("success");
           localStorage.setItem("username", e.username);
-          navigate(`/profile/${e.id}`);
+          // We search the volunteer and company profiles for their username
+          const waitResponse = await fetch("http://localhost:5000/api/search-username", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username: e.username }),
+          });
+          const searchResult = await waitResponse.json();
+          if (searchResult.success) {
+            // If user is found in Volunteer_profile, navigate to volunteer profile page
+            navigate(`/profile/${e.username}`);
+          } else {
+            // If user is found in Company_profile, navigate to company profile page
+            navigate(`/profile/${e.username}`);
+          }
         } else {
           setLoginStatus("error");
         }
