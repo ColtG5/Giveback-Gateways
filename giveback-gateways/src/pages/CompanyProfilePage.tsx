@@ -103,22 +103,31 @@ const CompanyProfilePage = () => {
           </Heading>
           {pendingApps.map((application, index) => (
             <PendingApplication key={index} {...application}>
-              <Button
-                colorScheme="green"
-                onClick={() => {
-                  handleApplication(index, "accept");
-                }}
+              <Flex
+                flexDirection={{ base: "column", md: "row" }}
+                alignItems={{ base: "flex-start", md: "center" }}
+                flexWrap="wrap"
+                mt={{ base: 2, md: 0 }}
               >
-                Accept
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  handleApplication(index, "reject");
-                }}
-              >
-                Reject
-              </Button>
+                <Button
+                  mb={{ base: 2, md: 0 }}
+                  mr={{ md: 5 }}
+                  colorScheme="green"
+                  onClick={() => {
+                    handleApplication(index, "accept");
+                  }}
+                >
+                  Accept
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    handleApplication(index, "reject");
+                  }}
+                >
+                  Reject
+                </Button>
+              </Flex>
             </PendingApplication>
           ))}
         </Box>
