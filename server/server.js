@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const app = express()
-const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity } = require('./database.js'); // Import the function from database.js
+const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -30,11 +30,11 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/signup", async (req, res) => {
-  const { username, name, email, phone, location, password, creationDate, pid} = req.body;
-  console.log(username,name,email,phone,location, password, creationDate, pid)
+  const { username, name, email, phone, location, password, creationDate } = req.body;
+  console.log(username,name,email,phone,location, password, creationDate )
 
   try {
-    const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate, pid);
+    const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate );
     // Send success response back to the client
     res.json({ success: true, message: "User registered successfully" });
     console.log(result)
@@ -75,9 +75,47 @@ app.post("/api/volunteering-opportunities", async (req, res) => {
   }
 });
 
-// app.post("/api/test", async (req,res) => {
-//   console.log("Yes this works")
-// })
+app.post("/api/volunteer-profile", async (req,res) => {
+  const { vUser,Hours } = req.body;
+  console.log("vUser:", vUser);
+  try {
+    const result = await insertVolunteerProfile( vUser,Hours );
+    // Send success response back to client
+    res.json({ success: true, message: "Profile successfully registered as Volunteer" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to register volunteer in database" });
+  }
+});
 
+app.post("/api/company-profile", async (req,res) => {
+  const { cUser } = req.body;
+  console.log("cUser:", cUser);
+  try {
+    const result = await insertCompanyProfile( cUser );
+    // Send success response back to client
+    res.json({ success: true, message: "Profile successfully registered as Company" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to register company in database" });
+  }
+});
+
+app.post("/api/search-username", async (req, res) => {
+  const { username } = req.body;
+  console.log("Username:", username);
+  try {
+    const result = await checkUserInDatabases(username);
+    if (result) {
+      console.log("Server: User and pass match records")
+      res.json({ success: true, message: "User found" });
+    } else {
+      console.log("Server: User and pass do not match records")
+      res.json({ success: false, message: "User and password did not match" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to check user and password" });
+  }
+});
 
 app.listen(5000, () => { console.log("Server started on port 5000")})
