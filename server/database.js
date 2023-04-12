@@ -111,35 +111,33 @@ const insertVolunteeringOpportunity = ( Title, Date, Time, Duration, Description
   });
 };
 
-const retrieveGoals = (username) => {
-  return new Promise((resolve, reject) => {
-      pool.query('USE gbgw471', (err, res) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          pool.query(
-            `SELECT goal FROM gbgw471.User_goals WHERE vUser = ?`, [username], (err, res) => {
-              if (err) {
-                console.error(err);
-                console.log("Database was not able to retrieve information properly")
-                reject(err);
-              } else {
-                // Process the result and send appropriate response
-                console.log("Successfully retrieved goals");
-                // You can send response back to server or perform further actions here
-                if (res.length > 0) {
-                  console.log("goals exist in the database")
-                  resolve(true);
-                } else {
-                  console.log("no goals for this user")
-                  resolve(false); // Reject the promise with false value
-                }
-              }
-            }
-          );
-        }
-      });
+const retrieveGoals = (username, callback) => {
+  const query = 'SELECT Goal FROM gbgw471.User_goals WHERE vUser = ?';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve goals:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+const retrieveInterests = (username, callback) => {
+  const query = 'SELECT Interest FROM gbgw471.User_interests WHERE vUser = ?';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve interests:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
   });
 };
 
@@ -304,4 +302,4 @@ const retrieveOpportunities = (callback) => {
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests };

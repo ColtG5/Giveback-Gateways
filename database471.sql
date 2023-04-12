@@ -19,10 +19,6 @@ CREATE TABLE Profile (
     PRIMARY KEY (Username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-ALTER TABLE Profile ADD COLUMN PID CHAR(10) NOT NULL AFTER CreationDate;
-
-
-
 INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography, Location, CreationDate) VALUES
 ('ColtG5', 'polarbear123', 'Colton', 'Gowans', 'coltongowans@gmail.com', '2234567890', 'POLAR BEARS 4 LIFE', 'Calgary', '2023-04-10'),
 ('gbgw123', 'lovegivingback321', 'GiveBack GateWays', '', 'givebackggw@gmail.com', '1653451234', 'We are all about giving back', 'Calgary', '2023-04-11'),
@@ -57,12 +53,20 @@ CREATE TABLE User_goals (
     FOREIGN KEY (vUser) REFERENCES Volunteer_profile (vUser) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+INSERT INTO User_goals (vUser, Goal) VALUES
+('ColtG5', 'Succes'),
+('ColtG5', 'Failure');
+
 CREATE TABLE User_interests (
     vUser varchar(25) NOT NULL,
     Interest varchar(25) NOT NULL,
     PRIMARY KEY (vUser, Interest),
     FOREIGN KEY (vUser) REFERENCES Volunteer_profile (vUser) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+INSERT INTO User_interests (vUser, Interest) VALUES
+('ColtG5', 'Video games'),
+('ColtG5', 'Snorkeling');
 
 CREATE TABLE Profile_follows (
     vUser varchar(25) NOT NULL,
