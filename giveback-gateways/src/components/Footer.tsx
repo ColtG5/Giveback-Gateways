@@ -2,7 +2,7 @@ import { Box, Center, Link, Text } from "@chakra-ui/layout";
 import { Link as RouterLink } from "react-router-dom";
 import React from "react";
 
-const widthToCenter = "15rem";
+const widthToCenter = "10rem";
 
 const Footer = () => {
   return (
@@ -22,7 +22,6 @@ const Footer = () => {
             as={RouterLink}
             to="/"
             fontSize="xl"
-            padding={1}
             width={widthToCenter}
             textAlign={"center"}
           >
@@ -32,7 +31,6 @@ const Footer = () => {
             as={RouterLink}
             to="/about"
             fontSize="xl"
-            padding={1}
             width={widthToCenter}
             textAlign={"center"}
           >

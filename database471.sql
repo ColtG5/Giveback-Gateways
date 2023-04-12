@@ -20,9 +20,9 @@ CREATE TABLE Profile (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography, Location, CreationDate) VALUES
-('ColtG5', 'polarbear123', 'Colton', 'Gowans', 'coltongowans@gmail.com', '1234567890', 'POLAR BEARS 4 LIFE', 'Calgary', '2023-04-10'),
-('gbgw123', 'lovegivingback321', 'GiveBack GateWays', '', 'givebackggw@gmail.com', '7653451234', 'We are all about giving back', 'Calgary', '2023-04-11'),
-('xlishx', 'databasesrock', 'Alisha', 'Nasir', 'alisha.nasir456@gmail.com', '9876543210', 'I LOVE DATABASES', 'Calgary', '2023-04-10');
+('ColtG5', 'polarbear123', 'Colton', 'Gowans', 'coltongowans@gmail.com', '2234567890', 'POLAR BEARS 4 LIFE', 'Calgary', '2023-04-10'),
+('gbgw123', 'lovegivingback321', 'GiveBack GateWays', '', 'givebackggw@gmail.com', '1653451234', 'We are all about giving back', 'Calgary', '2023-04-11'),
+('xlishx', 'databasesrock', 'Alisha', 'Nasir', 'alisha.nasir456@gmail.com', '2876543210', 'I LOVE DATABASES', 'Calgary', '2023-04-10');
 
 CREATE TABLE Volunteer_profile (
     cID INT AUTO_INCREMENT NOT NULL,
