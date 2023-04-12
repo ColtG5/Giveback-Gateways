@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express()
 
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
-  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals } = require('./database.js'); // Import the function from database.js
+  insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests } = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -90,19 +90,58 @@ app.post("/api/volunteer-profile", async (req,res) => {
   }
 });
 
-app.get('/api/goals', (req, res) => {
-  retrieveGoals((err, results) => {
-    if (err) {
-      // Handle error
-      console.error('Failed to retrieve goals:', err);
-      res.status(500).json({ error: 'Failed to retrieve goals' });
+app.post("/api/goals", async (req, res) => {
+  const { username } = req.body;
+  console.log("Username:", username);
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveGoals(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
     } else {
-      // Send the retrieved data back to the client
-      res.json(results);
-      console.log(results);
+      console.log("No goals")
+      res.json({ success: false, message: "No goals found" });
     }
-  });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve goals" });
+  }
 });
+
+app.post("/api/interests", async (req, res) => {
+  const { username } = req.body;
+  console.log("Username:", username);
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveInterests(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No interests")
+      res.json({ success: false, message: "No interests found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve interests" });
+  }
+});
+
 
 app.post("/api/company-profile", async (req,res) => {
   const { cUser } = req.body;
