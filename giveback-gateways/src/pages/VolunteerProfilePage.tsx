@@ -43,16 +43,18 @@ const VolunteerProfilePage = () => {
   const [goals, setGoals] = useState([]);
 
   useEffect(() => {
-    getGoals(username).then((hasGoals) => {
-      if (hasGoals) {
-        // Make an API call to retrieve the goals and update the state variable
-        fetch(`https://localhost:5000/api/goals/${username}`)
-          .then((response) => response.json())
-          .then((data) => setGoals(data))
-          .catch((error) => console.error(error));
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/goals'); // Update the URL with your actual API endpoint
+        const data = await response.json();
+        setGoals(data); // Update the companies state with the fetched data
+        console.log("Goals data is", data)
+      } catch (error) {
+        console.error('Failed to fetch goals:', error);
       }
-    });
-  }, [username]);
+    };
+
+  }, []);
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -85,8 +87,8 @@ const VolunteerProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               Goals & Interests
             </Heading>
-            <UnorderedList>
-              <ListItem>Goal: Help 100 people this year</ListItem>
+            <UnorderedList> {goals.map((goal, index) => (
+              <ListItem key={index}>{goal}</ListItem>))}
               <ListItem>Interests: Animal welfare, Environment</ListItem>
             </UnorderedList>
           </Box>
