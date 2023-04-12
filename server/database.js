@@ -32,38 +32,6 @@ const checkUserAndPassword = (username, password) => {
   });
 };
 
-const getGoals = (username) => {
-  return new Promise((resolve, reject) => {
-      pool.query('USE gbgw471', (err, res) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          pool.query(
-            `SELECT goal FROM gbgw471.User_goals WHERE vUser = ?`, [username], (err, res) => {
-              if (err) {
-                console.error(err);
-                console.log("Database was not able to retrieve information properly")
-                reject(err);
-              } else {
-                // Process the result and send appropriate response
-                console.log("Successfully retrieved goals");
-                // You can send response back to server or perform further actions here
-                if (res.length > 0) {
-                  console.log("goals exist in the database")
-                  resolve(true);
-                } else {
-                  console.log("no goals for this user")
-                  resolve(false); // Reject the promise with false value
-                }
-              }
-            }
-          );
-        }
-      });
-  });
-};
-
 const insertUserIntoProfileTable = (username, name, email, phone, location, password, creationDate) => {
   return new Promise((resolve, reject) => {
     // Call the pool.query method to specify the database to use
@@ -268,7 +236,40 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
 };
 
 
+// Method to retrieve values from the message_board table
+const retrieveCompanies = (callback) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Company_profile';
+  pool.query(query, (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve companies:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+// Method to retrieve values from the message_board table
+const retrieveOpportunities = (callback) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity';
+  pool.query(query, (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, getGoals };
-
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities };

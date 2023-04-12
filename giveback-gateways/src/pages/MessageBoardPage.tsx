@@ -49,12 +49,29 @@ const MessageBoardPage =  () => {
     scrollToBottom();
   }, [messages]);
 
-  // Replace with data fetched from the SQL database
-  const companies = [
-    { id: 1, name: "Company A" },
-    { id: 2, name: "Company B" },
-    { id: 3, name: "Company C" },
-  ];
+  // // Replace with data fetched from the SQL database
+  // const companies = [
+  //   { id: 1, name: "Company A" },
+  //   { id: 2, name: "Company B" },
+  //   { id: 3, name: "Company C" },
+  // ];
+
+  const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/companies'); // Update the URL with your actual API endpoint
+        const data = await response.json();
+        setCompanies(data); // Update the companies state with the fetched data
+        console.log("Message board data is", data)
+      } catch (error) {
+        console.error('Failed to fetch companies:', error);
+      }
+    };
+  
+    fetchCompanies();    
+  }, []);
 
   const sendMessage = async (e:any) => {
     // Save the message to the SQL database and retrieve the date/time
@@ -69,20 +86,20 @@ const MessageBoardPage =  () => {
       content: messageInput,
       timestamp: new Date(),
     };
-
-      // Make a fetch request to your server's API endpoint
   try {
+    const storedUsername = localStorage.getItem("username");
     const response = await fetch(`http://localhost:5000/api/messages`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        cUser: 'John', 
+        cUser: storedUsername, 
         bID: newMessage.messageBoardID,
         Title: newMessage.Title,
-        content: newMessage.content,
-        Date: newMessage.timestamp,
+        Content: newMessage.content,
+        Date: newMessage.timestamp.toISOString().split('T')[0], // Convert to ISO format and extract date part
+        Time: newMessage.timestamp.toTimeString().split(' ')[0] // Extract time part and remove AM/PM designation
       }),
     });
     console.log("Content is:",newMessage.content)
@@ -98,7 +115,6 @@ const MessageBoardPage =  () => {
     // Handle fetch error
     console.error('Failed to send message:', error);
   }
-
     setMessages([...messages, newMessage]);
     setMessageInput("");
     console.log(newMessage)
@@ -121,22 +137,18 @@ const MessageBoardPage =  () => {
           Message Board
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
-          {companies.map((company) => (
-            <Box
-              key={company.id}
-              bg="white"
-              borderRadius="lg"
-              p={6}
-              boxShadow="md"
-              onClick={() => {
-                setSelectedCompany(company.name);
-                onOpen();
-              }}
-              cursor="pointer"
-            >
-              <Heading as="h2" size="md" mb={4}>
-                {company.name}
-              </Heading>
+        {companies.map((company) => (
+        <Box
+          key={company.id}
+          bg="white"
+          borderRadius="lg"
+          boxShadow="md"
+          p={4}
+          cursor="pointer"
+          onClick={() => setSelectedCompany(company.name)}
+          border={selectedCompany === company.name ? '2px solid' : 'none'}
+          >
+          <Text fontSize={fontSize}>{company.name}</Text>
             </Box>
           ))}
         </SimpleGrid>
