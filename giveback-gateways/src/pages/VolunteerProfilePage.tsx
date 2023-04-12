@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
-//import { getGoals } from "../../../server/database.js";
 
 const VolunteerProfilePage = () => {
   let { username } = useParams();
@@ -40,12 +39,19 @@ const VolunteerProfilePage = () => {
 
   // Initialize the state variable for current opportunities
   const [currentOpportunities, setCurrentOpportunities] = useState(initialCurrentOpportunities);
+
   const [goals, setGoals] = useState([]);
 
   useEffect(() => {
     const fetchGoals = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/goals'); // Update the URL with your actual API endpoint
+        const response = await fetch('http://localhost:5000/api/goals', {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: 'ColtG5' }),
+        } );
         const data = await response.json();
         setGoals(data); // Update the companies state with the fetched data
         console.log("Goals data is", data)
@@ -53,8 +59,31 @@ const VolunteerProfilePage = () => {
         console.error('Failed to fetch goals:', error);
       }
     };
-
+    fetchGoals();
   }, []);
+
+  const [interests, setInterests] = useState([]);
+
+  useEffect(() => {
+    const fetchInterests = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/interests', {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: 'ColtG5' }),
+        } );
+        const data = await response.json();
+        setInterests(data); // Update the companies state with the fetched data
+        console.log("Interests data is", data)
+      } catch (error) {
+        console.error('Failed to fetch interests:', error);
+      }
+    };
+    fetchInterests();
+  }, []);
+
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -87,10 +116,26 @@ const VolunteerProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               Goals & Interests
             </Heading>
-            <UnorderedList> {goals.map((goal, index) => (
-              <ListItem key={index}>{goal}</ListItem>))}
-              <ListItem>Interests: Animal welfare, Environment</ListItem>
-            </UnorderedList>
+            <Text fontWeight={"bold"}>Goals</Text>
+              {goals.length > 0 ? (
+                <UnorderedList>
+                  {goals.map((goal, index) => (
+                    <ListItem key={index}>{JSON.stringify(goal)}</ListItem>
+                  ))}
+                </UnorderedList>
+              ) : (
+                <Text>None</Text>
+              )}
+            <Text fontWeight={"bold"}>Interests</Text>
+              {interests.length > 0 ? (
+                <UnorderedList>
+                  {interests.map((interest, index) => (
+                    <ListItem key={index}>{JSON.stringify(interest)}</ListItem>
+                  ))}
+                </UnorderedList>
+              ) : (
+                <Text>None</Text>
+              )}
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
