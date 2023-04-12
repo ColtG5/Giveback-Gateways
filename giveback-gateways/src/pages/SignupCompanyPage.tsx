@@ -7,9 +7,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 const CompanySignUpPage = () => {
   let navigate = useNavigate();
 
-
   const handleSubmit = async (e:any) => {
-    e.preventDefault(); // Add this line to prevent form submission
     try {
       // Check if the username already exists in the database
       const checkResponse = await fetch(`http://localhost:5000/api/checkUsername`, {
@@ -54,11 +52,11 @@ const CompanySignUpPage = () => {
           console.log("Failed to register user");
         }
       }
-  } catch (err) {
-    // Handle error
-    console.log(err)
-  }
-};
+    } catch (err) {
+      // Handle error
+      console.log(err)
+    }
+  };
 
   return (
     <>
