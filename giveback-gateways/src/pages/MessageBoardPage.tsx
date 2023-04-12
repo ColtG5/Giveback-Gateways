@@ -56,20 +56,42 @@ const MessageBoardPage = () => {
     { id: 3, name: "Company C" },
   ];
 
-  const sendMessage = () => {
+  const sendMessage = async(e:any) => {
     // Save the message to the SQL database and retrieve the date/time
 
     if (messageInput === "") return;
+    
+      const newMessage: Message = {
+        messageID: messages.length + 1,
+        volunteerUsername: "John Doe",
+        messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
+        Title: "New Message",
+        content: messageInput,
+        timestamp: new Date(),
+      };
 
-    const newMessage: Message = {
-      messageID: messages.length + 1,
-      volunteerUsername: "John Doe",
-      messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
-      Title: "New Message",
-      content: messageInput,
-      timestamp: new Date(),
-    };
-
+      try {
+        const checkResponse = await fetch('https://localhost:5000/api/message', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: e.message
+          }),
+        });
+    
+        const checkResult = await checkResponse.json();
+        console.log("We get to this point");
+        if (checkResult.success) {
+          console.log("Success")
+        } else {
+          console.log('Error saving message:', checkResponse.status);
+        }
+      } catch (error) {
+        console.log('Error saving message:', error);
+      }
+    
     setMessages([...messages, newMessage]);
     setMessageInput("");
   };

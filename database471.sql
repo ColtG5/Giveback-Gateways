@@ -25,10 +25,10 @@ INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography
 ('xlishx', 'databasesrock', 'Alisha', 'Nasir', 'alisha.nasir456@gmail.com', '2876543210', 'I LOVE DATABASES', 'Calgary', '2023-04-10');
 
 CREATE TABLE Volunteer_profile (
-    cID INT AUTO_INCREMENT NOT NULL,
+    vID INT AUTO_INCREMENT NOT NULL,
     vUser varchar(25) NOT NULL,
     Hours INT DEFAULT NULL,
-    PRIMARY KEY (cID),
+    PRIMARY KEY (vID),
     FOREIGN KEY (vUser) REFERENCES Profile (Username) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
