@@ -18,7 +18,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
-import { volunteerOpportunities } from "../VolunteerOpportunities";
+// import { volunteerOpportunities } from "../VolunteerOpportunities";
 import OpportunityCard from "../components/OpportunityCard";
 
 export interface Opportunity {
