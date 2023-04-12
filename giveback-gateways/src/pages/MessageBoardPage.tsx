@@ -73,6 +73,17 @@ const MessageBoardPage = () => {
     fetchCompanies();
   }, []);
 
+  const fetchMessages = async (messageBoardID: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/get-messages?bID=${messageBoardID}`);
+      const data = await response.json();
+      console.log("Messages are: ", data);
+      setMessages(data);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
+  };
+
   const sendMessage = async (e: any) => {
     // Save the message to the SQL database and retrieve the date/time
     if (messageInput === "" || selectedCompany === null) return;
@@ -86,6 +97,8 @@ const MessageBoardPage = () => {
       timestamp: new Date(),
       userType: "volunteer", // Replace with the actual user type from the user's profile
     };
+
+    fetchMessages(selectedCompany.cID);
 
     try {
       const response = await fetch("http://localhost:5000/api/messages", {
@@ -105,6 +118,7 @@ const MessageBoardPage = () => {
       });
 
       if (response.ok) {
+        console.log(response);
         setMessages([...messages, newMessage]);
         setMessageInput("");
       } else {
@@ -146,6 +160,7 @@ const MessageBoardPage = () => {
               cursor="pointer"
               onClick={() => {
                 setSelectedCompany(company);
+                fetchMessages(company.cID);
                 onOpen();
               }}
               border={selectedCompany?.cID === company.cID ? "2px solid" : "none"}
