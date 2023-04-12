@@ -32,11 +32,17 @@ interface Message {
   Title: string;
   content: string;
   timestamp: Date;
+  userType: string;
 }
 
-const MessageBoardPage =  () => {
+interface Company {
+  cID: number;
+  cUser: string;
+}
+
+const MessageBoardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedCompany, setSelectedCompany] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -49,75 +55,68 @@ const MessageBoardPage =  () => {
     scrollToBottom();
   }, [messages]);
 
-  // // Replace with data fetched from the SQL database
-  // const companies = [
-  //   { id: 1, name: "Company A" },
-  //   { id: 2, name: "Company B" },
-  //   { id: 3, name: "Company C" },
-  // ];
-
-  const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
 
   useEffect(() => {
+    // Fetch companies and their corresponding message boards from the database
     const fetchCompanies = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/companies'); // Update the URL with your actual API endpoint
+        const response = await fetch("http://localhost:5000/api/companies"); // Update the URL with your actual API endpoint
         const data = await response.json();
+        console.log("Companies are: ", data[0].cUser);
         setCompanies(data); // Update the companies state with the fetched data
-        console.log("Message board data is", data)
       } catch (error) {
-        console.error('Failed to fetch companies:', error);
+        console.error("Failed to fetch companies:", error);
       }
     };
-  
-    fetchCompanies();    
+
+    fetchCompanies();
   }, []);
 
-  const sendMessage = async (e:any) => {
+  const sendMessage = async (e: any) => {
     // Save the message to the SQL database and retrieve the date/time
-
-    if (messageInput === "") return;
+    if (messageInput === "" || selectedCompany === null) return;
 
     const newMessage: Message = {
       messageID: messages.length + 1,
-      volunteerUsername: "John Doe",
-      messageBoardID: companies.find((company) => company.name === selectedCompany)?.id ?? 0,
+      volunteerUsername: "John Doe", // Replace with the actual username from the user's profile
+      messageBoardID: selectedCompany.id,
       Title: "New Message",
       content: messageInput,
       timestamp: new Date(),
+      userType: "volunteer", // Replace with the actual user type from the user's profile
     };
-  try {
-    const storedUsername = localStorage.getItem("username");
-    const response = await fetch(`http://localhost:5000/api/messages`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        cUser: storedUsername, 
-        bID: newMessage.messageBoardID,
-        Title: newMessage.Title,
-        Content: newMessage.content,
-        Date: newMessage.timestamp.toISOString().split('T')[0], // Convert to ISO format and extract date part
-        Time: newMessage.timestamp.toTimeString().split(' ')[0] // Extract time part and remove AM/PM designation
-      }),
-    });
-    console.log("Content is:",newMessage.content)
-    if (response.ok) {
-      setMessages([...messages, newMessage]);
-      setMessageInput("");
-      console.log(newMessage);
-    } else {
-      // Handle error response from server
-      console.error('Failed to send message:', response.status, response.statusText);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/messages", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cUser: newMessage.volunteerUsername,
+          bID: newMessage.messageBoardID,
+          Title: newMessage.Title,
+          Content: newMessage.content,
+          Date: newMessage.timestamp.toISOString().split("T")[0], // Convert to ISO format and extract date part
+          Time: newMessage.timestamp.toTimeString().split(" ")[0], // Extract time part and remove AM/PM designation
+          userType: newMessage.userType,
+        }),
+      });
+
+      if (response.ok) {
+        setMessages([...messages, newMessage]);
+        setMessageInput("");
+      } else {
+        // Handle error response from server
+        console.error("Failed to send message:", response.status, response.statusText);
+      }
+    } catch (error) {
+      // Handle fetch error
+      console.error("Failed to send message:", error);
     }
-  } catch (error) {
-    // Handle fetch error
-    console.error('Failed to send message:', error);
-  }
     setMessages([...messages, newMessage]);
     setMessageInput("");
-    console.log(newMessage)
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
@@ -137,18 +136,18 @@ const MessageBoardPage =  () => {
           Message Board
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
-        {companies.map((company) => (
-        <Box
-          key={company.id}
-          bg="white"
-          borderRadius="lg"
-          boxShadow="md"
-          p={4}
-          cursor="pointer"
-          onClick={() => setSelectedCompany(company.name)}
-          border={selectedCompany === company.name ? '2px solid' : 'none'}
-          >
-          <Text fontSize={fontSize}>{company.name}</Text>
+          {companies.map((company) => (
+            <Box
+              key={company.id}
+              bg="white"
+              borderRadius="lg"
+              boxShadow="md"
+              p={4}
+              cursor="pointer"
+              onClick={() => setSelectedCompany(company)}
+              border={selectedCompany?.id === company.id ? "2px solid" : "none"}
+            >
+              <Text fontSize={fontSize}>{company.name}</Text>
             </Box>
           ))}
         </SimpleGrid>
@@ -157,15 +156,11 @@ const MessageBoardPage =  () => {
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent padding={0}>
-          <ModalHeader>{selectedCompany} Forum</ModalHeader>
+          <ModalHeader>{selectedCompany?.name} Forum</ModalHeader>
           <ModalCloseButton />
           <ModalBody overflow={"auto"} maxHeight={"60vh"}>
             {messages
-              .filter(
-                (message) =>
-                  message.messageBoardID ===
-                  companies.find((company) => company.name === selectedCompany)?.id
-              )
+              .filter((message) => message.messageBoardID === selectedCompany?.id)
               .map((message, index) => (
                 <Grid
                   key={message.messageID}
@@ -184,7 +179,13 @@ const MessageBoardPage =  () => {
                     </Text>
                   </GridItem>
                   <GridItem colSpan={2}>
-                    <Text fontSize={fontSize} wordBreak="break-word">
+                    <Text
+                      fontSize={fontSize}
+                      wordBreak="break-word"
+                      bg={message.userType === "company" ? "green.100" : "transparent"}
+                      p={message.userType === "company" ? 2 : 0}
+                      borderRadius={message.userType === "company" ? "md" : "none"}
+                    >
                       {message.content}
                     </Text>
                   </GridItem>

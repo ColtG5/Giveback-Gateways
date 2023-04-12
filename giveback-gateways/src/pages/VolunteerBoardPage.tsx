@@ -19,16 +19,17 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import { volunteerOpportunities } from "../VolunteerOpportunities";
+import OpportunityCard from "../components/OpportunityCard";
 
 export interface Opportunity {
-  id: number;
-  name: string;
-  description: string;
-  company: string;
-  location: string;
-  date: string;
-  volunteersNeeded: number;
-  duration: string;
+  Date: "2023-04-17T06:00:00.000Z";
+  Description: "Help us make our citys beaches look squeaky clean";
+  Duration: 2;
+  ID: 1;
+  Time: "16:00:00";
+  Title: "Beach Cleanup";
+  VolunteersNeeded: 10;
+  cUser: "gbgw123";
 }
 
 const VolunteerBoardPage = () => {
@@ -45,7 +46,7 @@ const VolunteerBoardPage = () => {
         const response = await fetch("http://localhost:5000/api/get-opportunities");
         const data = await response.json();
         setOpportunities(data);
-        console.log("Volunteering opportunities are: ",data)
+        console.log("Volunteering opportunities are: ", data);
       } catch (error) {
         console.error("Failed to fetch opportunities:", error);
       }
@@ -60,12 +61,37 @@ const VolunteerBoardPage = () => {
 
   const handleSignUp = async () => {
     if (selectedOpportunity === null) return;
-    // update database here with the new signed up opportunity
-    setSignedUpOpportunities([...signedUpOpportunities, selectedOpportunity.id]);
-    setSignupButton({ color: "green", text: "Thank you!" });
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setSignupButton({ color: "blue", text: "Sign up for this" });
-    onClose();
+    try {
+      // id what the endpoint is
+      // so someone else
+      // make this work ty
+
+      const response = await fetch("http://localhost:5000/api/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          //idk what other info
+          // to ncluse to
+          //so someone else provife all of taht/
+          //ty
+          opportunityId: selectedOpportunity.ID,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to sign up for the opportunity.");
+      }
+
+      setSignedUpOpportunities([...signedUpOpportunities, selectedOpportunity.ID]);
+      setSignupButton({ color: "green", text: "Thank you!" });
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setSignupButton({ color: "blue", text: "Sign up for this" });
+      onClose();
+    } catch (error) {
+      console.error("Failed to sign up for the opportunity:", error);
+    }
   };
 
   const isOpportunitySignedUp = (id: number) => signedUpOpportunities.includes(id);
@@ -89,56 +115,16 @@ const VolunteerBoardPage = () => {
           spacing={10}
           w={{ base: "100%", md: "80%" }}
         >
-          {volunteerOpportunities.map((opportunity) => (
-            <Box
-              key={opportunity.id}
-              bg="white"
-              borderRadius="lg"
-              p={6}
-              boxShadow="md"
-              textAlign="left"
-              cursor={isOpportunitySignedUp(opportunity.id) ? "not-allowed" : "pointer"}
-              opacity={isOpportunitySignedUp(opportunity.id) ? 0.5 : 1}
+          {opportunities.map((opportunity) => (
+            <OpportunityCard
+              key={opportunity.ID}
+              opportunity={opportunity}
+              isSignedUp={isOpportunitySignedUp(opportunity.ID)}
               onClick={() =>
                 // if the opportunity is not signed up for, then open the modal
-                !isOpportunitySignedUp(opportunity.id) && handleOpportunityClick(opportunity)
+                !isOpportunitySignedUp(opportunity.ID) && handleOpportunityClick(opportunity)
               }
-            >
-              <Heading as="h3" size="md" mb={4}>
-                {opportunity.name}
-              </Heading>
-              <Text mb={4}>{opportunity.description}</Text>
-              <Text fontSize="sm">
-                <Text as="span" fontWeight="bold">
-                  Offering Company:
-                </Text>{" "}
-                {opportunity.company}
-              </Text>
-              <Text fontSize="sm">
-                <Text as="span" fontWeight="bold">
-                  Location:
-                </Text>{" "}
-                {opportunity.location}
-              </Text>
-              <Text fontSize="sm">
-                <Text as="span" fontWeight="bold">
-                  Date:
-                </Text>{" "}
-                {opportunity.date}
-              </Text>
-              <Text fontSize="sm">
-                <Text as="span" fontWeight="bold">
-                  Number of Volunteers Needed:
-                </Text>{" "}
-                {opportunity.volunteersNeeded}
-              </Text>
-              <Text fontSize="sm">
-                <Text as="span" fontWeight="bold">
-                  Duration:
-                </Text>{" "}
-                {opportunity.duration}
-              </Text>
-            </Box>
+            />
           ))}
         </SimpleGrid>
       </VStack>
@@ -148,39 +134,46 @@ const VolunteerBoardPage = () => {
         <ModalContent>
           {selectedOpportunity && (
             <>
-              <ModalHeader>{selectedOpportunity.name}</ModalHeader>
+              <ModalHeader>{selectedOpportunity.Title}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Text mb={4}>{selectedOpportunity.description}</Text>
+                <Text mb={4}>{selectedOpportunity.Description}</Text>
                 <Text fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     Offering Company:
                   </Text>{" "}
-                  {selectedOpportunity.company}
+                  {selectedOpportunity.cUser}
                 </Text>
                 <Text fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     Location:
                   </Text>{" "}
-                  {selectedOpportunity.location}
+                  {/* {selectedOpportunity.Location} */}
+                  hehehaha no loc yet
                 </Text>
                 <Text fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     Date:
                   </Text>{" "}
-                  {selectedOpportunity.date}
+                  {selectedOpportunity.Date}
+                </Text>
+                <Text fontSize="sm">
+                  <Text as="span" fontWeight="bold">
+                    Time:
+                  </Text>{" "}
+                  {selectedOpportunity.Time}
                 </Text>
                 <Text fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     Number of Volunteers Needed:
                   </Text>{" "}
-                  {selectedOpportunity.volunteersNeeded}
+                  {selectedOpportunity.VolunteersNeeded}
                 </Text>
                 <Text fontSize="sm">
                   <Text as="span" fontWeight="bold">
                     Duration:
                   </Text>{" "}
-                  {selectedOpportunity.duration}
+                  {selectedOpportunity.Duration}
                 </Text>
               </ModalBody>
               <ModalFooter>
