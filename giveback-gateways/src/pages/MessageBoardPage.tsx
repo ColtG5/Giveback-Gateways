@@ -74,13 +74,14 @@ const MessageBoardPage = () => {
   }, []);
 
   const fetchMessages = async (messageBoardID: number) => {
+
     try {
       const response = await fetch(`http://localhost:5000/api/get-messages`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: localStorage.getItem("messageBoardID") }),
+        body: JSON.stringify({ username: localStorage.getItem("username") }),
       });
 
       const data = await response.json();
@@ -115,13 +116,14 @@ const MessageBoardPage = () => {
     fetchMessages(selectedCompany.cID);
 
     try {
+      console.log("The username is", localStorage.getItem("username"))
       const response = await fetch("http://localhost:5000/api/messages", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cUser: newMessage.volunteerUsername,
+          cUser: localStorage.getItem("username"),
           bID: newMessage.messageBoardID,
           Title: newMessage.Title,
           Content: newMessage.content,
