@@ -6,7 +6,7 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
-rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity} = require('./database.js'); // Import the function from database.js
+rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -128,6 +128,31 @@ app.post("/api/get-signed-opportunities", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: "Failed to retrieve signed up for opportunities" });
+  }
+});
+
+app.post("/api/get-pending-apps", async (req, res) => {
+  const { cUser } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrievePendingApps(cUser, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No pending apps")
+      res.json({ success: false, message: "No pending apps found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve pending apps" });
   }
 });
 
