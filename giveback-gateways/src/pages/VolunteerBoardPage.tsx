@@ -44,7 +44,7 @@ const VolunteerBoardPage = () => {
     // Fetch volunteer opportunities from the server
     const fetchOpportunities = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/get-opportunities");
+        const response = await fetch("http://localhost:5000/api/get-all-opportunities");
         const data = await response.json();
         setOpportunities(data);
         console.log("Volunteering opportunities are: ", data);

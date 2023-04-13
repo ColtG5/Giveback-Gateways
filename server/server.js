@@ -416,6 +416,22 @@ app.get('/api/get-opportunities', (req, res) => {
 });
 
 // Define route to retrieve companies from message_board table
+app.get('/api/get-all-opportunities', (req, res) => {
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrieveOpportunities((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log("The results of company opp is: ", results)
+    }
+  }); // Pass the cUser value to the retrieveCompanyOpportunities function
+});
+
+// Define route to retrieve companies from message_board table
 app.get('/api/get-pending-apps', (req, res) => {
   const cUser = req.query.cUser; // Get the value of cUser from the query parameters
   // Call the retrieveCompanyOpportunities method to fetch data from the database
