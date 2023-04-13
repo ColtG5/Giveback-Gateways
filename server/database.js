@@ -197,7 +197,7 @@ const deleteSignedOpportunity = (vUser, OppID) => {
 };
 
 const retrieveSignedUpOpportunities = (username, callback) => {
-  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
+  const query = 'SELECT Volunteering_opportunity.Title, Volunteering_opportunity.Date, Volunteering_opportunity.Time, Volunteering_opportunity.Duration, Volunteering_opportunity.Description FROM gbgw471.SignedUp_Opportunities, gbgw471.Volunteering_opportunity WHERE SignedUp_Opportunities.OppID = Volunteering_opportunity.ID AND vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
