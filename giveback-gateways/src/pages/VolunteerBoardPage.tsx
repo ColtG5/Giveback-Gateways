@@ -73,10 +73,6 @@ const VolunteerBoardPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          //idk what other info
-          // to ncluse to
-          //so someone else provife all of taht/
-          //ty
           opportunityId: selectedOpportunity.ID,
           vUser: storedUsername,
         }),

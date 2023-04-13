@@ -123,13 +123,12 @@ const MessageBoardPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cUser: localStorage.getItem("username"),
+          cUser: selectedCompany,
           bID: newMessage.messageBoardID,
           Title: newMessage.Title,
           Content: newMessage.content,
           Date: newMessage.timestamp.toISOString().split("T")[0], // Convert to ISO format and extract date part
           Time: newMessage.timestamp.toTimeString().split(" ")[0], // Extract time part and remove AM/PM designation
-          //userType: newMessage.userType,
         }),
       });
 
