@@ -30,15 +30,38 @@ interface Profile {
 const CompanyProfilePage = () => {
   let { username } = useParams();
 
-
   const [volunteeringOpportunities, setVolunteeringOpportunities] = useState([]);
 
- // Fetch volunteer opportunities from server
-useEffect(() => {
-  fetch(`http://localhost:5000/api/get-opportunities?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to retrieve volunteer opportunities");
+  // Fetch volunteer opportunities from server
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/get-opportunities?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to retrieve volunteer opportunities");
+        }
+        return response.json();
+      })
+      .then((data) => setVolunteeringOpportunities(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const [profile, setProfile] = useState([]);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/profile-info', {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: localStorage.getItem("username") }),
+        });
+        const data = await response.json();
+        setProfile(data);
+        console.log("Profile data is", data)
+      } catch (error) {
+        console.error('Failed to fetch profile data:', error);
       }
       return response.json();
     })

@@ -350,19 +350,20 @@ const checkUserInDatabases = (username) => {
   });
 };
 
-const storeMessages = ( username, messageBoardID, Title, Content, Date, Time ) => {
+const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
   return new Promise((resolve, reject) => {
-    console.log("Values:", username, messageBoardID, Title, Content, Date, Time )
+    console.log("Values:", cUser, bID, Title, Content, Date, Time )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
         console.error(err);
         reject(err);
       } else {
-        // Call the pool.query method to insert the user information into the Profile table
         pool.query(
-          `INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
-          [ username, bID, Title, Content, Date, Time ],
+
+          `INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
+          [ cUser, bID, Title, Content, Date, Time ],
+
           (err, res) => {
             if (err) {
               console.error(err);
