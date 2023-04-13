@@ -81,10 +81,10 @@ app.post("/api/volunteering-opportunities", async (req, res) => {
 });
 
 app.post("/api/sign-up-opportunity", async (req,res) => {
-  const { vUser, OppID, Accepted, Rejected, Pending, Attended } = req.body;
+  const { vUser, opportunityId, Accepted, Rejected, Pending, Attended } = req.body;
   
   try {
-    const result = await insertSignedUpOpportunity( vUser, OppID, Accepted, Rejected, Pending, Attended );
+    const result = await insertSignedUpOpportunity( vUser, opportunityId, Accepted, Rejected, Pending, Attended );
     // Send success response back to client
     res.json({ success: true, message: "Signed up for opportunity successfully" });
     console.log(result);
