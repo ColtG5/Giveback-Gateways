@@ -191,4 +191,5 @@ const [pendingApplications, setPendingApplications] = useState([]);
   );
 };
 
+
 export default CompanyProfilePage;
