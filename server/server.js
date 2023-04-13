@@ -82,7 +82,6 @@ app.post("/api/volunteering-opportunities", async (req, res) => {
 
 app.post("/api/sign-up-opportunity", async (req,res) => {
   const { vUser, opportunityId, Accepted, Rejected, Pending, Attended } = req.body;
-  
   try {
     const result = await insertSignedUpOpportunity( vUser, opportunityId, Accepted, Rejected, Pending, Attended );
     // Send success response back to client
@@ -234,7 +233,6 @@ app.post("/api/interests", async (req, res) => {
 
 app.post("/api/get-messages", async (req, res) => {
   const { bID } = req.body;
-
   try {
     const result = await new Promise ((resolve, reject) => {
       retrieveMessages(bID, (err, results) => {
@@ -349,10 +347,10 @@ app.post("/api/search-username", async (req, res) => {
 });
 
 app.post("/api/messages", async (req, res) => {
-  const { username, bID, Title, Content, Date, Time } = req.body;
-  console.log("Username:", username, bID, Title, Content, Date, Time);
+  const { cUser, bID, Title, Content, Date, Time } = req.body;
+  console.log("Username:", cUser,bID, Title, Content, Date, Time);
   try {
-    const result = await storeMessages(username, bID, Title, Content, Date, Time);
+    const result = await storeMessages( cUser, bID, Title, Content, Date, Time );
     if (result) {
       console.log("Messages found")
       res.json({ success: true, message: "Message found" });
@@ -413,6 +411,22 @@ app.get('/api/get-opportunities', (req, res) => {
       console.log("The results of company opp is: ", results)
     }
   }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
+});
+
+// Define route to retrieve companies from message_board table
+app.get('/api/get-all-opportunities', (req, res) => {
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrieveOpportunities((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log("The results of company opp is: ", results)
+    }
+  }); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
 
 // Define route to retrieve companies from message_board table
