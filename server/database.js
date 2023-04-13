@@ -361,8 +361,8 @@ const storeMessages = ( username, messageBoardID, Title, Content, Date, Time ) =
       } else {
         // Call the pool.query method to insert the user information into the Profile table
         pool.query(
-          "INSERT INTO Message ( username, messageBoardID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)",
-          [ username, messageBoardID, Title, Content, Date, Time ],
+          `INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
+          [ username, bID, Title, Content, Date, Time ],
           (err, res) => {
             if (err) {
               console.error(err);
