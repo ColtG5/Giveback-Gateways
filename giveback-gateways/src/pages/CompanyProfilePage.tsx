@@ -15,6 +15,18 @@ import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOppo
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
 import PendingApplication from "../components/PendingApplication";
 
+
+interface Profile {
+  Username: String;
+  Password: String;
+  Name: String;
+  LastName: String;
+  Email: String;
+  Phone: String;
+  Biography: String;
+  Location: String;
+  CreationDate: String;
+}
 const CompanyProfilePage = () => {
   let { username } = useParams();
 
@@ -35,7 +47,18 @@ useEffect(() => {
 }, []);
 
 
-const [profile, setProfile] = useState([]);
+const initialProfileState = {
+  Username: "",
+  Password: "",
+  Name: "",
+  LastName: "",
+  Email: "",
+  Phone: "",
+  Biography: "",
+  Location: "",
+  CreationDate: "",
+};
+const [profile, setProfile] = useState<Profile>(initialProfileState);
 
 useEffect(() => {
   const fetchProfileData = async () => {
@@ -48,7 +71,7 @@ useEffect(() => {
         body: JSON.stringify({ username: localStorage.getItem("username") }),
       } );
       const data = await response.json();
-      setProfile(data); 
+      setProfile(data[0]); 
       console.log("Profile data is", data)
     } catch (error) {
       console.error('Failed to fetch profile data:', error);
@@ -112,11 +135,11 @@ const [pendingApplications, setPendingApplications] = useState([]);
               Personal Information
             </Heading>
             <UnorderedList>
-              <ListItem>Name: John Doe</ListItem>
+              <ListItem>Name: {profile.Name}</ListItem>
               <ListItem>Username: {localStorage.getItem("username")}</ListItem>
-              <ListItem>Description: Passionate about volunteering</ListItem>
-              <ListItem>Location: New York, NY</ListItem>
-              <ListItem>Contact Info: johndoe@example.com</ListItem>
+              <ListItem>Description: {profile.Biography}</ListItem>
+              <ListItem>Location: {profile.Location}</ListItem>
+              <ListItem>Contact Info: {profile.Email}</ListItem>
             </UnorderedList>
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
