@@ -27,7 +27,7 @@ import { format } from "date-fns";
 
 interface Message {
   messageID: number;
-  volunteerUsername: string;
+  volunteerUsername: string | null;
   messageBoardID: number;
   Title: string;
   content: string;
@@ -73,19 +73,46 @@ const MessageBoardPage = () => {
     fetchCompanies();
   }, []);
 
+  const fetchMessages = async (messageBoardID: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/get-messages`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: localStorage.getItem("messageBoardID") }),
+      });
+
+      const data = await response.json();
+      console.log("Messages are: ", data);
+
+      // Check if the response is successful and contains an array of messages
+      if (data.success && Array.isArray(data.messages)) {
+        setMessages(data.messages);
+      } else {
+        // If the response is not successful or doesn't contain an array of messages, set messages to an empty array
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
+  };
+
   const sendMessage = async (e: any) => {
     // Save the message to the SQL database and retrieve the date/time
     if (messageInput === "" || selectedCompany === null) return;
 
     const newMessage: Message = {
       messageID: messages.length + 1,
-      volunteerUsername: "John Doe", // Replace with the actual username from the user's profile
+      volunteerUsername: localStorage.getItem("username"), // Replace with the actual username from the user's profile
       messageBoardID: selectedCompany.cID,
       Title: "New Message",
       content: messageInput,
       timestamp: new Date(),
       userType: "volunteer", // Replace with the actual user type from the user's profile
     };
+
+    fetchMessages(selectedCompany.cID);
 
     try {
       const response = await fetch("http://localhost:5000/api/messages", {
@@ -100,11 +127,13 @@ const MessageBoardPage = () => {
           Content: newMessage.content,
           Date: newMessage.timestamp.toISOString().split("T")[0], // Convert to ISO format and extract date part
           Time: newMessage.timestamp.toTimeString().split(" ")[0], // Extract time part and remove AM/PM designation
-          userType: newMessage.userType,
+          //userType: newMessage.userType,
         }),
       });
 
       if (response.ok) {
+        console.log(response);
+        console.log(messages);
         setMessages([...messages, newMessage]);
         setMessageInput("");
       } else {
@@ -146,6 +175,7 @@ const MessageBoardPage = () => {
               cursor="pointer"
               onClick={() => {
                 setSelectedCompany(company);
+                fetchMessages(company.cID);
                 onOpen();
               }}
               border={selectedCompany?.cID === company.cID ? "2px solid" : "none"}
@@ -162,38 +192,42 @@ const MessageBoardPage = () => {
           <ModalHeader>{selectedCompany?.cUser} Forum</ModalHeader>
           <ModalCloseButton />
           <ModalBody overflow={"auto"} maxHeight={"60vh"}>
-            {messages
-              .filter((message) => message.messageBoardID === selectedCompany?.cID)
-              .map((message, index) => (
-                <Grid
-                  key={message.messageID}
-                  templateColumns="1fr 1fr"
-                  gap={4}
-                  bg={index % 2 === 0 ? "blue.50" : "white"}
-                  p={4}
-                  borderRadius="md"
-                  borderColor="gray.200"
-                  borderWidth={1}
-                >
-                  <GridItem colSpan={2}>
-                    <Text fontSize={fontSize}>
-                      <strong>{message.volunteerUsername}</strong> -{" "}
-                      {format(message.timestamp, "MMM dd, yyyy hh:mm a")}
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={2}>
-                    <Text
-                      fontSize={fontSize}
-                      wordBreak="break-word"
-                      bg={message.userType === "company" ? "green.100" : "transparent"}
-                      p={message.userType === "company" ? 2 : 0}
-                      borderRadius={message.userType === "company" ? "md" : "none"}
-                    >
-                      {message.content}
-                    </Text>
-                  </GridItem>
-                </Grid>
-              ))}
+            {messages.length > 0 ? (
+              messages
+                .filter((message) => message.messageBoardID === selectedCompany?.cID)
+                .map((message, index) => (
+                  <Grid
+                    key={message.messageID}
+                    templateColumns="1fr 1fr"
+                    gap={4}
+                    bg={index % 2 === 0 ? "blue.50" : "white"}
+                    p={4}
+                    borderRadius="md"
+                    borderColor="gray.200"
+                    borderWidth={1}
+                  >
+                    <GridItem colSpan={2}>
+                      <Text fontSize={fontSize}>
+                        <strong>{message.volunteerUsername}</strong> -{" "}
+                        {format(message.timestamp, "MMM dd, yyyy hh:mm a")}
+                      </Text>
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                      <Text
+                        fontSize={fontSize}
+                        wordBreak="break-word"
+                        bg={message.userType === "company" ? "green.100" : "transparent"}
+                        p={message.userType === "company" ? 2 : 0}
+                        borderRadius={message.userType === "company" ? "md" : "none"}
+                      >
+                        {message.content}
+                      </Text>
+                    </GridItem>
+                  </Grid>
+                ))
+            ) : (
+              <Text>No messages yet.</Text>
+            )}
             <div ref={messagesEndRef} />
           </ModalBody>
           <ModalFooter>
