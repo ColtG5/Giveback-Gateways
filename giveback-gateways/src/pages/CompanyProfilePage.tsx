@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -19,31 +19,62 @@ const CompanyProfilePage = () => {
   let { username } = useParams();
 
 
-  // Replace the array below with data fetched from the database
-  const volunteeringOpportunities = [
-    {
-      title: "Beach Cleanup",
-      company: "Big Companawdn",
-      date: "2023-05-01",
-      time: "09:00",
-      duration: "3 hours",
-      description: "Join us in cleaning the local beach.",
-      numOfVolunteers: 10,
-    },
-    // Add more opportunities...
-  ];
+  const [volunteeringOpportunities, setVolunteeringOpportunities] = useState([]);
 
-  // Replace the array below with data fetched from the database
-  const pendingApplications = [
-    {
-      volunteerName: "Jane Smith",
-      location: "New York, NY",
-      email: "jane@example.com",
-      phoneNumber: "123-456-7890",
-      opportunityTitle: "Beach Cleanup",
-    },
-    // Add more applications...
-  ];
+ // Fetch volunteer opportunities from server
+useEffect(() => {
+  fetch(`http://localhost:5000/api/get-opportunities?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve volunteer opportunities");
+      }
+      return response.json();
+    })
+    .then((data) => setVolunteeringOpportunities(data))
+    .catch((error) => console.error(error));
+}, []);
+
+
+const [profile, setProfile] = useState([]);
+
+useEffect(() => {
+  const fetchProfileData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/profile-info', {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: localStorage.getItem("username") }),
+      } );
+      const data = await response.json();
+      setProfile(data); 
+      console.log("Profile data is", data)
+    } catch (error) {
+      console.error('Failed to fetch profile data:', error);
+    }
+  };
+  fetchProfileData();
+}, []);
+
+
+
+const [pendingApplications, setPendingApplications] = useState([]);
+
+ // Fetch pending applications from server
+ useEffect(() => {
+  fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve volunteer apps");
+      }
+      return response.json();
+    })
+    .then((data) => setPendingApplications(data))
+    .catch((error) => console.error(error));
+}, []);
+
+
 
   const [pendingApps, setPendingApps] = useState(pendingApplications);
 

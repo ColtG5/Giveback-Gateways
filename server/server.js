@@ -6,7 +6,7 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
-rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps} = require('./database.js'); // Import the function from database.js
+rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -131,30 +131,6 @@ app.post("/api/get-signed-opportunities", async (req, res) => {
   }
 });
 
-app.post("/api/get-pending-apps", async (req, res) => {
-  const { cUser } = req.body;
-
-  try {
-    const result = await new Promise ((resolve, reject) => {
-      retrievePendingApps(cUser, (err, results) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results);
-        }
-      })
-    });
-    if (result.length > 0) { // Check if there are any results
-      res.json(result);
-      console.log(result);
-    } else {
-      console.log("No pending apps")
-      res.json({ success: false, message: "No pending apps found" });
-    }
-  } catch (err) {
-    res.status(500).json({ error: "Failed to retrieve pending apps" });
-  }
-});
 
 app.post("/api/get-all-opportunities", async (req, res) => {
   const { username } = req.body;
@@ -407,9 +383,26 @@ app.get('/api/companies', (req, res) => {
 });
 
 // Define route to retrieve companies from message_board table
-app.get('/api/get-opportunities', (req, res) => {
+app.get('/api/company-opportunities', (req, res) => {
   // Call the retrieveCompanies method to fetch data from the database
-  retrieveOpportunities((err, results) => {
+  retrieveCompanies((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve companies:', err);
+      res.status(500).json({ error: 'Failed to retrieve companies' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log(results)
+    }
+  });
+});
+
+// Define route to retrieve companies from message_board table
+app.get('/api/get-opportunities', (req, res) => {
+  const cUser = req.query.cUser; // Get the value of cUser from the query parameters
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrieveCompanyOpportunities((err, results) => {
     if (err) {
       // Handle error
       console.error('Failed to retrieve opportunities:', err);
@@ -417,8 +410,26 @@ app.get('/api/get-opportunities', (req, res) => {
     } else {
       // Send the retrieved data back to the client
       res.json(results);
+      console.log("The results of company opp is: ", results)
     }
-  });
+  }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
+});
+
+// Define route to retrieve companies from message_board table
+app.get('/api/get-pending-apps', (req, res) => {
+  const cUser = req.query.cUser; // Get the value of cUser from the query parameters
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrievePendingApps((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log("The results of pending apps is: ", results)
+    }
+  }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
 
 
