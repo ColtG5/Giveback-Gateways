@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "colton.gowans.471",
+  password: "alisha.nasir.471",
   connecLimit: 10 
 })
 
@@ -197,7 +197,7 @@ const deleteSignedOpportunity = (vUser, OppID) => {
 };
 
 const retrieveSignedUpOpportunities = (username, callback) => {
-  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
+  const query = 'SELECT Volunteering_opportunity.Title, Volunteering_opportunity.Date, Volunteering_opportunity.Time, Volunteering_opportunity.Duration, Volunteering_opportunity.Description FROM gbgw471.SignedUp_Opportunities, gbgw471.Volunteering_opportunity WHERE SignedUp_Opportunities.OppID = Volunteering_opportunity.ID AND vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
@@ -350,9 +350,9 @@ const checkUserInDatabases = (username) => {
   });
 };
 
-const storeMessages = ( username, bID, Title, Content, Date, Time ) => {
+const storeMessages = ( username, messageBoardID, Title, Content, Date, Time ) => {
   return new Promise((resolve, reject) => {
-    console.log("Values:", username, bID, Title, Content, Date, Time )
+    console.log("Values:", username, messageBoardID, Title, Content, Date, Time )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
@@ -451,7 +451,7 @@ const attendVolunteerApp = (vUser, OppID) => {
 
 const retrievePendingApps = (callback, cUser) => {
   // Query the message_board table
-  const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity, gbgw471.SignedUp_Opportunity WHERE Volunteering_Opportunity.ID = SignedUp_Opportunity.OppID AND Volunteering_Opportunity.cUser = ?';
+  const query = 'SELECT * FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND Volunteering_opportunity.cUser = ?';
   pool.query(query, [cUser], (err, results) => {
     if (err) {
       // Handle error
@@ -465,9 +465,31 @@ const retrievePendingApps = (callback, cUser) => {
   });
 };
 
+const retrieveCompanyOpportunities = (callback, cUser) => {
+  // Query the message_board table
+  console.log(cUser);
+  const query = `SELECT * FROM gbgw471.Volunteering_Opportunity WHERE cUser = ?`;
+  pool.query(query, [cUser] ,(err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+
+
+
+
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
-deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps};
+deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
+retrieveCompanyOpportunities};
