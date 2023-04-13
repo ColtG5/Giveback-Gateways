@@ -27,11 +27,12 @@ import { format } from "date-fns";
 
 interface Message {
   messageID: number;
-  volunteerUsername: string | null;
-  messageBoardID: number;
+  username: string | null;
+  bID: number;
   Title: string;
-  content: string;
-  timestamp: Date;
+  Content: string;
+  Date: string;
+  Time: string;
   userType: string;
 }
 
@@ -51,20 +52,14 @@ const MessageBoardPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
   const [companies, setCompanies] = useState<Company[]>([]);
 
   useEffect(() => {
-    // Fetch companies and their corresponding message boards from the database
     const fetchCompanies = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/companies"); // Update the URL with your actual API endpoint
+        const response = await fetch("http://localhost:5000/api/companies");
         const data = await response.json();
-        console.log("Companies are: ", data[0]);
-        setCompanies(data); // Update the companies state with the fetched data
+        setCompanies(data);
       } catch (error) {
         console.error("Failed to fetch companies:", error);
       }
@@ -73,24 +68,31 @@ const MessageBoardPage = () => {
     fetchCompanies();
   }, []);
 
+  useEffect(() => {
+    if (selectedCompany === null) return;
+
+    fetchMessages(selectedCompany.cID);
+  }, [selectedCompany]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const fetchMessages = async (messageBoardID: number) => {
     try {
       const response = await fetch(`http://localhost:5000/api/get-messages`, {
-        method: "post",
+        method: "Post",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: localStorage.getItem("messageBoardID") }),
+        body: JSON.stringify({ bID: messageBoardID }),
       });
 
       const data = await response.json();
-      console.log("Messages are: ", data);
 
-      // Check if the response is successful and contains an array of messages
       if (data.success && Array.isArray(data.messages)) {
         setMessages(data.messages);
       } else {
-        // If the response is not successful or doesn't contain an array of messages, set messages to an empty array
         setMessages([]);
       }
     } catch (error) {
@@ -99,20 +101,21 @@ const MessageBoardPage = () => {
   };
 
   const sendMessage = async (e: any) => {
-    // Save the message to the SQL database and retrieve the date/time
     if (messageInput === "" || selectedCompany === null) return;
 
     const newMessage: Message = {
       messageID: messages.length + 1,
-      volunteerUsername: localStorage.getItem("username"), // Replace with the actual username from the user's profile
-      messageBoardID: selectedCompany.cID,
+      username: localStorage.getItem("username"),
+      bID: selectedCompany.cID,
       Title: "New Message",
-      content: messageInput,
-      timestamp: new Date(),
-      userType: "volunteer", // Replace with the actual user type from the user's profile
+      Content: messageInput,
+      Date: new Date().toISOString().slice(0, 19).replace("T", " ").slice(0, 10),
+      Time: new Date().toISOString().slice(0, 19).replace("T", " ").slice(11, 19),
+
+      userType: "volunteer",
     };
 
-    fetchMessages(selectedCompany.cID);
+    console.log("Sending message:", newMessage);
 
     try {
       const response = await fetch("http://localhost:5000/api/messages", {
@@ -121,31 +124,26 @@ const MessageBoardPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cUser: newMessage.volunteerUsername,
-          bID: newMessage.messageBoardID,
+          username: localStorage.getItem("username"),
+          bID: newMessage.bID,
           Title: newMessage.Title,
-          Content: newMessage.content,
-          Date: newMessage.timestamp.toISOString().split("T")[0], // Convert to ISO format and extract date part
-          Time: newMessage.timestamp.toTimeString().split(" ")[0], // Extract time part and remove AM/PM designation
-          //userType: newMessage.userType,
+          Content: newMessage.Content,
+          Date: newMessage.Date,
+          Time: newMessage.Time,
         }),
       });
 
       if (response.ok) {
         console.log(response);
-        console.log(messages);
         setMessages([...messages, newMessage]);
         setMessageInput("");
+        //fetchMessages(selectedCompany.cID); // Fetch messages again after sending
       } else {
-        // Handle error response from server
         console.error("Failed to send message:", response.status, response.statusText);
       }
     } catch (error) {
-      // Handle fetch error
       console.error("Failed to send message:", error);
     }
-    setMessages([...messages, newMessage]);
-    setMessageInput("");
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
@@ -193,38 +191,35 @@ const MessageBoardPage = () => {
           <ModalCloseButton />
           <ModalBody overflow={"auto"} maxHeight={"60vh"}>
             {messages.length > 0 ? (
-              messages
-                .filter((message) => message.messageBoardID === selectedCompany?.cID)
-                .map((message, index) => (
-                  <Grid
-                    key={message.messageID}
-                    templateColumns="1fr 1fr"
-                    gap={4}
-                    bg={index % 2 === 0 ? "blue.50" : "white"}
-                    p={4}
-                    borderRadius="md"
-                    borderColor="gray.200"
-                    borderWidth={1}
-                  >
-                    <GridItem colSpan={2}>
-                      <Text fontSize={fontSize}>
-                        <strong>{message.volunteerUsername}</strong> -{" "}
-                        {format(message.timestamp, "MMM dd, yyyy hh:mm a")}
-                      </Text>
-                    </GridItem>
-                    <GridItem colSpan={2}>
-                      <Text
-                        fontSize={fontSize}
-                        wordBreak="break-word"
-                        bg={message.userType === "company" ? "green.100" : "transparent"}
-                        p={message.userType === "company" ? 2 : 0}
-                        borderRadius={message.userType === "company" ? "md" : "none"}
-                      >
-                        {message.content}
-                      </Text>
-                    </GridItem>
-                  </Grid>
-                ))
+              messages.map((message, index) => (
+                <Grid
+                  key={message.messageID}
+                  templateColumns="1fr 1fr"
+                  gap={4}
+                  bg={index % 2 === 0 ? "blue.50" : "white"}
+                  p={4}
+                  borderRadius="md"
+                  borderColor="gray.200"
+                  borderWidth={1}
+                >
+                  <GridItem colSpan={2}>
+                    <Text fontSize={fontSize}>
+                      <strong>{message.username}</strong> - {message.Date} {message.Time}
+                    </Text>
+                  </GridItem>
+                  <GridItem colSpan={2}>
+                    <Text
+                      fontSize={fontSize}
+                      wordBreak="break-word"
+                      bg={message.userType === "company" ? "green.100" : "transparent"}
+                      p={message.userType === "company" ? 2 : 0}
+                      borderRadius={message.userType === "company" ? "md" : "none"}
+                    >
+                      {message.Content}
+                    </Text>
+                  </GridItem>
+                </Grid>
+              ))
             ) : (
               <Text>No messages yet.</Text>
             )}

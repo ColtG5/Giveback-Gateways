@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "habiba471",
+  password: "colton.gowans.471",
   connecLimit: 10 
 })
 
@@ -361,7 +361,7 @@ const storeMessages = ( username, bID, Title, Content, Date, Time ) => {
       } else {
         // Call the pool.query method to insert the user information into the Profile table
         pool.query(
-          "INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)",
+          `INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
           [ username, bID, Title, Content, Date, Time ],
           (err, res) => {
             if (err) {

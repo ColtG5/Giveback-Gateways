@@ -166,16 +166,6 @@ const VolunteerProfilePage = () => {
               <VolunteeringOpportunity key={index} {...opportunity} />
             ))}
           </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
-            <Heading as="h2" size="md" mb={4}>
-              All Volunteer Work
-            </Heading>
-            <UnorderedList>
-              <ListItem>Animal Shelter Volunteer</ListItem>
-              <ListItem>Park Cleanup Organizer</ListItem>
-              <ListItem>Food Bank Supporter</ListItem>
-            </UnorderedList>
-          </Box>
         </SimpleGrid>
       </VStack>
     </Flex>
