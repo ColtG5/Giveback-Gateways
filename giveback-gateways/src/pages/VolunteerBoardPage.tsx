@@ -20,6 +20,7 @@ import {
 import Navbar from "../components/Navbar";
 // import { volunteerOpportunities } from "../VolunteerOpportunities";
 import OpportunityCard from "../components/OpportunityCard";
+import { useAnimationFrame } from "framer-motion";
 
 export interface Opportunity {
   Date: "2023-04-17T06:00:00.000Z";
@@ -65,8 +66,8 @@ const VolunteerBoardPage = () => {
       // id what the endpoint is
       // so someone else
       // make this work ty
-
-      const response = await fetch("http://localhost:5000/api/sign-up", {
+      const storedUsername = localStorage.getItem("username");
+      const response = await fetch("http://localhost:5000/api/sign-up-opportunity", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,6 +78,7 @@ const VolunteerBoardPage = () => {
           //so someone else provife all of taht/
           //ty
           opportunityId: selectedOpportunity.ID,
+          vUser: storedUsername,
         }),
       });
 
