@@ -35,6 +35,14 @@ interface Interests {
   Interest: String;
 }
 
+interface Opportunity {
+  Title: string;
+  Date: string;
+  Time: string;
+  Duration: string;
+  Description: string;
+}
+
 const VolunteerProfilePage = () => {
   let { username } = useParams();
 
@@ -114,6 +122,34 @@ const VolunteerProfilePage = () => {
     fetchInterests();
   }, []);
 
+  const initialOpportunityState = {
+    Title: "",
+    Date: "",
+    Time: "",
+    Duration: "",
+    Description: "",
+  };
+  const [opportunity, setOpportunities] = useState<Opportunity[]>([initialOpportunityState]);
+
+  useEffect(() => {
+    const fetchOpportunities = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/get-signed-opportunities", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: localStorage.getItem("username") }),
+        });
+        const data = await response.json();
+        setOpportunities(data); // Update the companies state with the fetched data
+        console.log("Signed up opportunities is", data);
+      } catch (error) {
+        console.error("Failed to fetch signed up opportunities:", error);
+      }
+    };
+    fetchOpportunities();
+  }, []);
 
   const initialProfileState = {
     Username: "",
@@ -202,21 +238,11 @@ const VolunteerProfilePage = () => {
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
-              Upcoming Volunteering Opportunities
+              You signed up for
             </Heading>
-            {currentOpportunities.map((opportunity, index) => (
-              <VolunteeringOpportunity key={index} {...opportunity} />
+            {opportunity.map((opportunity, index) => (
+              <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
             ))}
-          </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
-            <Heading as="h2" size="md" mb={4}>
-              All Volunteer Work
-            </Heading>
-            <UnorderedList>
-              <ListItem>Animal Shelter Volunteer</ListItem>
-              <ListItem>Park Cleanup Organizer</ListItem>
-              <ListItem>Food Bank Supporter</ListItem>
-            </UnorderedList>
           </Box>
         </SimpleGrid>
       </VStack>
