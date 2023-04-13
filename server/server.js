@@ -396,22 +396,31 @@ app.get('/api/company-opportunities', (req, res) => {
   });
 });
 
-// Define route to retrieve companies from message_board table
-app.get('/api/get-opportunities', (req, res) => {
-  const cUser = req.query.cUser; // Get the value of cUser from the query parameters
-  // Call the retrieveCompanyOpportunities method to fetch data from the database
-  retrieveCompanyOpportunities((err, results) => {
-    if (err) {
-      // Handle error
-      console.error('Failed to retrieve opportunities:', err);
-      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+app.post("/api/get-company-opportunities", async (req, res) => {
+  const { cUser } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveCompanyOpportunities(cUser, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
     } else {
-      // Send the retrieved data back to the client
-      res.json(results);
-      console.log("The results of company opp is: ", results)
+      console.log("No company opportunities")
+      res.json({ success: false, message: "No company opportunities found" });
     }
-  }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve company opportunities" });
+  }
 });
+
 
 // Define route to retrieve companies from message_board table
 app.get('/api/get-all-opportunities', (req, res) => {
