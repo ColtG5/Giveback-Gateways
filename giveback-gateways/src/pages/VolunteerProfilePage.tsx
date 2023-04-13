@@ -84,6 +84,28 @@ const VolunteerProfilePage = () => {
     fetchInterests();
   }, []);
 
+  const [profile, setProfile] = useState([]);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/profile-info', {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: localStorage.getItem("username") }),
+        } );
+        const data = await response.json();
+        setProfile(data); 
+        console.log("Profile data is", data)
+      } catch (error) {
+        console.error('Failed to fetch profile data:', error);
+      }
+    };
+    fetchProfileData();
+  }, []);
+
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
       <Navbar />
@@ -138,7 +160,7 @@ const VolunteerProfilePage = () => {
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
-              Current Volunteering Opportunities
+              Upcoming Volunteering Opportunities
             </Heading>
             {currentOpportunities.map((opportunity, index) => (
               <VolunteeringOpportunity key={index} {...opportunity} />

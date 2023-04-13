@@ -170,12 +170,53 @@ const retrieveProfileInfo = (username, callback) => {
   });
 };
 
+const deleteVolunteerOpportunity = (OppID) => {
+  const query = 'DELETE FROM gbgw471.Volunteering_opportunity WHERE ID = ?';
+  pool.query(query, [OppID], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('Opportunity deleted successfully');
+      resolve(results);
+    }
+  });
+};
+
+const deleteSignedOpportunity = (vUser, OppID) => {
+  const query = 'DELETE FROM gbgw471.SignedUp_Opportunities WHERE OppID = ? AND vUser = ?';
+  pool.query(query, [OppID, vUser], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('SIgned for Opportunity deleted successfully');
+      resolve(results);
+    }
+  });
+};
+
 const retrieveSignedUpOpportunities = (username, callback) => {
   const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
       console.error('Failed to retrieve signed up opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+const retrieveAllUserOpportunities = (username, callback) => {
+  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ? AND Attended = 1';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve all user opportunities:', err);
       callback(err, null);
     } else {
       // Send the retrieved data back to the callback function
@@ -369,6 +410,64 @@ const retrieveOpportunities = (callback) => {
   });
 };
 
+const acceptVolunteerApp = (vUser, OppID) => {
+  const query = 'UPDATE gbgw471.SignedUp_Opportunities SET Pending = 0, Accepted = 1 WHERE vUser = ? AND OppID = ?';
+  pool.query(query, [vUser, OppID], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('Opportunity accepted successfully');
+      resolve(res);
+    }
+  });
+};
+
+const rejectVolunteerApp = (vUser, OppID) => {
+  const query = 'UPDATE gbgw471.SignedUp_Opportunities SET Pending = 0, Rejected = 1 WHERE vUser = ? AND OppID = ?';
+  pool.query(query, [vUser, OppID], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('Opportunity rejected successfully');
+      resolve(res);
+    }
+  });
+};
+
+const attendVolunteerApp = (vUser, OppID) => {
+  const query = 'UPDATE gbgw471.SignedUp_Opportunities SET Pending = 0, Attended = 1 WHERE vUser = ? AND OppID = ?';
+  pool.query(query, [vUser, OppID], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('Opportunity attended successfully');
+      resolve(res);
+    }
+  });
+};
+
+const retrievePendingApps = (callback, cUser) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity, gbgw471.SignedUp_Opportunity WHERE Volunteering_Opportunity.ID = SignedUp_Opportunity.OppID AND Volunteering_Opportunity.cUser = ?';
+  pool.query(query, [cUser], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
+  retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
+deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps};
