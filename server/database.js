@@ -197,7 +197,7 @@ const deleteSignedOpportunity = (vUser, OppID) => {
 };
 
 const retrieveSignedUpOpportunities = (username, callback) => {
-  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
+  const query = 'SELECT Volunteering_opportunity.Title, Volunteering_opportunity.Date, Volunteering_opportunity.Time, Volunteering_opportunity.Duration, Volunteering_opportunity.Description FROM gbgw471.SignedUp_Opportunities, gbgw471.Volunteering_opportunity WHERE SignedUp_Opportunities.OppID = Volunteering_opportunity.ID AND vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
@@ -360,8 +360,10 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
         reject(err);
       } else {
         pool.query(
+
           `INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
           [ cUser, bID, Title, Content, Date, Time ],
+
           (err, res) => {
             if (err) {
               console.error(err);

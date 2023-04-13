@@ -166,4 +166,5 @@ const CompanyProfilePage = () => {
   );
 };
 
+
 export default CompanyProfilePage;

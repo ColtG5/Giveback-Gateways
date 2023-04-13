@@ -13,6 +13,36 @@ import {
 import Navbar from "../components/Navbar";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
 
+interface Profile {
+  Username: String;
+  Password: String;
+  Name: String;
+  LastName: String;
+  Email: String;
+  Phone: String;
+  Biography: String;
+  Location: String;
+  CreationDate: String;
+}
+
+interface Goals {
+  vUser: String;
+  Goal: String;
+}
+
+interface Interests {
+  vUser: String;
+  Interest: String;
+}
+
+interface Opportunity {
+  Title: string;
+  Date: string;
+  Time: string;
+  Duration: string;
+  Description: string;
+}
+
 const VolunteerProfilePage = () => {
   let { username } = useParams();
 
@@ -40,7 +70,11 @@ const VolunteerProfilePage = () => {
   // Initialize the state variable for current opportunities
   const [currentOpportunities, setCurrentOpportunities] = useState(initialCurrentOpportunities);
 
-  const [goals, setGoals] = useState([]);
+  const initialGoalState = {
+    vUser: "",
+    Goal: "",
+  };
+  const [goals, setGoals] = useState<Goals[]>([initialGoalState]);
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -62,7 +96,11 @@ const VolunteerProfilePage = () => {
     fetchGoals();
   }, []);
 
-  const [interests, setInterests] = useState([]);
+  const initialInterestState = {
+    vUser: "",
+    Interest: "",
+  };
+  const [interests, setInterests] = useState<Interests[]>([initialInterestState]);
 
   useEffect(() => {
     const fetchInterests = async () => {
@@ -84,7 +122,47 @@ const VolunteerProfilePage = () => {
     fetchInterests();
   }, []);
 
-  const [profile, setProfile] = useState([]);
+  const initialOpportunityState = {
+    Title: "",
+    Date: "",
+    Time: "",
+    Duration: "",
+    Description: "",
+  };
+  const [opportunity, setOpportunities] = useState<Opportunity[]>([initialOpportunityState]);
+
+  useEffect(() => {
+    const fetchOpportunities = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/get-signed-opportunities", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: localStorage.getItem("username") }),
+        });
+        const data = await response.json();
+        setOpportunities(data); // Update the companies state with the fetched data
+        console.log("Signed up opportunities is", data);
+      } catch (error) {
+        console.error("Failed to fetch signed up opportunities:", error);
+      }
+    };
+    fetchOpportunities();
+  }, []);
+
+  const initialProfileState = {
+    Username: "",
+    Password: "",
+    Name: "",
+    LastName: "",
+    Email: "",
+    Phone: "",
+    Biography: "",
+    Location: "",
+    CreationDate: "",
+  };
+  const [profile, setProfile] = useState<Profile>(initialProfileState);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -97,7 +175,7 @@ const VolunteerProfilePage = () => {
           body: JSON.stringify({ username: localStorage.getItem("username") }),
         } );
         const data = await response.json();
-        setProfile(data); 
+        setProfile(data[0]); 
         console.log("Profile data is", data)
       } catch (error) {
         console.error('Failed to fetch profile data:', error);
@@ -126,11 +204,11 @@ const VolunteerProfilePage = () => {
               Personal Information
             </Heading>
             <UnorderedList>
-              <ListItem>Name: John Doe</ListItem>
+              <ListItem>Name: {profile.Name}</ListItem>
               <ListItem>Username: {localStorage.getItem("username")}</ListItem>
-              <ListItem>Description: Passionate about volunteering</ListItem>
-              <ListItem>Location: New York, NY</ListItem>
-              <ListItem>Contact Info: johndoe@example.com</ListItem>
+              <ListItem>Description: {profile.Biography}</ListItem>
+              <ListItem>Location: {profile.Location}</ListItem>
+              <ListItem>Contact Info: {profile.Email}</ListItem>
             </UnorderedList>
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
@@ -141,7 +219,7 @@ const VolunteerProfilePage = () => {
             {goals.length > 0 ? (
               <UnorderedList>
                 {goals.map((goal, index) => (
-                  <ListItem key={index}>{JSON.stringify(goal)}</ListItem>
+                  <ListItem key={index}>{goal.Goal}</ListItem>
                 ))}
               </UnorderedList>
             ) : (
@@ -151,7 +229,7 @@ const VolunteerProfilePage = () => {
             {interests.length > 0 ? (
               <UnorderedList>
                 {interests.map((interest, index) => (
-                  <ListItem key={index}>{JSON.stringify(interest)}</ListItem>
+                  <ListItem key={index}>{interest.Interest}</ListItem>
                 ))}
               </UnorderedList>
             ) : (
@@ -160,21 +238,11 @@ const VolunteerProfilePage = () => {
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
-              Upcoming Volunteering Opportunities
+              You signed up for
             </Heading>
-            {currentOpportunities.map((opportunity, index) => (
-              <VolunteeringOpportunity key={index} {...opportunity} />
+            {opportunity.map((opportunity, index) => (
+              <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
             ))}
-          </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
-            <Heading as="h2" size="md" mb={4}>
-              All Volunteer Work
-            </Heading>
-            <UnorderedList>
-              <ListItem>Animal Shelter Volunteer</ListItem>
-              <ListItem>Park Cleanup Organizer</ListItem>
-              <ListItem>Food Bank Supporter</ListItem>
-            </UnorderedList>
           </Box>
         </SimpleGrid>
       </VStack>
