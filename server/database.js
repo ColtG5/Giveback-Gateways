@@ -197,7 +197,7 @@ const deleteSignedOpportunity = (vUser, OppID) => {
 };
 
 const retrieveSignedUpOpportunities = (username, callback) => {
-  const query = 'SELECT Volunteering_opportunity.Title, Volunteering_opportunity.Date, Volunteering_opportunity.Time, Volunteering_opportunity.Duration, Volunteering_opportunity.Description FROM gbgw471.SignedUp_Opportunities, gbgw471.Volunteering_opportunity WHERE SignedUp_Opportunities.OppID = Volunteering_opportunity.ID AND vUser = ?';
+  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
@@ -352,7 +352,7 @@ const checkUserInDatabases = (username) => {
 
 const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
   return new Promise((resolve, reject) => {
-    console.log("Values:", cUser, bID, Title, Content, Date, Time )
+    console.log("Store message values:", cUser, bID, Title, Content, Date, Time )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
@@ -360,10 +360,8 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
         reject(err);
       } else {
         pool.query(
-
           `INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
           [ cUser, bID, Title, Content, Date, Time ],
-
           (err, res) => {
             if (err) {
               console.error(err);
@@ -482,10 +480,6 @@ const retrieveCompanyOpportunities = (callback, cUser) => {
     }
   });
 };
-
-
-
-
 
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  

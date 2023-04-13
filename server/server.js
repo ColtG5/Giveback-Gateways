@@ -231,8 +231,8 @@ app.post("/api/interests", async (req, res) => {
   }
 });
 
-app.post("/api/get-messages", async (req, res) => {
-  const { bID } = req.body;
+app.get("/api/get-messages", async (req, res) => {
+  const { bID } = req.query;
   try {
     const result = await new Promise ((resolve, reject) => {
       retrieveMessages(bID, (err, results) => {
@@ -244,8 +244,8 @@ app.post("/api/get-messages", async (req, res) => {
       })
     });
     if (result.length > 0) { // Check if there are any results
-      res.json(result);
-      console.log(result);
+      res.json({ success: true, messages: result }); // Include success property in the response JSON
+      console.log("Messages are",result);
     } else {
       console.log("No messages")
       res.json({ success: false, message: "No messages found" });
@@ -350,7 +350,7 @@ app.post("/api/messages", async (req, res) => {
   const { cUser, bID, Title, Content, Date, Time } = req.body;
   console.log("Username:", cUser,bID, Title, Content, Date, Time);
   try {
-    const result = await storeMessages( cUser, bID, Title, Content, Date, Time );
+    const result = await storeMessages( cUser,bID, Title, Content, Date, Time );
     if (result) {
       console.log("Messages found")
       res.json({ success: true, message: "Message found" });
