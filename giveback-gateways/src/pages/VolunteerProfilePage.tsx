@@ -45,18 +45,18 @@ const VolunteerProfilePage = () => {
   useEffect(() => {
     const fetchGoals = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/goals', {
+        const response = await fetch("http://localhost:5000/api/goals", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: localStorage.getItem("username") }),
-        } );
+        });
         const data = await response.json();
         setGoals(data); // Update the companies state with the fetched data
-        console.log("Goals data is", data)
+        console.log("Goals data is", data);
       } catch (error) {
-        console.error('Failed to fetch goals:', error);
+        console.error("Failed to fetch goals:", error);
       }
     };
     fetchGoals();
@@ -67,18 +67,18 @@ const VolunteerProfilePage = () => {
   useEffect(() => {
     const fetchInterests = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/interests', {
+        const response = await fetch("http://localhost:5000/api/interests", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: localStorage.getItem("username") }),
-        } );
+        });
         const data = await response.json();
         setInterests(data); // Update the companies state with the fetched data
-        console.log("Interests data is", data)
+        console.log("Interests data is", data);
       } catch (error) {
-        console.error('Failed to fetch interests:', error);
+        console.error("Failed to fetch interests:", error);
       }
     };
     fetchInterests();
@@ -138,25 +138,25 @@ const VolunteerProfilePage = () => {
               Goals & Interests
             </Heading>
             <Text fontWeight={"bold"}>Goals</Text>
-              {goals.length > 0 ? (
-                <UnorderedList>
-                  {goals.map((goal, index) => (
-                    <ListItem key={index}>{JSON.stringify(goal)}</ListItem>
-                  ))}
-                </UnorderedList>
-              ) : (
-                <Text>None</Text>
-              )}
+            {goals.length > 0 ? (
+              <UnorderedList>
+                {goals.map((goal, index) => (
+                  <ListItem key={index}>{JSON.stringify(goal)}</ListItem>
+                ))}
+              </UnorderedList>
+            ) : (
+              <Text>None</Text>
+            )}
             <Text fontWeight={"bold"}>Interests</Text>
-              {interests.length > 0 ? (
-                <UnorderedList>
-                  {interests.map((interest, index) => (
-                    <ListItem key={index}>{JSON.stringify(interest)}</ListItem>
-                  ))}
-                </UnorderedList>
-              ) : (
-                <Text>None</Text>
-              )}
+            {interests.length > 0 ? (
+              <UnorderedList>
+                {interests.map((interest, index) => (
+                  <ListItem key={index}>{JSON.stringify(interest)}</ListItem>
+                ))}
+              </UnorderedList>
+            ) : (
+              <Text>None</Text>
+            )}
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
