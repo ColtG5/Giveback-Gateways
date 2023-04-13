@@ -15,6 +15,18 @@ import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOppo
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
 import PendingApplication from "../components/PendingApplication";
 
+
+interface Profile {
+  Username: String;
+  Password: String;
+  Name: String;
+  LastName: String;
+  Email: String;
+  Phone: String;
+  Biography: String;
+  Location: String;
+  CreationDate: String;
+}
 const CompanyProfilePage = () => {
   let { username } = useParams();
 
@@ -51,30 +63,66 @@ const CompanyProfilePage = () => {
       } catch (error) {
         console.error('Failed to fetch profile data:', error);
       }
-    };
-    fetchProfileData();
-  }, []);
+      return response.json();
+    })
+    .then((data) => setVolunteeringOpportunities(data))
+    .catch((error) => console.error(error));
+}, []);
 
-  const [pendingApplications, setPendingApplications] = useState([]);
 
-  // Fetch pending applications from server
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to retrieve volunteer apps");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPendingApplications(data);
-        // Update the pendingApps state as well
-        setPendingApps(data);
-      })
-      .catch((error) => console.error(error));
-  }, []);
+const initialProfileState = {
+  Username: "",
+  Password: "",
+  Name: "",
+  LastName: "",
+  Email: "",
+  Phone: "",
+  Biography: "",
+  Location: "",
+  CreationDate: "",
+};
+const [profile, setProfile] = useState<Profile>(initialProfileState);
 
-  const [pendingApps, setPendingApps] = useState([]);
+useEffect(() => {
+  const fetchProfileData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/profile-info', {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: localStorage.getItem("username") }),
+      } );
+      const data = await response.json();
+      setProfile(data[0]); 
+      console.log("Profile data is", data)
+    } catch (error) {
+      console.error('Failed to fetch profile data:', error);
+    }
+  };
+  fetchProfileData();
+}, []);
+
+
+
+const [pendingApplications, setPendingApplications] = useState([]);
+
+ // Fetch pending applications from server
+ useEffect(() => {
+  fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve volunteer apps");
+      }
+      return response.json();
+    })
+    .then((data) => setPendingApplications(data))
+    .catch((error) => console.error(error));
+}, []);
+
+
+
+  const [pendingApps, setPendingApps] = useState(pendingApplications);
 
   // Function to handle application acceptance or rejection
   const handleApplication = (index: number, action: string) => {
@@ -110,11 +158,11 @@ const CompanyProfilePage = () => {
               Personal Information
             </Heading>
             <UnorderedList>
-              <ListItem>Name: John Doe</ListItem>
+              <ListItem>Name: {profile.Name}</ListItem>
               <ListItem>Username: {localStorage.getItem("username")}</ListItem>
-              <ListItem>Description: Passionate about volunteering</ListItem>
-              <ListItem>Location: New York, NY</ListItem>
-              <ListItem>Contact Info: johndoe@example.com</ListItem>
+              <ListItem>Description: {profile.Biography}</ListItem>
+              <ListItem>Location: {profile.Location}</ListItem>
+              <ListItem>Contact Info: {profile.Email}</ListItem>
             </UnorderedList>
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
