@@ -449,8 +449,25 @@ const attendVolunteerApp = (vUser, OppID) => {
   });
 };
 
+const retrievePendingApps = (callback, cUser) => {
+  // Query the message_board table
+  const query = 'SELECT * FROM gbgw471.Volunteering_Opportunity, gbgw471.SignedUp_Opportunity WHERE Volunteering_Opportunity.ID = SignedUp_Opportunity.OppID AND Volunteering_Opportunity.cUser = ?';
+  pool.query(query, [cUser], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
-deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity};
+deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps};
