@@ -5,7 +5,8 @@ const app = express()
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
-retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity} = require('./database.js'); // Import the function from database.js
+retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
+rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -278,6 +279,54 @@ app.post("/api/delete-opp", async (req,res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to delete opportunity" });
+  }
+});
+
+app.post("/api/delete-signed-opp", async (req,res) => {
+  const { vUser, OppID } = req.body;
+  try {
+    const result = await deleteSignedOpportunity( vUser, OppID );
+    // Send success response back to client
+    res.json({ success: true, message: "Signed for Opportunity successfully deleted" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete signed up opportunity" });
+  }
+});
+
+app.post("/api/accept-app", async (req,res) => {
+  const { vUser, OppID } = req.body;
+  try {
+    const result = await acceptVolunteerApp( vUser, OppID );
+    // Send success response back to client
+    res.json({ success: true, message: "Opportunity successfully accepted" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to accept opportunity" });
+  }
+});
+
+app.post("/api/reject-app", async (req,res) => {
+  const { vUser, OppID } = req.body;
+  try {
+    const result = await rejectVolunteerApp( vUser, OppID );
+    // Send success response back to client
+    res.json({ success: true, message: "Opportunity successfully rejected" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to reject opportunity" });
+  }
+});
+
+app.post("/api/attend-app", async (req,res) => {
+  const { vUser, OppID } = req.body;
+  try {
+    const result = await attendVolunteerApp( vUser, OppID );
+    // Send success response back to client
+    res.json({ success: true, message: "Opportunity successfully attend" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to attend opportunity" });
   }
 });
 

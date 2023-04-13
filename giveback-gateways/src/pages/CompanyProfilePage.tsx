@@ -73,7 +73,7 @@ const CompanyProfilePage = () => {
         pb={20}
       >
         <Heading as="h1" size="2xl" textAlign="center" mt={"1.5rem"}>
-          {username}'s Company Profile
+        {localStorage.getItem("username")}'s Company Profile
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} w={{ base: "100%", md: "80%" }}>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md">
@@ -82,7 +82,7 @@ const CompanyProfilePage = () => {
             </Heading>
             <UnorderedList>
               <ListItem>Name: John Doe</ListItem>
-              <ListItem>Username: {username}</ListItem>
+              <ListItem>Username: {localStorage.getItem("username")}</ListItem>
               <ListItem>Description: Passionate about volunteering</ListItem>
               <ListItem>Location: New York, NY</ListItem>
               <ListItem>Contact Info: johndoe@example.com</ListItem>
