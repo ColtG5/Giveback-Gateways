@@ -170,12 +170,40 @@ const retrieveProfileInfo = (username, callback) => {
   });
 };
 
+const deleteVolunteerOpportunity = (OppID) => {
+  const query = 'DELETE FROM gbgw471.Volunteering_opportunity WHERE ID = ?';
+  pool.query(query, [OppID], (err, results) => {
+    if (err) {
+      console.error(err);
+      reject(err);
+    } else {
+      console.log('Opportunity deleted successfully');
+      resolve(results);
+    }
+  });
+};
+
 const retrieveSignedUpOpportunities = (username, callback) => {
   const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
       console.error('Failed to retrieve signed up opportunities:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+const retrieveAllUserOpportunities = (username, callback) => {
+  const query = 'SELECT * FROM gbgw471.SignedUp_Opportunities WHERE vUser = ? AND Attended = 1';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve all user opportunities:', err);
       callback(err, null);
     } else {
       // Send the retrieved data back to the callback function
@@ -371,4 +399,6 @@ const retrieveOpportunities = (callback) => {
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
-  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities };
+  checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
+  retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
+deleteVolunteerOpportunity};

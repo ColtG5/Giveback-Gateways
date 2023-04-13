@@ -5,7 +5,7 @@ const app = express()
 const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, insertVolunteeringOpportunity, 
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
-retrieveSignedUpOpportunities } = require('./database.js'); // Import the function from database.js
+retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -130,6 +130,31 @@ app.post("/api/get-signed-opportunities", async (req, res) => {
   }
 });
 
+app.post("/api/get-all-opportunities", async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveAllUserOpportunities(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No opportunities ")
+      res.json({ success: false, message: "No opportunities found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve opportunities" });
+  }
+});
+
 app.post("/api/profile-info", async (req, res) => {
   const { username } = req.body;
 
@@ -241,6 +266,18 @@ app.post("/api/company-profile", async (req,res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to register company in database" });
+  }
+});
+
+app.post("/api/delete-opp", async (req,res) => {
+  const { OppID } = req.body;
+  try {
+    const result = await deleteVolunteerOpportunity( OppID );
+    // Send success response back to client
+    res.json({ success: true, message: "Opportunity successfully deleted" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete opportunity" });
   }
 });
 
