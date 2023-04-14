@@ -423,6 +423,8 @@ const storeMessages = ( username, bID, Title, Content, Date, Time ) => {
   });
 };
 
+
+
 const retrieveCompanies = (callback) => {
   // Query the message_board table
   const query = 'SELECT * FROM gbgw471.Company_profile';
@@ -526,49 +528,6 @@ const retrieveCompanyOpportunities = (callback, cUser) => {
     }
   });
 };
-
-// const retrievePendingVolunteers = (callback, cUser) => {
-//   // Query the message_board table
-//   const query = `
-//     SELECT *
-//     FROM gbgw471.Volunteering_opportunity vo
-//     INNER JOIN gbgw471.SignedUp_Opportunities so ON vo.ID = so.OppID
-//     INNER JOIN gbgw471.Volunteer_profile vp ON so.vUser = vp.vUser
-//     WHERE vo.cUser = ?;
-//   `;  pool.query(query, [cUser], (err, results) => {
-//     if (err) {
-//       // Handle error
-//       console.error('Failed to retrieve opportunities:', err);
-//       callback(err, null);
-//     } else {
-//       // Send the retrieved data back to the callback function
-//       console.log("Pending volunters",results)
-//       callback(null, results);
-//     }
-//   });
-// };
-
-// const retrievePendingVolunteers = (callback, cUser) => {
-//   // Query the message_board table
-//   const query = `
-//     SELECT vp.Email, vp.Phone, vp.Location
-//     FROM gbgw471.Volunteering_opportunity vo
-//     INNER JOIN gbgw471.SignedUp_Opportunities so ON vo.ID = so.OppID
-//     INNER JOIN gbgw471.Volunteer_profile vp ON so.vUser = vp.vUser
-//     WHERE vo.cUser = ?;
-//   `;  
-//   pool.query(query, [cUser], (err, results) => {
-//     if (err) {
-//       // Handle error
-//       console.error('Failed to retrieve pending volunteers:', err);
-//       callback(err, null);
-//     } else {
-//       // Send the retrieved data back to the callback function
-//       console.log("Pending volunteers",results)
-//       callback(null, results);
-//     }
-//   });
-// };
 
 const retrievePendingVolunteers = (callback, cUser) => {
   // Query the message_board table
