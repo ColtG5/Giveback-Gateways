@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "alisha.nasir.471",
+  password: "habiba471",
   connecLimit: 10 
 })
 
@@ -328,6 +328,34 @@ const insertCompanyProfile = ( cUser ) => {
   });
 };
 
+const insertMessageBoard = ( cUser ) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", cUser )
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Message_board (cUser ) VALUES (?)",
+          [ cUser ],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Volunteer registered successfully');
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
 // Function to check if username exists in the Volunteer_profile or Company_profile tables
 const checkUserInDatabases = (username) => {
   return new Promise((resolve, reject) => {
@@ -528,4 +556,4 @@ module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUserna
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
 deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
-retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName};
+retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName, insertMessageBoard};

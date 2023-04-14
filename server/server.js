@@ -7,7 +7,7 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
 rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities,
-retrievePendingVolunteers, retrieveVolunteerName} = require('./database.js'); // Import the function from database.js
+retrievePendingVolunteers, retrieveVolunteerName, insertMessageBoard} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -290,6 +290,19 @@ app.post("/api/company-profile", async (req,res) => {
     console.log(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to register company in database" });
+  }
+});
+
+app.post("/api/new-message-board", async (req,res) => {
+  const { cUser } = req.body;
+  console.log("cUser:", cUser);
+  try {
+    const result = await insertMessageBoard( cUser );
+    // Send success response back to client
+    res.json({ success: true, message: "Message board created" });
+    console.log(result);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to register message board" });
   }
 });
 
