@@ -141,7 +141,10 @@ const retrieveInterests = (username, callback) => {
 };
 
 const retrieveMessages = (bID, callback) => {
-  const query = 'SELECT * FROM gbgw471.Message WHERE bID = ?';
+  const query = `SELECT * 
+  FROM gbgw471.Message 
+  WHERE bID = ?
+  `;
   pool.query(query, [bID], (err, results) => {
     if (err) {
       // Handle error
@@ -156,7 +159,7 @@ const retrieveMessages = (bID, callback) => {
 };
 
 const retrieveProfileInfo = (username, callback) => {
-  const query = 'SELECT * FROM gbgw471.Profile WHERE Username = ?';
+  const query = 'SELECT Name FROM gbgw471.Profile WHERE Username = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
@@ -481,10 +484,75 @@ const retrieveCompanyOpportunities = (callback, cUser) => {
   });
 };
 
+// const retrievePendingVolunteers = (callback, cUser) => {
+//   // Query the message_board table
+//   const query = `
+//     SELECT *
+//     FROM gbgw471.Volunteering_opportunity vo
+//     INNER JOIN gbgw471.SignedUp_Opportunities so ON vo.ID = so.OppID
+//     INNER JOIN gbgw471.Volunteer_profile vp ON so.vUser = vp.vUser
+//     WHERE vo.cUser = ?;
+//   `;  pool.query(query, [cUser], (err, results) => {
+//     if (err) {
+//       // Handle error
+//       console.error('Failed to retrieve opportunities:', err);
+//       callback(err, null);
+//     } else {
+//       // Send the retrieved data back to the callback function
+//       console.log("Pending volunters",results)
+//       callback(null, results);
+//     }
+//   });
+// };
+
+// const retrievePendingVolunteers = (callback, cUser) => {
+//   // Query the message_board table
+//   const query = `
+//     SELECT vp.Email, vp.Phone, vp.Location
+//     FROM gbgw471.Volunteering_opportunity vo
+//     INNER JOIN gbgw471.SignedUp_Opportunities so ON vo.ID = so.OppID
+//     INNER JOIN gbgw471.Volunteer_profile vp ON so.vUser = vp.vUser
+//     WHERE vo.cUser = ?;
+//   `;  
+//   pool.query(query, [cUser], (err, results) => {
+//     if (err) {
+//       // Handle error
+//       console.error('Failed to retrieve pending volunteers:', err);
+//       callback(err, null);
+//     } else {
+//       // Send the retrieved data back to the callback function
+//       console.log("Pending volunteers",results)
+//       callback(null, results);
+//     }
+//   });
+// };
+
+const retrievePendingVolunteers = (callback, cUser) => {
+  // Query the message_board table
+  const query = `
+  SELECT Profile.Email, Profile.Phone, Profile.Location 
+  FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities, gbgw471.Profile
+  WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND Volunteering_opportunity.cUser = ? AND SignedUp_Opportunities.vUser = Profile.Username 
+  `;
+  pool.query(query, [cUser], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve pending volunteers:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log("Pending volunteers",results)
+      callback(null, results);
+    }
+  });
+};
+
+
+
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
   insertVolunteeringOpportunity, insertVolunteerProfile, insertCompanyProfile, 
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
 deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
-retrieveCompanyOpportunities};
+retrieveCompanyOpportunities,retrievePendingVolunteers};

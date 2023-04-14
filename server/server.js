@@ -6,7 +6,8 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
-rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities} = require('./database.js'); // Import the function from database.js
+rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities,
+retrievePendingVolunteers} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -158,7 +159,6 @@ app.post("/api/get-all-opportunities", async (req, res) => {
 
 app.post("/api/profile-info", async (req, res) => {
   const { username } = req.body;
-
   try {
     const result = await new Promise ((resolve, reject) => {
       retrieveProfileInfo(username, (err, results) => {
@@ -446,6 +446,22 @@ app.get('/api/get-pending-apps', (req, res) => {
   }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
 
+// Define route to retrieve companies from message_board table
+app.get('/api/get-pending-apps-volunteer-info', (req, res) => {
+  const cUser = req.query.cUser; // Get the value of cUser from the query parameters
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrievePendingVolunteers((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log("The results of pending apps is: ", results)
+    }
+  }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
+});
 
 
 app.listen(5000, () => { console.log("Server started on port 5000")})

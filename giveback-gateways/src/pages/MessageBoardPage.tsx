@@ -98,7 +98,6 @@ const MessageBoardPage = () => {
     }
   };
 
-
   const sendMessage = async (e: any) => {
     if (messageInput === "" || selectedCompany === null) return;
 
@@ -110,7 +109,6 @@ const MessageBoardPage = () => {
       Content: messageInput,
       Date: new Date().toISOString().slice(0, 19).replace("T", " ").slice(0, 10),
       Time: new Date().toISOString().slice(0, 19).replace("T", " ").slice(11, 19),
-
       userType: "volunteer",
     };
 
@@ -148,6 +146,10 @@ const MessageBoardPage = () => {
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
 
+  console.log("Message username:", messages.map(messages => messages.cUser))
+  console.log(messages)
+
+
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
       <Navbar />
@@ -183,7 +185,6 @@ const MessageBoardPage = () => {
           ))}
         </SimpleGrid>
       </VStack>
-
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent padding={0}>
