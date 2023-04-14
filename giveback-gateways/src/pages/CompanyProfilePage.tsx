@@ -9,6 +9,17 @@ import {
   ListItem,
   UnorderedList,
   Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOpportunitySection";
@@ -183,6 +194,15 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
   // console.log("Pending volunteers location:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Location))
 
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleUpdateInfo = () => {
+    // Here you can send the updated information to the server
+    // and update the user's information in the database
+    onClose();
+  };
+
+
   // Function to handle application acceptance or rejection
   const handleApplication = (index: number, action: string) => {
     // Remove the application from the pendingApps array
@@ -235,6 +255,39 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
             ))}
           </Box>
         </SimpleGrid>
+        <Button colorScheme="blue" onClick={onOpen}>
+          Update Information
+        </Button>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Update Personal Information & Goals/Interests</ModalHeader>
+            <ModalBody>
+              <FormControl id="name" mt={4}>
+                <FormLabel>Name</FormLabel>
+                <Input placeholder="Name" />
+              </FormControl>
+              <FormControl id="biography" mt={4}>
+                <FormLabel>Biography</FormLabel>
+                <Textarea placeholder="Biography" />
+              </FormControl>
+              <FormControl id="location" mt={4}>
+                <FormLabel>Location</FormLabel>
+                <Input placeholder="Location" />
+              </FormControl>
+              <FormControl id="email" mt={4}>
+                <FormLabel>Email</FormLabel>
+                <Input type="email" placeholder="Email" />
+              </FormControl>    
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={handleUpdateInfo}>
+                Save
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
         <Box bg="white" borderRadius="lg" p={6} boxShadow="md" w={{ base: "100%", md: "80%" }}>
           <Heading as="h2" size="md" mb={4}>
             Pending Volunteering Applications
