@@ -150,7 +150,6 @@ const VolunteerProfilePage = () => {
     };
     fetchOpportunities();
   }, []);
-  
 
   const initialProfileState = {
     Username: "",
@@ -168,18 +167,18 @@ const VolunteerProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profile-info', {
+        const response = await fetch("http://localhost:5000/api/profile-info", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: localStorage.getItem("username") }),
-        } );
+        });
         const data = await response.json();
-        setProfile(data[0]); 
-        console.log("Profile data is", data)
+        setProfile(data[0]);
+        console.log("Profile data is", data);
       } catch (error) {
-        console.error('Failed to fetch profile data:', error);
+        console.error("Failed to fetch profile data:", error);
       }
     };
     fetchProfileData();
@@ -237,20 +236,27 @@ const VolunteerProfilePage = () => {
               <Text>None</Text>
             )}
           </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
-            <Heading as="h2" size="md" mb={4}>
-              You signed up for
-            </Heading>
-            {Array.isArray(opportunity) && opportunity.length > 0 ? (
-  opportunity.map((opportunity, index) => (
-              <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
-            ))
-) : (
-  <Text>No opportunities found.</Text>
-)}
-
-          </Box>
         </SimpleGrid>
+        <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px" w={{ base: "100%", md: "80%" }}>
+          <Heading as="h2" size="md" mb={4}>
+            You signed up for
+          </Heading>
+          {Array.isArray(opportunity) && opportunity.length > 0 ? (
+            opportunity.map((opportunity, index) => (
+              <VolunteeringOpportunity
+                title={opportunity.Title}
+                date={opportunity.Date}
+                time={opportunity.Time}
+                duration={opportunity.Duration}
+                description={opportunity.Description}
+                key={index}
+                {...opportunity}
+              />
+            ))
+          ) : (
+            <Text>No opportunities found.</Text>
+          )}
+        </Box>
       </VStack>
     </Flex>
   );
