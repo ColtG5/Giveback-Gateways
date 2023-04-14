@@ -130,7 +130,7 @@ CREATE TABLE Message (
     FOREIGN KEY (bID) REFERENCES Message_board (boardID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-INSERT INTO Message (cUser, bID, Title, Content, Date, Time) VALUES
+INSERT INTO Message (username, bID, Title, Content, Date, Time) VALUES
 ('gbgw123', 1, 'Important Update', 'Time of cleanup has changed!', '2023-04-10', '12:00'),
 ('gbgw123', 1, 'Change of plans', 'We have changed the location', '2023-04-10', '12:00');
 

@@ -3,7 +3,7 @@ const {createPool} = require('mysql2')
 const pool = createPool ({ 
   host: "localhost",
   user: "root",
-  password: "alisha.nasir.471",
+  password: "habiba471",
   connecLimit: 10 
 })
 
@@ -470,7 +470,7 @@ const retrievePendingApps = (callback, cUser) => {
 const retrieveCompanyOpportunities = (callback, cUser) => {
   // Query the message_board table
   console.log(cUser);
-  const query = `SELECT * FROM gbgw471.Volunteering_Opportunity WHERE cUser = ?`;
+  const query = `SELECT * FROM gbgw471.Volunteering_opportunity WHERE cUser = ?`;
   pool.query(query, [cUser] ,(err, results) => {
     if (err) {
       // Handle error
