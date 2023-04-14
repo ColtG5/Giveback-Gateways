@@ -65,6 +65,7 @@ const CompanySignUpPage = () => {
       console.log(err);
     }
   };
+  
 
   return (
     <>

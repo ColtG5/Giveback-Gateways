@@ -328,6 +328,7 @@ const insertCompanyProfile = ( cUser ) => {
   });
 };
 
+
 // Function to check if username exists in the Volunteer_profile or Company_profile tables
 const checkUserInDatabases = (username) => {
   return new Promise((resolve, reject) => {

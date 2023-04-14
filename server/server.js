@@ -9,6 +9,7 @@ retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOppo
 rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities,
 retrievePendingVolunteers, retrieveVolunteerName} = require('./database.js'); // Import the function from database.js
 
+
 // Allow requests from specific origins
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174']
