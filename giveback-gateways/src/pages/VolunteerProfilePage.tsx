@@ -9,9 +9,24 @@ import {
   SimpleGrid,
   ListItem,
   UnorderedList,
+  useDisclosure,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Textarea,
 } from "@chakra-ui/react";
+import { z } from "zod";
 import Navbar from "../components/Navbar";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 interface Profile {
   Username: String;
@@ -44,8 +59,6 @@ interface Opportunity {
 }
 
 const VolunteerProfilePage = () => {
-  let { username } = useParams();
-
   const initialCurrentOpportunities = [
     {
       title: "Beach Cleanup",
@@ -87,7 +100,7 @@ const VolunteerProfilePage = () => {
           body: JSON.stringify({ username: localStorage.getItem("username") }),
         });
         const data = await response.json();
-        setGoals(data); // Update the companies state with the fetched data
+        setGoals(data);
         console.log("Goals data is", data);
       } catch (error) {
         console.error("Failed to fetch goals:", error);
@@ -150,7 +163,6 @@ const VolunteerProfilePage = () => {
     };
     fetchOpportunities();
   }, []);
-  
 
   const initialProfileState = {
     Username: "",
@@ -168,22 +180,30 @@ const VolunteerProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profile-info', {
+        const response = await fetch("http://localhost:5000/api/profile-info", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ username: localStorage.getItem("username") }),
-        } );
+        });
         const data = await response.json();
-        setProfile(data[0]); 
-        console.log("Profile data is", data)
+        setProfile(data[0]);
+        console.log("Profile data is", data);
       } catch (error) {
-        console.error('Failed to fetch profile data:', error);
+        console.error("Failed to fetch profile data:", error);
       }
     };
     fetchProfileData();
   }, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleUpdateInfo = () => {
+    // Here you can send the updated information to the server
+    // and update the user's information in the database
+    onClose();
+  };
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -237,20 +257,79 @@ const VolunteerProfilePage = () => {
               <Text>None</Text>
             )}
           </Box>
-          <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
-            <Heading as="h2" size="md" mb={4}>
-              You signed up for
-            </Heading>
-            {Array.isArray(opportunity) && opportunity.length > 0 ? (
-  opportunity.map((opportunity, index) => (
-              <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
-            ))
-) : (
-  <Text>No opportunities found.</Text>
-)}
-
-          </Box>
         </SimpleGrid>
+        <Button colorScheme="blue" onClick={onOpen}>
+          Update Information
+        </Button>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Update Personal Information & Goals/Interests</ModalHeader>
+            <ModalBody>
+              <FormControl id="name" mt={4}>
+                <FormLabel>Name</FormLabel>
+                <Input placeholder="Name" />
+              </FormControl>
+              <FormControl id="biography" mt={4}>
+                <FormLabel>Biography</FormLabel>
+                <Textarea placeholder="Biography" />
+              </FormControl>
+              <FormControl id="location" mt={4}>
+                <FormLabel>Location</FormLabel>
+                <Input placeholder="Location" />
+              </FormControl>
+              <FormControl id="email" mt={4}>
+                <FormLabel>Email</FormLabel>
+                <Input type="email" placeholder="Email" />
+              </FormControl>
+              <FormControl id="goals" mt={4}>
+                <FormLabel>Goals</FormLabel>
+                <Textarea placeholder="Enter goals separated by commas" />
+              </FormControl>
+              <FormControl id="interests" mt={4}>
+                <FormLabel>Interests</FormLabel>
+                <Textarea
+                  placeholder="Enter interests separated by commas"
+                  // defaultValue={interests.map((interest) => interest.Interest).join(", ")}
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={handleUpdateInfo}>
+                Save
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Box
+          bg="white"
+          borderRadius="lg"
+          p={6}
+          boxShadow="md"
+          overflowY="auto"
+          maxH="400px"
+          w={{ base: "100%", md: "80%" }}
+        >
+          <Heading as="h2" size="md" mb={4}>
+            You signed up for
+          </Heading>
+          {Array.isArray(opportunity) && opportunity.length > 0 ? (
+            opportunity.map((opportunity, index) => (
+              <VolunteeringOpportunity
+                title={opportunity.Title}
+                date={opportunity.Date}
+                time={opportunity.Time}
+                duration={opportunity.Duration}
+                description={opportunity.Description}
+                key={index}
+                {...opportunity}
+              />
+            ))
+          ) : (
+            <Text>No opportunities found.</Text>
+          )}
+        </Box>
       </VStack>
     </Flex>
   );
