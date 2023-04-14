@@ -129,7 +129,7 @@ const VolunteerProfilePage = () => {
     Duration: "",
     Description: "",
   };
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [opportunity, setOpportunities] = useState<Opportunity[]>([initialOpportunityState]);
 
   useEffect(() => {
     const fetchOpportunities = async () => {
@@ -241,10 +241,10 @@ const VolunteerProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               You signed up for
             </Heading>
-            {Array.isArray(opportunities) && opportunities.length > 0 ? (
-  opportunities.map((opportunity, index) => (
-    <VolunteeringOpportunity key={index} opportunity={opportunity} />
-  ))
+            {Array.isArray(opportunity) && opportunity.length > 0 ? (
+  opportunity.map((opportunity, index) => (
+              <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
+            ))
 ) : (
   <Text>No opportunities found.</Text>
 )}
