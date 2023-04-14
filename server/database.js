@@ -570,4 +570,4 @@ module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUserna
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
 deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
-retrieveCompanyOpportunities,retrievePendingVolunteers};
+retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName};
