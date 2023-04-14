@@ -199,9 +199,39 @@ const VolunteerProfilePage = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleUpdateInfo = () => {
+  const handleUpdateInfo = async (e: any) => {
     // Here you can send the updated information to the server
     // and update the user's information in the database
+    try {
+      const storedUsername = localStorage.getItem("username");
+      // Check if the username already exists in the database
+      const checkResponse = await fetch(`http://localhost:5000/api/update-volunteer-info`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Name : name,
+          vUser: localStorage.getItem("username"),
+          Goal: goals,
+          Interest: interests,
+          Biography: biography,
+          Email: Email, 
+          Phone: Phone,
+        }),
+      });
+        if (checkResponse.ok) {
+          // User successfully registered
+          // Do something with the response
+          console.log("Response ok")
+        } else {
+          // Handle error
+          console.log("Failed to register user");
+        }
+      } catch (err) {
+      // Handle error
+      console.log(err)
+    }
     onClose();
   };
 

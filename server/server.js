@@ -39,7 +39,6 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/signup", async (req, res) => {
   const { username, name, email, phone, location, password, creationDate } = req.body;
   console.log(username,name,email,phone,location, password, creationDate )
-
   try {
     const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate );
     // Send success response back to the client
@@ -528,5 +527,19 @@ app.get('/api/get-pending-apps-volunteer-info', (req, res) => {
   }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
 
+
+app.post("/api/update-volunteer-info", async (req, res) => {
+  const { username, name, email, phone, location, password, creationDate } = req.body;
+  console.log(username,name,email,phone,location, password, creationDate )
+  try {
+    const result = await insertUserIntoProfileTable(username, name, email, phone, location, password, creationDate );
+    // Send success response back to the client
+    res.json({ success: true, message: "User registered successfully" });
+    console.log(result)
+  } catch (err) {
+    // Handle error
+    res.status(500).json({ error: "Failed to register user" });
+  }
+});
 
 app.listen(5000, () => { console.log("Server started on port 5000")})

@@ -549,6 +549,65 @@ const retrievePendingVolunteers = (callback, cUser) => {
   });
 };
 
+const updateProfileInfo = (Name, vUser, Goal, Interest, Biography, Email, Phone) => {
+  return new Promise((resolve, reject) => {
+    console.log("Values:", vUser, Hours)
+    // Call the pool.query method to specify the database to use
+    pool.query('USE gbgw471', (err, res) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        // Call the pool.query method to insert the user information into the Profile table
+        pool.query(
+          "INSERT INTO Profile (Username, Name, Email, Phone, Biography) VALUES (?, ?, ?, ?, ?)",
+          [vUser, Name, Email, Phone, Biography],
+          (err, res) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              console.log('Profile information updated successfully');
+              // Insert values into User_goals table
+              if (Goal) {
+                pool.query(
+                  "INSERT INTO User_goals (vUser, Goal) VALUES (?, ?)",
+                  [vUser, Goal],
+                  (err, res) => {
+                    if (err) {
+                      console.error(err);
+                      reject(err);
+                    } else {
+                      console.log('Goal information updated successfully');
+                    }
+                  }
+                );
+              }
+              // Insert values into User_interests table
+              if (Interest) {
+                pool.query(
+                  "INSERT INTO User_interests (vUser, Interest) VALUES (?, ?)",
+                  [vUser, Interest],
+                  (err, res) => {
+                    if (err) {
+                      console.error(err);
+                      reject(err);
+                    } else {
+                      console.log('Interest information updated successfully');
+                    }
+                  }
+                );
+              }
+              resolve(res);
+            }
+          }
+        );
+      }
+    });
+  });
+};
+
+
 
 
 module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists,  
@@ -556,4 +615,4 @@ module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUserna
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
 deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
-retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName, insertMessageBoard};
+retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName, insertMessageBoard, updateProfileInfo};

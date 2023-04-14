@@ -141,64 +141,18 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
     .catch((error) => console.error(error));
 }, []);
 
-
-  // const [pendingApplications, setPendingApplications] = useState([]);
-
-  // // Fetch pending applications from server
-  // useEffect(() => {
-  //   fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Failed to retrieve volunteer apps");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setPendingApplications(data);
-  //       // Update the pendingApps state as well
-  //       setPendingApplications(data);
-  //     })
-  //     .catch((error) => console.error(error));
-  // }, []);
-
-
-  // console.log("Pending applications:", pendingApplications.map(pendingApplications => pendingApplications.Title))
-
-
-  // const initialPendingInfoState = {
-  //   Email: "",
-  //   Phone: "",
-  //   Location: "",
-  // }
-  // const [pendingApplicationsInfo, setPendingApplicationsInfo] = useState<PendingAppInfo[]>([initialPendingInfoState]);
-
-  // // fetch the pending application volunteer's info
-  // useEffect(() => {
-  //   fetch(`http://localhost:5000/api/get-pending-apps-volunteer-info?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Failed to retrieve volunteer apps");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setPendingApplicationsInfo(data);
-  //       // Update the pendingApps state as well
-  //       //setPendingApplicationsInfo(data);
-  //     })
-  //     .catch((error) => console.error(error));
-  // }, []);
-
-  // console.log("Pending volunteers email:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Email))
-  // console.log("Pending volunteers phone:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Phone))
-  // console.log("Pending volunteers location:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Location))
-
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleUpdateInfo = () => {
     // Here you can send the updated information to the server
     // and update the user's information in the database
+    const updatedProfileInfo = [...profile];
+
+    updatedProfileInfo.
+
+    setProfile(updatedProfileInfo);
+
+
     onClose();
   };
 
