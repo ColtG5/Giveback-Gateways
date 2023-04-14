@@ -468,7 +468,7 @@ const attendVolunteerApp = (vUser, OppID) => {
 
 const retrievePendingApps = (callback, cUser) => {
   // Query the message_board table
-  const query = 'SELECT * FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND Volunteering_opportunity.cUser = ?';
+  const query = 'SELECT Volunteering_opportunity.Title, Profile.Email, Profile.Phone, Profile.Location FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities, gbgw471.Profile WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND SignedUp_Opportunities.vUser = Profile.Username AND Volunteering_opportunity.cUser = ?';
   pool.query(query, [cUser], (err, results) => {
     if (err) {
       // Handle error
@@ -561,7 +561,6 @@ const retrievePendingVolunteers = (callback, cUser) => {
     }
   });
 };
-
 
 
 
