@@ -54,6 +54,15 @@ const CompanySignUpPage = () => {
               cUser: e.username,
             }),
           });
+          const response = await fetch("http://localhost:5000/api/new-message-board", {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cUser: e.username,
+            }),
+          });
           navigate(`/login`);
         } else {
           // Handle error
