@@ -93,7 +93,7 @@ const VolunteerBoardPage = () => {
   const isOpportunitySignedUp = (id: number) => {
     const profileType = localStorage.getItem("profile-type");
 
-    if (profileType === "2") {
+    if (profileType === "1") {
       // Company profiles should not be able to sign up for opportunities
       return true;
     }
