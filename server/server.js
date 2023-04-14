@@ -181,6 +181,30 @@ app.post("/api/profile-info", async (req, res) => {
   }
 });
 
+app.post("/api/volunteer-name", async (req, res) => {
+  const { username } = req.body;
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveVolunteerName(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No profile info")
+      res.json({ success: false, message: "No profile information found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve profile information" });
+  }
+});
+
 app.post("/api/goals", async (req, res) => {
   const { username } = req.body;
 
