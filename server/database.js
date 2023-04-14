@@ -368,9 +368,9 @@ const checkUserInDatabases = (username) => {
   });
 };
 
-const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
+const storeMessages = ( username, bID, Title, Content, Date, Time ) => {
   return new Promise((resolve, reject) => {
-    console.log("Store message values:", cUser, bID, Title, Content, Date, Time )
+    console.log("Store message values:", username, bID, Title, Content, Date, Time )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
@@ -378,8 +378,8 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
         reject(err);
       } else {
         pool.query(
-          `INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
-          [ cUser, bID, Title, Content, Date, Time ],
+          `INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
+          [ username, bID, Title, Content, Date, Time ],
           (err, res) => {
             if (err) {
               console.error(err);
