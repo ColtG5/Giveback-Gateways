@@ -7,7 +7,7 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
 rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities,
-retrievePendingVolunteers} = require('./database.js'); // Import the function from database.js
+retrievePendingVolunteers, retrieveVolunteerName} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
