@@ -26,14 +26,12 @@ import Navbar from "../components/Navbar";
 import { format } from "date-fns";
 
 interface Message {
-  messageID: number;
-  username: string | null;
+  username: string;
   bID: number;
   Title: string;
   Content: string;
   Date: string;
   Time: string;
-  userType: string;
 }
 
 interface Company {
@@ -102,14 +100,13 @@ const MessageBoardPage = () => {
     if (messageInput === "" || selectedCompany === null) return;
 
     const newMessage: Message = {
-      messageID: messages.length + 1,
+      //messageID: messages.length + 1,
       username: localStorage.getItem("username"),
       bID: selectedCompany.cID,
       Title: "New Message",
       Content: messageInput,
       Date: new Date().toISOString().slice(0, 19).replace("T", " ").slice(0, 10),
       Time: new Date().toISOString().slice(0, 19).replace("T", " ").slice(11, 19),
-      userType: "volunteer",
     };
 
     console.log("Sending message:", newMessage);
@@ -121,7 +118,7 @@ const MessageBoardPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cUser: selectedCompany.cUser,
+          username: newMessage.username,
           bID: newMessage.bID,
           Title: newMessage.Title,
           Content: newMessage.Content,
@@ -146,7 +143,7 @@ const MessageBoardPage = () => {
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
 
-  console.log("Message username:", messages.map(messages => messages.cUser))
+  console.log("Message username:", messages.map(messages => messages.username))
   console.log(messages)
 
 
