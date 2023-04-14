@@ -19,6 +19,8 @@ CREATE TABLE Profile (
     PRIMARY KEY (Username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+
+
 INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography, Location, CreationDate) VALUES
 ('ColtG5', 'polarbear123', 'Colton', 'Gowans', 'coltongowans@gmail.com', '2234567890', 'POLAR BEARS 4 LIFE', 'Calgary', '2023-04-10'),
 ('gbgw123', 'lovegivingback321', 'GiveBack GateWays', '', 'givebackggw@gmail.com', '1653451234', 'We are all about giving back', 'Calgary', '2023-04-11'),
@@ -54,8 +56,8 @@ CREATE TABLE User_goals (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO User_goals (vUser, Goal) VALUES
-('ColtG5', 'Succes'),
-('ColtG5', 'Failure');
+('ColtG5', 'Graduation'),
+('ColtG5', 'Software engineer');
 
 CREATE TABLE User_interests (
     vUser varchar(25) NOT NULL,
@@ -136,7 +138,7 @@ CREATE TABLE Message (
     FOREIGN KEY (bID) REFERENCES Message_board (boardID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-INSERT INTO Message (cUser, bID, Title, Content, Date, Time) VALUES
+INSERT INTO Message (username, bID, Title, Content, Date, Time) VALUES
 ('gbgw123', 1, 'Important Update', 'Time of cleanup has changed!', '2023-04-10', '12:00'),
 ('gbgw123', 1, 'Change of plans', 'We have changed the location', '2023-04-10', '12:00');
 

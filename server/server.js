@@ -6,7 +6,8 @@ const { checkUserAndPassword, insertUserIntoProfileTable, checkUsernameExists, i
   insertVolunteerProfile, insertCompanyProfile, checkUserInDatabases, storeMessages, retrieveCompanies, 
   retrieveOpportunities, retrieveGoals, retrieveInterests, retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity,
 retrieveSignedUpOpportunities, retrieveAllUserOpportunities, deleteVolunteerOpportunity, acceptVolunteerApp,
-rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities} = require('./database.js'); // Import the function from database.js
+rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps, retrieveCompanyOpportunities,
+retrievePendingVolunteers, retrieveVolunteerName} = require('./database.js'); // Import the function from database.js
 
 // Allow requests from specific origins
 app.use(cors({
@@ -158,10 +159,33 @@ app.post("/api/get-all-opportunities", async (req, res) => {
 
 app.post("/api/profile-info", async (req, res) => {
   const { username } = req.body;
-
   try {
     const result = await new Promise ((resolve, reject) => {
       retrieveProfileInfo(username, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      })
+    });
+    if (result.length > 0) { // Check if there are any results
+      res.json(result);
+      console.log(result);
+    } else {
+      console.log("No profile info")
+      res.json({ success: false, message: "No profile information found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve profile information" });
+  }
+});
+
+app.post("/api/volunteer-name", async (req, res) => {
+  const { username } = req.body;
+  try {
+    const result = await new Promise ((resolve, reject) => {
+      retrieveVolunteerName(username, (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -231,8 +255,8 @@ app.post("/api/interests", async (req, res) => {
   }
 });
 
-app.post("/api/get-messages", async (req, res) => {
-  const { bID } = req.body;
+app.get("/api/get-messages", async (req, res) => {
+  const { bID } = req.query;
   try {
     const result = await new Promise ((resolve, reject) => {
       retrieveMessages(bID, (err, results) => {
@@ -244,8 +268,8 @@ app.post("/api/get-messages", async (req, res) => {
       })
     });
     if (result.length > 0) { // Check if there are any results
-      res.json(result);
-      console.log(result);
+      res.json({ success: true, messages: result }); // Include success property in the response JSON
+      console.log("Messages are",result);
     } else {
       console.log("No messages")
       res.json({ success: false, message: "No messages found" });
@@ -347,10 +371,10 @@ app.post("/api/search-username", async (req, res) => {
 });
 
 app.post("/api/messages", async (req, res) => {
-  const { cUser, bID, Title, Content, Date, Time } = req.body;
-  console.log("Username:", cUser,bID, Title, Content, Date, Time);
+  const { username, bID, Title, Content, Date, Time } = req.body;
+  console.log("Username:", username,bID, Title, Content, Date, Time);
   try {
-    const result = await storeMessages( cUser, bID, Title, Content, Date, Time );
+    const result = await storeMessages( username, bID, Title, Content, Date, Time );
     if (result) {
       console.log("Messages found")
       res.json({ success: true, message: "Message found" });
@@ -396,8 +420,33 @@ app.get('/api/company-opportunities', (req, res) => {
   });
 });
 
+// app.post("/api/get-company-opportunities", async (req, res) => {
+//   const { cUser } = req.body;
+
+//   try {
+//     const result = await new Promise ((resolve, reject) => {
+//       retrieveCompanyOpportunities(cUser, (err, results) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(results);
+//         }
+//       })
+//     });
+//     if (result.length > 0) { // Check if there are any results
+//       res.json(result);
+//       console.log(result);
+//     } else {
+//       console.log("No company opportunities")
+//       res.json({ success: false, message: "No company opportunities found" });
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to retrieve company opportunities" });
+//   }
+// });
+
 // Define route to retrieve companies from message_board table
-app.get('/api/get-opportunities', (req, res) => {
+app.get('/api/get-company-opportunities', (req, res) => {
   const cUser = req.query.cUser; // Get the value of cUser from the query parameters
   // Call the retrieveCompanyOpportunities method to fetch data from the database
   retrieveCompanyOpportunities((err, results) => {
@@ -412,6 +461,8 @@ app.get('/api/get-opportunities', (req, res) => {
     }
   }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
+
+
 
 // Define route to retrieve companies from message_board table
 app.get('/api/get-all-opportunities', (req, res) => {
@@ -446,6 +497,22 @@ app.get('/api/get-pending-apps', (req, res) => {
   }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
 });
 
+// Define route to retrieve companies from message_board table
+app.get('/api/get-pending-apps-volunteer-info', (req, res) => {
+  const cUser = req.query.cUser; // Get the value of cUser from the query parameters
+  // Call the retrieveCompanyOpportunities method to fetch data from the database
+  retrievePendingVolunteers((err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve opportunities:', err);
+      res.status(500).json({ error: 'Failed to retrieve opportunities' });
+    } else {
+      // Send the retrieved data back to the client
+      res.json(results);
+      console.log("The results of pending apps is: ", results)
+    }
+  }, cUser); // Pass the cUser value to the retrieveCompanyOpportunities function
+});
 
 
 app.listen(5000, () => { console.log("Server started on port 5000")})

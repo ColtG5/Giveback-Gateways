@@ -142,7 +142,7 @@ const VolunteerProfilePage = () => {
           body: JSON.stringify({ username: localStorage.getItem("username") }),
         });
         const data = await response.json();
-        setOpportunities(data); // Update the companies state with the fetched data
+        setOpportunities(data); // Update the opportunities state with the fetched data
         console.log("Signed up opportunities is", data);
       } catch (error) {
         console.error("Failed to fetch signed up opportunities:", error);
@@ -150,6 +150,7 @@ const VolunteerProfilePage = () => {
     };
     fetchOpportunities();
   }, []);
+  
 
   const initialProfileState = {
     Username: "",
@@ -240,9 +241,14 @@ const VolunteerProfilePage = () => {
             <Heading as="h2" size="md" mb={4}>
               You signed up for
             </Heading>
-            {opportunity.map((opportunity, index) => (
+            {Array.isArray(opportunity) && opportunity.length > 0 ? (
+  opportunity.map((opportunity, index) => (
               <VolunteeringOpportunity title={opportunity.Title} date={opportunity.Date} time={opportunity.Time} duration={opportunity.Duration} description={opportunity.Description} key={index} {...opportunity} />
-            ))}
+            ))
+) : (
+  <Text>No opportunities found.</Text>
+)}
+
           </Box>
         </SimpleGrid>
       </VStack>

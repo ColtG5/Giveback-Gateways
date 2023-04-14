@@ -141,7 +141,10 @@ const retrieveInterests = (username, callback) => {
 };
 
 const retrieveMessages = (bID, callback) => {
-  const query = 'SELECT * FROM gbgw471.Message WHERE bID = ?';
+  const query = `SELECT * 
+  FROM gbgw471.Message 
+  WHERE bID = ?
+  `;
   pool.query(query, [bID], (err, results) => {
     if (err) {
       // Handle error
@@ -157,6 +160,21 @@ const retrieveMessages = (bID, callback) => {
 
 const retrieveProfileInfo = (username, callback) => {
   const query = 'SELECT * FROM gbgw471.Profile WHERE Username = ?';
+  pool.query(query, [username], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve profile information:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log(results)
+      callback(null, results);
+    }
+  });
+};
+
+const retrieveVolunteerName = (username, callback) => {
+  const query = 'SELECT Name FROM gbgw471.Profile WHERE Username = ?';
   pool.query(query, [username], (err, results) => {
     if (err) {
       // Handle error
@@ -350,9 +368,9 @@ const checkUserInDatabases = (username) => {
   });
 };
 
-const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
+const storeMessages = ( username, bID, Title, Content, Date, Time ) => {
   return new Promise((resolve, reject) => {
-    console.log("Values:", cUser, bID, Title, Content, Date, Time )
+    console.log("Store message values:", username, bID, Title, Content, Date, Time )
     // Call the pool.query method to specify the database to use
     pool.query('USE gbgw471', (err, res) => {
       if (err) {
@@ -360,10 +378,8 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
         reject(err);
       } else {
         pool.query(
-
-          `INSERT INTO Message ( cUser, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
-          [ cUser, bID, Title, Content, Date, Time ],
-
+          `INSERT INTO Message ( username, bID, Title, Content, Date, Time ) VALUES ( ?, ?, ?, ?, ?, ?)`,
+          [ username, bID, Title, Content, Date, Time ],
           (err, res) => {
             if (err) {
               console.error(err);
@@ -378,6 +394,8 @@ const storeMessages = ( cUser, bID, Title, Content, Date, Time ) => {
     });
   });
 };
+
+
 
 const retrieveCompanies = (callback) => {
   // Query the message_board table
@@ -452,7 +470,7 @@ const attendVolunteerApp = (vUser, OppID) => {
 
 const retrievePendingApps = (callback, cUser) => {
   // Query the message_board table
-  const query = 'SELECT * FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND Volunteering_opportunity.cUser = ?';
+  const query = 'SELECT Volunteering_opportunity.Title, Profile.Email, Profile.Phone, Profile.Location FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities, gbgw471.Profile WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND SignedUp_Opportunities.vUser = Profile.Username AND Volunteering_opportunity.cUser = ?';
   pool.query(query, [cUser], (err, results) => {
     if (err) {
       // Handle error
@@ -469,7 +487,7 @@ const retrievePendingApps = (callback, cUser) => {
 const retrieveCompanyOpportunities = (callback, cUser) => {
   // Query the message_board table
   console.log(cUser);
-  const query = `SELECT * FROM gbgw471.Volunteering_Opportunity WHERE cUser = ?`;
+  const query = `SELECT * FROM gbgw471.Volunteering_opportunity WHERE cUser = ?`;
   pool.query(query, [cUser] ,(err, results) => {
     if (err) {
       // Handle error
@@ -483,8 +501,25 @@ const retrieveCompanyOpportunities = (callback, cUser) => {
   });
 };
 
-
-
+const retrievePendingVolunteers = (callback, cUser) => {
+  // Query the message_board table
+  const query = `
+  SELECT Profile.Email, Profile.Phone, Profile.Location 
+  FROM gbgw471.Volunteering_opportunity, gbgw471.SignedUp_Opportunities, gbgw471.Profile
+  WHERE Volunteering_opportunity.ID = SignedUp_Opportunities.OppID AND Volunteering_opportunity.cUser = ? AND SignedUp_Opportunities.vUser = Profile.Username 
+  `;
+  pool.query(query, [cUser], (err, results) => {
+    if (err) {
+      // Handle error
+      console.error('Failed to retrieve pending volunteers:', err);
+      callback(err, null);
+    } else {
+      // Send the retrieved data back to the callback function
+      console.log("Pending volunteers",results)
+      callback(null, results);
+    }
+  });
+};
 
 
 
@@ -493,4 +528,4 @@ module.exports = { checkUserAndPassword, insertUserIntoProfileTable, checkUserna
   checkUserInDatabases, storeMessages, retrieveCompanies, retrieveOpportunities, retrieveGoals, retrieveInterests, 
   retrieveMessages, retrieveProfileInfo, insertSignedUpOpportunity, retrieveSignedUpOpportunities, retrieveAllUserOpportunities,
 deleteVolunteerOpportunity, acceptVolunteerApp, rejectVolunteerApp, attendVolunteerApp, deleteSignedOpportunity, retrievePendingApps,
-retrieveCompanyOpportunities};
+retrieveCompanyOpportunities,retrievePendingVolunteers, retrieveVolunteerName};

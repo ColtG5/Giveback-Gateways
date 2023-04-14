@@ -56,16 +56,15 @@ const VolunteerBoardPage = () => {
   }, []);
 
   const handleOpportunityClick = (opportunity: Opportunity) => {
-    setSelectedOpportunity(opportunity);
-    onOpen();
+    if (!isOpportunitySignedUp(opportunity.ID)) {
+      setSelectedOpportunity(opportunity);
+      onOpen();
+    }
   };
 
   const handleSignUp = async () => {
     if (selectedOpportunity === null) return;
     try {
-      // id what the endpoint is
-      // so someone else
-      // make this work ty
       const storedUsername = localStorage.getItem("username");
       const response = await fetch("http://localhost:5000/api/sign-up-opportunity", {
         method: "POST",
@@ -77,11 +76,9 @@ const VolunteerBoardPage = () => {
           vUser: storedUsername,
         }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to sign up for the opportunity.");
       }
-
       setSignedUpOpportunities([...signedUpOpportunities, selectedOpportunity.ID]);
       setSignupButton({ color: "green", text: "Thank you!" });
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -92,7 +89,10 @@ const VolunteerBoardPage = () => {
     }
   };
 
-  const isOpportunitySignedUp = (id: number) => signedUpOpportunities.includes(id);
+  // const isOpportunitySignedUp = (id: number) => signedUpOpportunities.includes(id);
+  const isOpportunitySignedUp = (id: number) => {
+    return signedUpOpportunities.includes(id) || localStorage.getItem(`isSignedUp_${id}`) === 'true';
+  };
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">

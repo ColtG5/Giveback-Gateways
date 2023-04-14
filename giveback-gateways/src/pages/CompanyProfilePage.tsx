@@ -14,15 +14,57 @@ import Navbar from "../components/Navbar";
 import NewVolunteeringOpportunitySection from "../components/NewVolunteeringOpportunitySection";
 import VolunteeringOpportunity from "../components/VolunteeringOpportunity";
 import PendingApplication from "../components/PendingApplication";
+//import { Opportunity } from "./VolunteerBoardPage";
+
+
+interface Profile {
+  Username: String;
+  Password: String;
+  Name: String;
+  LastName: String;
+  Email: String;
+  Phone: String;
+  Biography: String;
+  Location: String;
+  CreationDate: String;
+}
+
+interface Opportunity {
+  Title: string;
+  Date: string;
+  Time: string;
+  Duration: string;
+  Description: string;
+}
+
+interface PendingApp {
+  Title: string;
+  Email: string;
+  Phone: string;
+  Location: string;
+}
+
+// interface PendingAppInfo {
+//   Email: string;
+//   Phone: string;
+//   Location: string;
+// }
 
 const CompanyProfilePage = () => {
   let { username } = useParams();
 
-  const [volunteeringOpportunities, setVolunteeringOpportunities] = useState([]);
+  const initialOpportunityState = {
+    Title: "",
+    Date: "",
+    Time: "",
+    Duration: "",
+    Description: "",
+  };
+  const [volunteeringOpportunities, setVolunteeringOpportunities] = useState<Opportunity[]>([initialOpportunityState]);
 
   // Fetch volunteer opportunities from server
   useEffect(() => {
-    fetch(`http://localhost:5000/api/get-opportunities?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+    fetch(`http://localhost:5000/api/get-company-opportunities?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to retrieve volunteer opportunities");
@@ -33,62 +75,128 @@ const CompanyProfilePage = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  const [profile, setProfile] = useState([]);
+const initialProfileState = {
+  Username: "",
+  Password: "",
+  Name: "",
+  LastName: "",
+  Email: "",
+  Phone: "",
+  Biography: "",
+  Location: "",
+  CreationDate: "",
+};
+const [profile, setProfile] = useState<Profile>(initialProfileState);
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/profile-info', {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: localStorage.getItem("username") }),
-        });
-        const data = await response.json();
-        setProfile(data);
-        console.log("Profile data is", data)
-      } catch (error) {
-        console.error('Failed to fetch profile data:', error);
+useEffect(() => {
+  const fetchProfileData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/profile-info', {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: localStorage.getItem("username") }),
+      } );
+      const data = await response.json();
+      setProfile(data[0]); 
+      console.log("Profile data is", data)
+    } catch (error) {
+      console.error('Failed to fetch profile data:', error);
+    }
+  };
+  fetchProfileData();
+}, []);
+
+
+const initialPendingState = {
+  Title: "",
+  Email: "",
+  Phone: "",
+  Location: "",
+}
+const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([initialPendingState]);
+
+ // Fetch pending applications from server
+ useEffect(() => {
+  fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve volunteer apps");
       }
-    };
-    fetchProfileData();
-  }, []);
+      return response.json();
+    })
+    .then((data) => setPendingApplications(data))
+    .catch((error) => console.error(error));
+}, []);
 
-  const [pendingApplications, setPendingApplications] = useState([]);
 
-  // Fetch pending applications from server
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to retrieve volunteer apps");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPendingApplications(data);
-        // Update the pendingApps state as well
-        setPendingApps(data);
-      })
-      .catch((error) => console.error(error));
-  }, []);
+  // const [pendingApplications, setPendingApplications] = useState([]);
 
-  const [pendingApps, setPendingApps] = useState([]);
+  // // Fetch pending applications from server
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to retrieve volunteer apps");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setPendingApplications(data);
+  //       // Update the pendingApps state as well
+  //       setPendingApplications(data);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, []);
+
+
+  // console.log("Pending applications:", pendingApplications.map(pendingApplications => pendingApplications.Title))
+
+
+  // const initialPendingInfoState = {
+  //   Email: "",
+  //   Phone: "",
+  //   Location: "",
+  // }
+  // const [pendingApplicationsInfo, setPendingApplicationsInfo] = useState<PendingAppInfo[]>([initialPendingInfoState]);
+
+  // // fetch the pending application volunteer's info
+  // useEffect(() => {
+  //   fetch(`http://localhost:5000/api/get-pending-apps-volunteer-info?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to retrieve volunteer apps");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setPendingApplicationsInfo(data);
+  //       // Update the pendingApps state as well
+  //       //setPendingApplicationsInfo(data);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, []);
+
+  // console.log("Pending volunteers email:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Email))
+  // console.log("Pending volunteers phone:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Phone))
+  // console.log("Pending volunteers location:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Location))
+
 
   // Function to handle application acceptance or rejection
   const handleApplication = (index: number, action: string) => {
     // Remove the application from the pendingApps array
-    const updatedPendingApps = [...pendingApps];
+    const updatedPendingApps = [...pendingApplications];
     updatedPendingApps.splice(index, 1);
 
     // Update the pendingApps state
-    setPendingApps(updatedPendingApps);
+    setPendingApplications(updatedPendingApps);
 
     // Handle the action (accept or reject) and update the database here
     console.log(index, action);
     // ...
   };
+
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -110,20 +218,20 @@ const CompanyProfilePage = () => {
               Personal Information
             </Heading>
             <UnorderedList>
-              <ListItem>Name: John Doe</ListItem>
+              <ListItem>Name: {profile.Name}</ListItem>
               <ListItem>Username: {localStorage.getItem("username")}</ListItem>
-              <ListItem>Description: Passionate about volunteering</ListItem>
-              <ListItem>Location: New York, NY</ListItem>
-              <ListItem>Contact Info: johndoe@example.com</ListItem>
+              <ListItem>Description: {profile.Biography}</ListItem>
+              <ListItem>Location: {profile.Location}</ListItem>
+              <ListItem>Contact Info: {profile.Email}</ListItem>
             </UnorderedList>
           </Box>
           <Box bg="white" borderRadius="lg" p={6} boxShadow="md" overflowY="auto" maxH="400px">
             <Heading as="h2" size="md" mb={4}>
               Volunteering Opportunities
             </Heading>
-            <NewVolunteeringOpportunitySection username={username} />
-            {volunteeringOpportunities.map((opportunity, index) => (
-              <VolunteeringOpportunity key={index} {...opportunity} />
+            <NewVolunteeringOpportunitySection />
+            {volunteeringOpportunities.map((volunteeringOpportunities, index) => (
+              <VolunteeringOpportunity title = {volunteeringOpportunities.Title} date={volunteeringOpportunities.Date} time={volunteeringOpportunities.Time} duration={volunteeringOpportunities.Duration} description={volunteeringOpportunities.Description} key={index} {...volunteeringOpportunities}  />
             ))}
           </Box>
         </SimpleGrid>
@@ -131,8 +239,8 @@ const CompanyProfilePage = () => {
           <Heading as="h2" size="md" mb={4}>
             Pending Volunteering Applications
           </Heading>
-          {pendingApps.map((application, index) => (
-            <PendingApplication key={index} {...application}>
+          {pendingApplications.map((pendingApplications, index) => (
+            <PendingApplication key={index} location={pendingApplications.Location} email={pendingApplications.Email} phoneNumber={pendingApplications.Phone} opportunityTitle={pendingApplications.Title} {...pendingApplications}>
               <Flex
                 flexDirection={{ base: "column", md: "row" }}
                 alignItems={{ base: "flex-start", md: "center" }}
