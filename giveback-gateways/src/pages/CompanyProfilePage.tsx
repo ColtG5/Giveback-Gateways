@@ -130,6 +130,7 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
     .catch((error) => console.error(error));
 }, []);
 
+
   // const [pendingApplications, setPendingApplications] = useState([]);
 
   // // Fetch pending applications from server
@@ -148,6 +149,7 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
   //     })
   //     .catch((error) => console.error(error));
   // }, []);
+
 
   // console.log("Pending applications:", pendingApplications.map(pendingApplications => pendingApplications.Title))
 
@@ -179,6 +181,7 @@ const [pendingApplications, setPendingApplications] = useState<PendingApp[]>([in
   // console.log("Pending volunteers email:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Email))
   // console.log("Pending volunteers phone:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Phone))
   // console.log("Pending volunteers location:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Location))
+
 
   // Function to handle application acceptance or rejection
   const handleApplication = (index: number, action: string) => {

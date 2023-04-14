@@ -19,6 +19,8 @@ CREATE TABLE Profile (
     PRIMARY KEY (Username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+
+
 INSERT INTO Profile (Username, Password, Name, LastName, Email, Phone, Biography, Location, CreationDate) VALUES
 ('ColtG5', 'polarbear123', 'Colton', 'Gowans', 'coltongowans@gmail.com', '2234567890', 'POLAR BEARS 4 LIFE', 'Calgary', '2023-04-10'),
 ('gbgw123', 'lovegivingback321', 'GiveBack GateWays', '', 'givebackggw@gmail.com', '1653451234', 'We are all about giving back', 'Calgary', '2023-04-11'),
@@ -54,8 +56,8 @@ CREATE TABLE User_goals (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO User_goals (vUser, Goal) VALUES
-('ColtG5', 'Succes'),
-('ColtG5', 'Failure');
+('ColtG5', 'Graduation'),
+('ColtG5', 'Software engineer');
 
 CREATE TABLE User_interests (
     vUser varchar(25) NOT NULL,
@@ -125,14 +127,14 @@ INSERT INTO Message_board (cUser) VALUES
 
 CREATE TABLE Message (
     messageID INT AUTO_INCREMENT NOT NULL,
-    username varchar(25) NOT NULL,
+    cUser varchar(25) NOT NULL,
     bID INT NOT NULL,
     Title varchar(25) NOT NULL,
     Content varchar(255) NOT NULL,
     Date date NOT NULL,
     Time time NOT NULL,
     PRIMARY KEY (messageID),
-    FOREIGN KEY (username) REFERENCES Profile (Username) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (cUser) REFERENCES Company_profile (cUser) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (bID) REFERENCES Message_board (boardID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
