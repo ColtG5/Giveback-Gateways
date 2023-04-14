@@ -91,7 +91,16 @@ const VolunteerBoardPage = () => {
 
   // const isOpportunitySignedUp = (id: number) => signedUpOpportunities.includes(id);
   const isOpportunitySignedUp = (id: number) => {
-    return signedUpOpportunities.includes(id) || localStorage.getItem(`isSignedUp_${id}`) === 'true';
+    const profileType = localStorage.getItem("profile-type");
+
+    if (profileType === "2") {
+      // Company profiles should not be able to sign up for opportunities
+      return true;
+    }
+    // return (
+    //   signedUpOpportunities.includes(id) || localStorage.getItem(`isSignedUp_${id}`) === "true"
+    // );
+    return signedUpOpportunities.includes(id);
   };
 
   return (
