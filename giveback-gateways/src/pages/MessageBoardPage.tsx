@@ -100,7 +100,6 @@ const MessageBoardPage = () => {
     if (messageInput === "" || selectedCompany === null) return;
 
     const newMessage: Message = {
-      //messageID: messages.length + 1,
       username: localStorage.getItem("username"),
       bID: selectedCompany.cID,
       Title: "New Message",

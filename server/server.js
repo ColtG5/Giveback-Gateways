@@ -371,10 +371,10 @@ app.post("/api/search-username", async (req, res) => {
 });
 
 app.post("/api/messages", async (req, res) => {
-  const { cUser, bID, Title, Content, Date, Time } = req.body;
-  console.log("Username:", cUser,bID, Title, Content, Date, Time);
+  const { username, bID, Title, Content, Date, Time } = req.body;
+  console.log("Username:", username,bID, Title, Content, Date, Time);
   try {
-    const result = await storeMessages( cUser,bID, Title, Content, Date, Time );
+    const result = await storeMessages( username, bID, Title, Content, Date, Time );
     if (result) {
       console.log("Messages found")
       res.json({ success: true, message: "Message found" });
