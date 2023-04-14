@@ -95,23 +95,66 @@ const [pendingApplications, setPendingApplications] = useState([]);
     .catch((error) => console.error(error));
 }, []);
 
+  const [pendingApplications, setPendingApplications] = useState([]);
+
+  // Fetch pending applications from server
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/get-pending-apps?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to retrieve volunteer apps");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setPendingApplications(data);
+        // Update the pendingApps state as well
+        setPendingApplications(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  // console.log("Pending applications:", pendingApplications.map(pendingApplications => pendingApplications.Title))
 
 
-  const [pendingApps, setPendingApps] = useState(pendingApplications);
+
+  const [pendingApplicationsInfo, setPendingApplicationsInfo] = useState([]);
+
+  // fetch the pending application volunteer's info
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/get-pending-apps-volunteer-info?cUser=${localStorage.getItem("username")}`) // Update the URL to match your server route
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to retrieve volunteer apps");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setPendingApplicationsInfo(data);
+        // Update the pendingApps state as well
+        setPendingApplicationsInfo(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  console.log("Pending volunteers email:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Email))
+  console.log("Pending volunteers phone:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Phone))
+  console.log("Pending volunteers location:", pendingApplicationsInfo.map(pendingApplicationsInfo => pendingApplicationsInfo.Location))
 
   // Function to handle application acceptance or rejection
   const handleApplication = (index: number, action: string) => {
     // Remove the application from the pendingApps array
-    const updatedPendingApps = [...pendingApps];
+    const updatedPendingApps = [...pendingApplications];
     updatedPendingApps.splice(index, 1);
 
     // Update the pendingApps state
-    setPendingApps(updatedPendingApps);
+    setPendingApplications(updatedPendingApps);
 
     // Handle the action (accept or reject) and update the database here
     console.log(index, action);
     // ...
   };
+
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -144,9 +187,9 @@ const [pendingApplications, setPendingApplications] = useState([]);
             <Heading as="h2" size="md" mb={4}>
               Volunteering Opportunities
             </Heading>
-            <NewVolunteeringOpportunitySection username={username} />
-            {volunteeringOpportunities.map((opportunity, index) => (
-              <VolunteeringOpportunity key={index} {...opportunity} />
+            <NewVolunteeringOpportunitySection />
+            {volunteeringOpportunities.map((volunteeringOpportunities, index) => (
+              <VolunteeringOpportunity title = {volunteeringOpportunities.Title} date={volunteeringOpportunities.Date} time={volunteeringOpportunities.Time} duration={volunteeringOpportunities.Duration} description={volunteeringOpportunities.Description} key={index} {...volunteeringOpportunities}  />
             ))}
           </Box>
         </SimpleGrid>
@@ -154,8 +197,8 @@ const [pendingApplications, setPendingApplications] = useState([]);
           <Heading as="h2" size="md" mb={4}>
             Pending Volunteering Applications
           </Heading>
-          {pendingApps.map((application, index) => (
-            <PendingApplication key={index} {...application}>
+          {pendingApplications.map((pendingApplications, index) => (
+            <PendingApplication key={index} location={pendingApplicationsInfo[index].Location} email={pendingApplicationsInfo[index].Email} phoneNumber={pendingApplicationsInfo[index].Phone} opportunityTitle={pendingApplications.Title} {...pendingApplications}>
               <Flex
                 flexDirection={{ base: "column", md: "row" }}
                 alignItems={{ base: "flex-start", md: "center" }}

@@ -70,7 +70,6 @@ const MessageBoardPage = () => {
 
   useEffect(() => {
     if (selectedCompany === null) return;
-
     fetchMessages(selectedCompany.cID);
   }, [selectedCompany]);
 
@@ -79,22 +78,20 @@ const MessageBoardPage = () => {
   }, [messages]);
 
   const fetchMessages = async (messageBoardID: number) => {
-
     try {
-      const response = await fetch(`http://localhost:5000/api/get-messages`, {
-        method: "Post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ bID: messageBoardID }),
-      });
 
+      const response = await fetch(`http://localhost:5000/api/get-messages?bID=${messageBoardID}`);
       const data = await response.json();
-
+      console.log("response:", response);
+      console.log("data:", data);
+      console.log("data.success:", data.success);
+      console.log("data.messages:", data.messages);
       if (data.success && Array.isArray(data.messages)) {
         setMessages(data.messages);
+        console.log("Success in fetching messages!")
       } else {
         setMessages([]);
+        console.log("No messages right now!")
       }
     } catch (error) {
       console.error("Failed to fetch messages:", error);
@@ -112,12 +109,10 @@ const MessageBoardPage = () => {
       Content: messageInput,
       Date: new Date().toISOString().slice(0, 19).replace("T", " ").slice(0, 10),
       Time: new Date().toISOString().slice(0, 19).replace("T", " ").slice(11, 19),
-
       userType: "volunteer",
     };
 
     console.log("Sending message:", newMessage);
-
     try {
       console.log("The username is", localStorage.getItem("username"))
       const response = await fetch("http://localhost:5000/api/messages", {
@@ -126,13 +121,12 @@ const MessageBoardPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cUser: selectedCompany,
-          bID: newMessage.messageBoardID,
+          cUser: selectedCompany.cUser,
+          bID: newMessage.bID,
           Title: newMessage.Title,
-
-          Content: newMessage.content,
-          Date: newMessage.timestamp.toISOString().split("T")[0], // Convert to ISO format and extract date part
-          Time: newMessage.timestamp.toTimeString().split(" ")[0], // Extract time part and remove AM/PM designation
+          Content: newMessage.Content,
+          Date: newMessage.Date, // Convert to ISO format and extract date part
+          Time: newMessage.Time, // Extract time part and remove AM/PM designation
 
         }),
       });
@@ -151,6 +145,10 @@ const MessageBoardPage = () => {
   };
 
   const fontSize = useBreakpointValue({ base: "13", md: "md" });
+
+  console.log("Message username:", messages.map(messages => messages.cUser))
+  console.log(messages)
+
 
   return (
     <Flex flexDirection="column" justifyContent="space-between" bg="gray.100">
@@ -187,7 +185,6 @@ const MessageBoardPage = () => {
           ))}
         </SimpleGrid>
       </VStack>
-
       <Modal isOpen={isOpen} onClose={onClose} size="6xl">
         <ModalOverlay />
         <ModalContent padding={0}>
